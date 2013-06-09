@@ -6,10 +6,7 @@
 package com.oldcurmudgeon.galois.polynomial;
 
 import com.oldcurmudgeon.toolbox.walkers.Iterables;
-import java.math.BigInteger;
-import java.util.Set;
 import javolution.util.FastBitSet;
-import javolution.util.Index;
 
 /**
  * @author OldCurmudgeon

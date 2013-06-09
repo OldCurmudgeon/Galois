@@ -3,7 +3,6 @@ package com.oldcurmudgeon.galois.polynomial;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;

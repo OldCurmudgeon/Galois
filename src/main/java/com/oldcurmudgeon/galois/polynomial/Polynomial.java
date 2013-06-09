@@ -37,7 +37,6 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    */
   private final TreeSet<BigInteger> degrees;
 
-
   /**
    * Constructs a polynomial using the bits from a long.
    */
@@ -518,7 +517,6 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
       final BigInteger stop;
       // Has the whole test failed?
       final AtomicBoolean failed;
-      
 
       public Task(Polynomial it, BigInteger start, BigInteger stop, AtomicBoolean failed) {
         this.it = it;
@@ -555,8 +553,8 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
           Polynomial p = ONE.shiftLeft(e).plus(ONE);
           if (p.mod(it).isEmpty()) {
             // We failed - but are we the first?
-            if ( failed.getAndSet(true) == false ) {
-            System.out.println("Reject " + it + " = (" + p + ")/(" + p.div(it) + ")");
+            if (failed.getAndSet(true) == false) {
+              System.out.println("Reject " + it + " = (" + p + ")/(" + p.div(it) + ")");
             }
           }
         }

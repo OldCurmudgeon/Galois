@@ -1,11 +1,14 @@
 package com.oldcurmudgeon.galois.polynomial;
 
 /**
+ * What should be possible with a polynomial.
+ * 
  * https://code.google.com/p/rabinfingerprint/source/browse/trunk/src/org/bdwyer/galoisfield/Arithmetic.java?r=4
  *
- * @author themadcreator
+ * @originalauthor themadcreator
+ * @adjustedby OldCurmudgeons
  */
-public interface Arithmetic<T> {
+public interface PolyMath<T> {
   public T plus(T o);
 
   public T minus(T o);

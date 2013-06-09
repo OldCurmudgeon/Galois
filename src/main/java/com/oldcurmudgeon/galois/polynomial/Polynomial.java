@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * https://code.google.com/p/rabinfingerprint/source/browse/trunk/src/org/bdwyer/galoisfield/Polynomial.java?r=4
@@ -22,12 +23,7 @@ import java.util.concurrent.RecursiveTask;
  *
  * @author themadcreator
  */
-public class Polynomial implements Arithmetic<Polynomial>, Comparable<Polynomial> {
-  /**
-   * number of elements in the finite field GF(2^k)
-   */
-  private static final long Q = 2L;
-  private static final BigInteger BQ = BigInteger.valueOf(Q);
+public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polynomial>, Comparable<Polynomial> {
   /**
    * the polynomial "x"
    */
@@ -36,16 +32,11 @@ public class Polynomial implements Arithmetic<Polynomial>, Comparable<Polynomial
    * the polynomial "1"
    */
   public static final Polynomial ONE = createFrom(1L);
-
   /**
-   * a reverse comparator so that polynomials are printed out correctly
+   * A (sorted) set of the degrees of the terms of the polynomial
    */
-  private static final class ReverseComparator implements Comparator<BigInteger> {
-    @Override
-    public int compare(BigInteger o1, BigInteger o2) {
-      return -1 * o1.compareTo(o2);
-    }
-  }
+  private final TreeSet<BigInteger> degrees;
+
 
   /**
    * Constructs a polynomial using the bits from a long.
@@ -128,23 +119,6 @@ public class Polynomial implements Arithmetic<Polynomial>, Comparable<Polynomial
       }
     }
   }
-
-  /**
-   * An enum representing the reducibility of the polynomial
-   *
-   * A polynomial p(x) in GF(2^k) is called irreducible over GF[2^k] if it is
-   * non-constant and cannot be represented as the product of two or more
-   * non-constant polynomials from GF(2^k).
-   *
-   * http://en.wikipedia.org/wiki/Irreducible_element
-   */
-  public static enum Reducibility {
-    REDUCIBLE, IRREDUCIBLE
-  };
-  /**
-   * A (sorted) set of the degrees of the terms of the polynomial
-   */
-  private final TreeSet<BigInteger> degrees;
 
   public Polynomial() {
     degrees = createDegreesCollection();
@@ -519,16 +493,16 @@ public class Polynomial implements Arithmetic<Polynomial>, Comparable<Polynomial
     private static final BigInteger GRANULARITY = BigInteger.valueOf(1000);
     private static final BigInteger TWO = BigInteger.valueOf(2);
     // Test failed.
-    volatile static boolean failed = false;
+    //volatile static boolean failed = false;
 
     // Tests primitivity of a Polynomial using the pool.
     private static boolean test(Polynomial p) throws InterruptedException, ExecutionException {
       // The required order o = 2^r - 1
       BigInteger o = BQ.pow(p.degree().intValue()).subtract(BigInteger.ONE);
-      // Build the task.
-      Task task = new Task(p, BigInteger.ONE, o);
       // Initially not failed.
-      failed = false;
+      AtomicBoolean failed = new AtomicBoolean(false);
+      // Build the task.
+      Task task = new Task(p, BigInteger.ONE, o, failed);
       // Process it in the pool.
       pool.invoke(task);
       // Deliver the answer.
@@ -542,25 +516,29 @@ public class Polynomial implements Arithmetic<Polynomial>, Comparable<Polynomial
       final BigInteger start;
       // Where to stop.
       final BigInteger stop;
+      // Has the whole test failed?
+      final AtomicBoolean failed;
+      
 
-      public Task(Polynomial it, BigInteger start, BigInteger stop) {
+      public Task(Polynomial it, BigInteger start, BigInteger stop, AtomicBoolean failed) {
         this.it = it;
         this.start = start;
         this.stop = stop;
+        this.failed = failed;
       }
 
       @Override
       protected Boolean compute() {
         // Do nothing if failed already.
-        if (!failed) {
+        if (!failed.get()) {
           // Compute or fork?
           if (stop.subtract(start).compareTo(GRANULARITY) < 0) {
             return computeDirectly();
           } else {
             // Fork!
             BigInteger split = stop.subtract(start).divide(TWO).add(start);
-            Task is1 = new Task(it, start, split);
-            Task is2 = new Task(it, split, stop);
+            Task is1 = new Task(it, start, split, failed);
+            Task is2 = new Task(it, split, stop, failed);
             is1.fork();
             // Join.
             return is2.compute().booleanValue() && is1.join().booleanValue();
@@ -572,16 +550,17 @@ public class Polynomial implements Arithmetic<Polynomial>, Comparable<Polynomial
 
       protected Boolean computeDirectly() {
         // Do it for myself.
-        for (BigInteger e = start; e.compareTo(stop) < 0 && !failed; e = e.add(BigInteger.ONE)) {
+        for (BigInteger e = start; e.compareTo(stop) < 0 && !failed.get(); e = e.add(BigInteger.ONE)) {
           // p = (x^e + 1)
           Polynomial p = ONE.shiftLeft(e).plus(ONE);
           if (p.mod(it).isEmpty()) {
-            // We failed.
-            failed = true;
+            // We failed - but are we the first?
+            if ( failed.getAndSet(true) == false ) {
             System.out.println("Reject " + it + " = (" + p + ")/(" + p.div(it) + ")");
+            }
           }
         }
-        return !failed;
+        return !failed.get();
       }
     }
   }

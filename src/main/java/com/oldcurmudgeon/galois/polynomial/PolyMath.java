@@ -13,7 +13,7 @@ public interface PolyMath<T> {
 
   public T minus(T o);
 
-  public T times(T o);
+  public T multiply(T o);
 
   public T and(T o);
 
@@ -23,7 +23,7 @@ public interface PolyMath<T> {
 
   public T mod(T o);
 
-  public T div(T o);
+  public T divide(T o);
 
   public T gcd(T o);
 

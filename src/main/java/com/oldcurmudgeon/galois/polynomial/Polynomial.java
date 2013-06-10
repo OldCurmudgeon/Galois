@@ -8,10 +8,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * https://code.google.com/p/rabinfingerprint/source/browse/trunk/src/org/bdwyer/galoisfield/Polynomial.java?r=4
@@ -26,11 +22,11 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   /**
    * the polynomial "x"
    */
-  public static final Polynomial X = createFrom(2L);
+  public static final Polynomial X = new Polynomial().valueOf(1);
   /**
    * the polynomial "1"
    */
-  public static final Polynomial ONE = createFrom(1L);
+  public static final Polynomial ONE = new Polynomial().valueOf(0);
   /**
    * A (sorted) set of the degrees of the terms of the polynomial
    */
@@ -39,7 +35,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   /**
    * Constructs a polynomial using the bits from a long.
    */
-  public static Polynomial createFrom(long l) {
+  public Polynomial valueOf(long l) {
     Set<BigInteger> dgrs = createDegreesCollection();
     int i = 0;
     while (l != 0) {
@@ -59,7 +55,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * We set the final degree to ensure a monic polynomial of the correct
    * degree.
    */
-  public static Polynomial createFrom(byte[] bytes, long degree) {
+  public static Polynomial valueOf(byte[] bytes, long degree) {
     Set<BigInteger> dgrs = createDegreesCollection();
     // Stop when we hit the byte limit too - just for safety.
     for (int i = 0; i < degree && i / 8 < bytes.length; i++) {
@@ -77,7 +73,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   /**
    * Constructs a polynomial using the bits from a BigInteger.
    */
-  public static Polynomial createFrom(BigInteger big, long degree) {
+  public static Polynomial valueOf(BigInteger big, long degree) {
     Set<BigInteger> dgrs = createDegreesCollection();
     // NB: BigInteger uses Big Endian.
     byte[] bytes = big.toByteArray();
@@ -96,22 +92,31 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
     return new Polynomial(dgrs);
   }
 
+  @Override
+  public Polynomial valueOf(int... powers) {
+    Set<BigInteger> dgrs = createDegreesCollection();
+    for (int i : powers) {
+      dgrs.add(BigInteger.valueOf(i));
+    }
+    return new Polynomial(dgrs);
+  }
+
   /**
    * Constructs a random polynomial of degree "degree"
    */
-  public static Polynomial createRandom(long degree) {
+  public static Polynomial newRandom(long degree) {
     Random random = new Random();
     byte[] bytes = new byte[(int) (degree / 8) + 1];
     random.nextBytes(bytes);
-    return createFrom(bytes, degree);
+    return valueOf(bytes, degree);
   }
 
   /**
    * Finds a random irreducible polynomial of degree "degree"
    */
-  public static Polynomial createIrreducible(long degree) {
+  public static Polynomial newIrreducible(long degree) {
     while (true) {
-      Polynomial p = createRandom(degree);
+      Polynomial p = newRandom(degree);
       if (p.getReducibility() == Reducibility.IRREDUCIBLE) {
         return p;
       }
@@ -166,7 +171,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * Computes (this * that) in GF(2^k)
    */
   @Override
-  public Polynomial times(Polynomial that) {
+  public Polynomial multiply(Polynomial that) {
     Set<BigInteger> dgrs = createDegreesCollection();
     for (BigInteger pa : this.degrees) {
       for (BigInteger pb : that.degrees) {
@@ -238,7 +243,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * Probably not the most efficient.
    */
   @Override
-  public Polynomial div(Polynomial that) {
+  public Polynomial divide(Polynomial that) {
     BigInteger da = this.degree();
     BigInteger db = that.degree();
     Polynomial mod = new Polynomial(this);
@@ -333,10 +338,10 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
 
     while (e.bitCount() != 0) {
       if (e.testBit(0)) {
-        result = result.times(b).mod(m);
+        result = result.multiply(b).mod(m);
       }
       e = e.shiftRight(1);
-      b = b.times(b).mod(m);
+      b = b.multiply(b).mod(m);
     }
 
     return result;
@@ -437,199 +442,6 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   }
 
   /**
-   * Tests the reducibility of the polynomial
-   */
-  public boolean isReducible() {
-    return getReducibility() == Reducibility.REDUCIBLE;
-  }
-
-  /*
-   * An irreducible polynomial of degree m, 
-   * F(x) over GF(p) for prime p, is a primitive polynomial 
-   * if the smallest positive integer n such that 
-   * F(x) divides x^n - 1 is n = p^m − 1.
-   * 
-   * ToDo: Somehow retain primality.
-   * 
-   * By discovery: x^12 + x^3 + 1 is NOT primitive but IS prime.
-   * 
-   * http://theory.cs.uvic.ca/inf/neck/PolyInfo.html
-   * 
-   * A polynomial over GF(2) is primitive if it has order 2^n-1. 
-   * For example, x2+x+1 has order 3 = 2^2-1 since (x^2+x+1)(x+1) = x^3+1. 
-   * Thus x^2+x+1 is primitive. 
-   * 
-   * http://maths-people.anu.edu.au/~brent/pd/rpb199.pdf
-   * 
-   * A polynomial P(x) of degree r > 1 is primitive if P(x) is irreducible
-   * and x^j != 1 mod P(x) for 0 <j <2^r - 1.
-   * 
-   * http://mathworld.wolfram.com/PrimitivePolynomial.html
-   * 
-   * A polynomial of degree n over the finite field GF(2) 
-   * (i.e., with coefficients either 0 or 1) is primitive if it has 
-   * polynomial order 2^n-1
-   * 
-   * http://mathworld.wolfram.com/PolynomialOrder.html
-   * 
-   * In particular, the order of a polynomial P(x) with P(0)!=0 is the 
-   * smallest integer e for which P(x) divides x^e+1 (Lidl and Niederreiter 1994).
-   */
-  public boolean isPrimitive() {
-    try {
-      return Primitivity.test(this);
-    } catch (InterruptedException | ExecutionException ex) {
-      // Rethrow it as a runtime exception.
-      throw new RuntimeException(ex);
-    }
-  }
-
-  private static class Primitivity {
-    // The common pool.
-    private static ForkJoinPool pool = new ForkJoinPool();
-    // How many calculations per task.
-    private static final BigInteger GRANULARITY = BigInteger.valueOf(1000);
-    private static final BigInteger TWO = BigInteger.valueOf(2);
-    // Test failed.
-    //volatile static boolean failed = false;
-
-    // Tests primitivity of a Polynomial using the pool.
-    private static boolean test(Polynomial p) throws InterruptedException, ExecutionException {
-      // The required order o = 2^r - 1
-      BigInteger o = BQ.pow(p.degree().intValue()).subtract(BigInteger.ONE);
-      // Initially not failed.
-      AtomicBoolean failed = new AtomicBoolean(false);
-      // Build the task.
-      Task task = new Task(p, BigInteger.ONE, o, failed);
-      // Process it in the pool.
-      pool.invoke(task);
-      // Deliver the answer.
-      return task.get();
-    }
-
-    private static class Task extends RecursiveTask<Boolean> {
-      // The polynomial we are testing.
-      final Polynomial it;
-      // Where to start.
-      final BigInteger start;
-      // Where to stop.
-      final BigInteger stop;
-      // Has the whole test failed?
-      final AtomicBoolean failed;
-
-      public Task(Polynomial it, BigInteger start, BigInteger stop, AtomicBoolean failed) {
-        this.it = it;
-        this.start = start;
-        this.stop = stop;
-        this.failed = failed;
-      }
-
-      @Override
-      protected Boolean compute() {
-        // Do nothing if failed already.
-        if (!failed.get()) {
-          // Compute or fork?
-          if (stop.subtract(start).compareTo(GRANULARITY) < 0) {
-            return computeDirectly();
-          } else {
-            // Fork!
-            BigInteger split = stop.subtract(start).divide(TWO).add(start);
-            Task is1 = new Task(it, start, split, failed);
-            Task is2 = new Task(it, split, stop, failed);
-            is1.fork();
-            // Join.
-            return is2.compute().booleanValue() && is1.join().booleanValue();
-          }
-        }
-        // Definitely not if failed.
-        return false;
-      }
-
-      protected Boolean computeDirectly() {
-        // Do it for myself.
-        for (BigInteger e = start; e.compareTo(stop) < 0 && !failed.get(); e = e.add(BigInteger.ONE)) {
-          // p = (x^e + 1)
-          Polynomial p = ONE.shiftLeft(e).plus(ONE);
-          if (p.mod(it).isEmpty()) {
-            // We failed - but are we the first?
-            if (failed.getAndSet(true) == false) {
-              System.out.println("Reject " + it + " = (" + p + ")/(" + p.div(it) + ")");
-            }
-          }
-        }
-        return !failed.get();
-      }
-    }
-  }
-
-  /**
-   * Tests the reducibility of the polynomial
-   */
-  public Reducibility getReducibility() {
-    return getReducibilityBenOr();
-  }
-
-  /**
-   * BenOr Reducibility Test
-   *
-   * Tests and Constructions of Irreducible Polynomials over Finite Fields
-   * (1997) Shuhong Gao, Daniel Panario
-   *
-   * http://citeseer.ist.psu.edu/cache/papers/cs/27167/http:zSzzSzwww.math.clemson.eduzSzfacultyzSzGaozSzpaperszSzGP97a.pdf/gao97tests.pdf
-   */
-  protected Reducibility getReducibilityBenOr() {
-    final long degree = this.degree().longValue();
-    for (int i = 1; i <= (int) (degree / 2); i++) {
-      Polynomial b = reduceExponent(i);
-      Polynomial g = this.gcd(b);
-      if (g.compareTo(Polynomial.ONE) != 0) {
-        return Reducibility.REDUCIBLE;
-      }
-    }
-
-    return Reducibility.IRREDUCIBLE;
-  }
-
-  /**
-   * Rabin's Reducibility Test
-   *
-   * This requires the distinct prime factors of the degree, so we don't use
-   * it. But this could be faster for prime degree polynomials
-   */
-  protected Reducibility getReducibilityRabin(int[] factors) {
-    int degree = (int) degree().longValue();
-    for (int i = 0; i < factors.length; i++) {
-      //int n_i = factors[i];
-      Polynomial b = reduceExponent(i);
-      Polynomial g = this.gcd(b);
-      if (g.compareTo(Polynomial.ONE) != 0) {
-        return Reducibility.REDUCIBLE;
-      }
-    }
-
-    Polynomial g = reduceExponent(degree);
-    if (!g.isEmpty()) {
-      return Reducibility.REDUCIBLE;
-    }
-
-    return Reducibility.IRREDUCIBLE;
-  }
-
-  /**
-   * Computes ( x^(2^p) - x ) mod f
-   *
-   * This function is useful for computing the reducibility of the polynomial
-   */
-  private Polynomial reduceExponent(final int p) {
-    // compute (x^q^p mod f)
-    BigInteger q_to_p = BQ.pow(p);
-    Polynomial x_to_q_to_p = X.modPow(q_to_p, this);
-
-    // subtract (x mod f)
-    return x_to_q_to_p.xor(X).mod(this);
-  }
-
-  /**
    * Compares this polynomial to the other
    */
   @Override
@@ -715,7 +527,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
           if (!finished && pattern.hasNext()) {
             // Roll a polynomial of base + this pattern.
             // i.e. 2^d + ... + 1
-            Polynomial p = Polynomial.createFrom(pattern.next().multiply(TWO), degree).plus(Polynomial.ONE);
+            Polynomial p = Polynomial.valueOf(pattern.next().multiply(TWO), degree).plus(Polynomial.ONE);
             // Is it a prime poly?
             boolean ok = !p.isReducible();
             if (ok && primitive) {
@@ -757,12 +569,12 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
 
   public static void main(String[] args) {
-    Polynomial q = Polynomial.createFrom(0x5);
-    Polynomial d = Polynomial.createFrom(0x3);
+    Polynomial q = new Polynomial().valueOf(4,1);
+    Polynomial d = new Polynomial().valueOf(1,2);
     // Should be 0
     Polynomial mod = q.mod(d);
     // Should be x + 1
-    Polynomial div = q.div(d);
+    Polynomial div = q.divide(d);
     // Big!
     //generatePrimitivePolys(95, 2, true);
 

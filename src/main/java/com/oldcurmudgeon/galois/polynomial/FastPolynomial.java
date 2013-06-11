@@ -24,8 +24,20 @@ public class FastPolynomial
   private BigInteger degrees = BigInteger.ZERO;
   // Base ones.
   static final FastPolynomial ZERO = new FastPolynomial();
-  static final FastPolynomial ONE = new FastPolynomial(1);
-  static final FastPolynomial X = new FastPolynomial(2);
+  static final FastPolynomial ONE = new FastPolynomial(0);
+  static final FastPolynomial X = new FastPolynomial(1);
+  @Override
+  public FastPolynomial x () {
+    return X;
+  }
+  @Override
+  public FastPolynomial zero () {
+    return ZERO;
+  }
+  @Override
+  public FastPolynomial one () {
+    return ONE;
+  }
   
   // Leave it empty.
   public FastPolynomial() {
@@ -55,7 +67,16 @@ public class FastPolynomial
     return p;
   }
 
- @Override
+  /**
+   * Constructs a polynomial using the bits from a BigInteger.
+   */
+  @Override
+  public FastPolynomial valueOf(BigInteger big, long degree) {
+    degrees = big.setBit((int)degree);
+    return this;
+  }
+
+  @Override
   public FastPolynomial multiply(FastPolynomial p) {
     degrees = degrees.multiply(p.degrees);
     return this;
@@ -107,6 +128,48 @@ public class FastPolynomial
      return BigInteger.valueOf(degrees.bitLength());
   }
    
+  /**
+   * Computes ( x^(2^p) - x ) mod f
+   *
+   * This function is useful for computing the reducibility of the polynomial
+   * 
+   * ToDo: Move this to GaloisPoly
+   */
+  @Override
+  protected FastPolynomial reduceExponent(final int p) {
+    // compute (x^q^p mod f)
+    BigInteger q_to_p = BQ.pow(p);
+    FastPolynomial x_to_q_to_p = x().modPow(q_to_p, this);
+
+    // subtract (x mod f)
+    return x_to_q_to_p.xor(X).mod(this);
+  }
+  
+  /**
+   * Computes x^e mod m.
+   *
+   * This algorithm requires at most this.degree() + m.degree() space.'
+   *
+   * http://en.wikipedia.org/wiki/Modular_exponentiation
+   * 
+   * ToDo: Move this up into GaloisPoly
+   */
+  @Override
+  public FastPolynomial modPow(BigInteger e, FastPolynomial m) {
+    FastPolynomial result = ONE;
+    FastPolynomial b = new FastPolynomial(this);
+
+    while (e.bitCount() != 0) {
+      if (e.testBit(0)) {
+        result = result.multiply(b).mod(m);
+      }
+      e = e.shiftRight(1);
+      b = b.multiply(b).mod(m);
+    }
+
+    return result;
+  }
+
  /**
    * Returns standard ascii representation of this polynomial in the form:
    *

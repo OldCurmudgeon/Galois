@@ -20,6 +20,14 @@ import java.util.TreeSet;
  */
 public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polynomial>, Comparable<Polynomial> {
   /**
+   * A (sorted) set of the degrees of the terms of the polynomial
+   */
+  private final TreeSet<BigInteger> degrees;
+  /**
+   * the polynomial ""
+   */
+  public static final Polynomial ZERO = new Polynomial();
+  /**
    * the polynomial "x"
    */
   public static final Polynomial X = new Polynomial().valueOf(1);
@@ -27,11 +35,20 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * the polynomial "1"
    */
   public static final Polynomial ONE = new Polynomial().valueOf(0);
-  /**
-   * A (sorted) set of the degrees of the terms of the polynomial
-   */
-  private final TreeSet<BigInteger> degrees;
 
+  @Override
+  public Polynomial x () {
+    return X;
+  }
+  @Override
+  public Polynomial zero () {
+    return ZERO;
+  }
+  @Override
+  public Polynomial one () {
+    return ONE;
+  }
+  
   /**
    * Constructs a polynomial using the bits from a long.
    */
@@ -73,7 +90,8 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   /**
    * Constructs a polynomial using the bits from a BigInteger.
    */
-  public static Polynomial valueOf(BigInteger big, long degree) {
+  @Override
+  public Polynomial valueOf(BigInteger big, long degree) {
     Set<BigInteger> dgrs = createDegreesCollection();
     // NB: BigInteger uses Big Endian.
     byte[] bytes = big.toByteArray();
@@ -140,6 +158,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
     return new TreeSet<>(new ReverseComparator());
   }
 
+  @Override
   public BigInteger degree() {
     if (degrees.isEmpty()) {
       return BigInteger.ONE.negate();
@@ -331,6 +350,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    *
    * http://en.wikipedia.org/wiki/Modular_exponentiation
    */
+  @Override
   public Polynomial modPow(BigInteger e, Polynomial m) {
 
     Polynomial result = Polynomial.ONE;
@@ -363,6 +383,23 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
     return a;
   }
 
+  /**
+   * Computes ( x^(2^p) - x ) mod f
+   *
+   * This function is useful for computing the reducibility of the polynomial
+   * 
+   * ToDo: Move this to GaloisPoly
+   */
+  @Override
+  protected Polynomial reduceExponent(final int p) {
+    // compute (x^q^p mod f)
+    BigInteger q_to_p = BQ.pow(p);
+    Polynomial x_to_q_to_p = x().modPow(q_to_p, this);
+
+    // subtract (x mod f)
+    return x_to_q_to_p.xor(X).mod(this);
+  }
+  
   /**
    * Construct a BigInteger whose value represents this polynomial. This can
    * lose information if the degrees of the terms are larger than
@@ -477,161 +514,4 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
     return hash;
   }
 
-  // Iterate over prime polynomials.
-  public static class PrimePolynomials implements Iterable<Polynomial> {
-    // TODO: Use a FilteredIterator.
-    private final int degree;
-    private final boolean primitive;
-    private final boolean reverse;
-
-    public PrimePolynomials(int degree, boolean primitive, boolean reverse) {
-      this.degree = degree;
-      this.primitive = primitive;
-      this.reverse = reverse;
-    }
-
-    public PrimePolynomials(int degree, boolean primitive) {
-      this(degree, primitive, false);
-    }
-
-    public PrimePolynomials(int degree) {
-      this(degree, false, false);
-    }
-
-    private class PrimeIterator implements Iterator<Polynomial> {
-      // How many bits we are working on right now.
-      int bits = 1;
-      // The current pattern.
-      Iterator<BigInteger> pattern = new BitPattern(bits, degree - 1, reverse).iterator();
-      // Next one to deliver.
-      Polynomial next = null;
-      Polynomial last = null;
-      // Have we finished?
-      boolean finished = false;
-
-      @Override
-      public boolean hasNext() {
-
-        while (next == null && !finished) {
-          // Turn the wheels.
-          if (!pattern.hasNext()) {
-            // Exhausted! Step bits.
-            bits += 1;
-            // Note when we've finished.
-            finished = bits >= degree;
-            // Next bit pattern.
-            if (!finished) {
-              pattern = new BitPattern(bits, degree - 1, reverse).iterator();
-            }
-          }
-          if (!finished && pattern.hasNext()) {
-            // Roll a polynomial of base + this pattern.
-            // i.e. 2^d + ... + 1
-            Polynomial p = Polynomial.valueOf(pattern.next().multiply(TWO), degree).plus(Polynomial.ONE);
-            // Is it a prime poly?
-            boolean ok = !p.isReducible();
-            if (ok && primitive) {
-              ok &= p.isPrimitive();
-            }
-            if (ok) {
-              next = p;
-            }
-          }
-        }
-        return next != null;
-      }
-
-      @Override
-      public Polynomial next() {
-        Polynomial it = hasNext() ? next : null;
-        next = null;
-        last = it;
-        return it;
-      }
-
-      @Override
-      public void remove() {
-        // To change body of generated methods, choose Tools | Templates.
-        throw new UnsupportedOperationException("Not supported.");
-      }
-
-      @Override
-      public String toString() {
-        return next != null ? next.toString() : last != null ? last.toString() : "";
-      }
-    }
-
-    @Override
-    public Iterator<Polynomial> iterator() {
-      return new PrimeIterator();
-    }
-  }
-  public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
-
-  public static void main(String[] args) {
-    Polynomial q = new Polynomial().valueOf(4,1);
-    Polynomial d = new Polynomial().valueOf(1,2);
-    // Should be 0
-    Polynomial mod = q.mod(d);
-    // Should be x + 1
-    Polynomial div = q.divide(d);
-    // Big!
-    //generatePrimitivePolys(95, 2, true);
-
-    //generateMinimalPrimitivePolys(4, 5);
-    //generateMinimalPrimitivePolys(12, 5);
-    //generateMinimalPrimePolys(5);
-    generatePrimitivePolysUpToDegree(13, 3, true);
-    generatePrimitivePolysUpToDegree(13, 3, false);
-    //generateMinimalPrimePolysUpToDegree(96);
-    generatePrimitivePolys(95, 1, true);
-    generatePrimitivePolys(95, 1, false);
-    generatePrimitivePolys(96, 1, false);
-    generatePrimitivePolys(255, 1, false);
-    generatePrimitivePolys(256, 1, false);
-  }
-
-  private static void generatePrimePolysUpToDegree(int d, int max, boolean minimal) {
-    for (int degree = 2; degree < d; degree++) {
-      generatePrimePolys(degree, max, minimal);
-    }
-  }
-
-  private static void generatePrimePolys(int degree, int count, boolean minimal) {
-    System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
-    int seen = 0;
-    for (Polynomial p : new PrimePolynomials(degree, false, minimal ? false : true)) {
-      // Prime Polynomials!
-      System.out.println("Prime poly: " + p);
-      seen += 1;
-      if (seen >= count) {
-        // Stop after the 1st 10 for speed - one day enumerate all.
-        System.out.println("...");
-        break;
-      }
-
-    }
-  }
-
-  private static void generatePrimitivePolysUpToDegree(int d, int max, boolean minimal) {
-    for (int degree = 2; degree < d; degree++) {
-      generatePrimitivePolys(degree, max, minimal);
-    }
-  }
-
-  private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
-    System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
-    int seen = 0;
-    for (Polynomial p : new PrimePolynomials(degree, true, minimal ? false : true)) {
-      // Prime Polynomials!
-      System.out.println("Primitive poly: " + p);
-      seen += 1;
-      if (seen >= count) {
-        // Stop after the 1st 10 for speed - one day enumerate all.
-        System.out.println("...");
-        break;
-      }
-
-    }
-  }
 }

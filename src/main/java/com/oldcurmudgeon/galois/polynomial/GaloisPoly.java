@@ -4,8 +4,10 @@
  */
 package com.oldcurmudgeon.galois.polynomial;
 
+import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
@@ -37,18 +39,28 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
   @Override
   public abstract T mod(T o);
 
+  public abstract T modPow(BigInteger e, T m);
+
   @Override
   public abstract T divide(T o);
 
   @Override
   public abstract T gcd(T o);
+  
+  public abstract T x();
+  public abstract T zero();
+  public abstract T one();
 
   // What degree am I.
   public abstract BigInteger degree();
   
-  // Shoudl be static - but no way to do that in Java.
+  // Should be static - but no way to do that in Java.
   public abstract GaloisPoly valueOf(int ... powers);
 
+  /**
+   * Constructs a polynomial using the bits from a BigInteger.
+   */
+  public abstract T valueOf(BigInteger big, long degree);
 
   /**
    * An enum representing the reducibility of the polynomial
@@ -94,6 +106,15 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
     return getReducibility() == Reducibility.REDUCIBLE;
   }
 
+  /**
+   * Computes ( x^(2^p) - x ) mod f
+   *
+   * This function is useful for computing the reducibility of the polynomial
+   * 
+   * ToDo: Move this to GaloisPoly
+   */
+  abstract T reduceExponent(final int p);
+  
   /*
    * An irreducible polynomial of degree m, 
    * F(x) over GF(p) for prime p, is a primitive polynomial 
@@ -233,9 +254,9 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
   protected Reducibility getReducibilityBenOr() {
     final long degree = this.degree().longValue();
     for (int i = 1; i <= (int) (degree / 2); i++) {
-      GaloisPoly b = reduceExponent(i);
-      GaloisPoly g = this.gcd(b);
-      if (g.compareTo(GaloisPoly.ONE) != 0) {
+      T b = reduceExponent(i);
+      T g = gcd(b);
+      if (!g.equals(one())) {
         return Reducibility.REDUCIBLE;
       }
     }
@@ -253,32 +274,180 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
     int degree = (int) degree().longValue();
     for (int i = 0; i < factors.length; i++) {
       //int n_i = factors[i];
-      GaloisPoly b = reduceExponent(i);
-      GaloisPoly g = this.gcd(b);
-      if (g.compareTo(GaloisPoly.ONE) != 0) {
+      T b = reduceExponent(i);
+      T g = gcd(b);
+      if (!g.equals(one())) {
         return Reducibility.REDUCIBLE;
       }
     }
 
-    GaloisPoly g = reduceExponent(degree);
-    if (!g.isEmpty()) {
+    T g = reduceExponent(degree);
+    if (!g.equals(zero())) {
       return Reducibility.REDUCIBLE;
     }
 
     return Reducibility.IRREDUCIBLE;
   }
 
-  /**
-   * Computes ( x^(2^p) - x ) mod f
-   *
-   * This function is useful for computing the reducibility of the polynomial
-   */
-  private GaloisPoly reduceExponent(final int p) {
-    // compute (x^q^p mod f)
-    BigInteger q_to_p = BQ.pow(p);
-    GaloisPoly x_to_q_to_p = X.modPow(q_to_p, this);
+  // Iterate over prime polynomials.
+  public class PrimePolynomials implements Iterable<GaloisPoly> {
+    // TODO: Use a FilteredIterator.
+    private final int degree;
+    private final boolean primitive;
+    private final boolean reverse;
 
-    // subtract (x mod f)
-    return x_to_q_to_p.xor(X).mod(this);
+    public PrimePolynomials(int degree, boolean primitive, boolean reverse) {
+      this.degree = degree;
+      this.primitive = primitive;
+      this.reverse = reverse;
+    }
+
+    public PrimePolynomials(int degree, boolean primitive) {
+      this(degree, primitive, false);
+    }
+
+    public PrimePolynomials(int degree) {
+      this(degree, false, false);
+    }
+
+    private class PrimeIterator implements Iterator<T> {
+      // How many bits we are working on right now.
+      int bits = 1;
+      // The current pattern.
+      Iterator<BigInteger> pattern = new BitPattern(bits, degree - 1, reverse).iterator();
+      // Next one to deliver.
+      T next = null;
+      T last = null;
+      // Have we finished?
+      boolean finished = false;
+
+      @Override
+      public boolean hasNext() {
+
+        while (next == null && !finished) {
+          // Turn the wheels.
+          if (!pattern.hasNext()) {
+            // Exhausted! Step bits.
+            bits += 1;
+            // Note when we've finished.
+            finished = bits >= degree;
+            // Next bit pattern.
+            if (!finished) {
+              pattern = new BitPattern(bits, degree - 1, reverse).iterator();
+            }
+          }
+          if (!finished && pattern.hasNext()) {
+            // Roll a polynomial of base + this pattern.
+            // i.e. 2^d + ... + 1
+            BigInteger m = pattern.next().multiply(TWO);
+            GaloisPoly v = valueOf(m, degree);
+            GaloisPoly valueOf = valueOf(pattern.next().multiply(TWO), degree);
+            PolyMath or = valueOf(pattern.next().multiply(TWO), degree).or(one());
+            // Is it a prime poly?
+            boolean ok = !p.isReducible();
+            if (ok && primitive) {
+              ok &= p.isPrimitive();
+            }
+            if (ok) {
+              next = p;
+            }
+          }
+        }
+        return next != null;
+      }
+
+      @Override
+      public T next() {
+        T it = hasNext() ? next : null;
+        next = null;
+        last = it;
+        return it;
+      }
+
+      @Override
+      public void remove() {
+        // To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported.");
+      }
+
+      @Override
+      public String toString() {
+        return next != null ? next.toString() : last != null ? last.toString() : "";
+      }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+      return new PrimeIterator<T>();
+    }
+  }
+  
+  public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
+
+  public static void main(String[] args) {
+    Polynomial q = new Polynomial().valueOf(4,1);
+    Polynomial d = new Polynomial().valueOf(1,2);
+    // Should be 0
+    Polynomial mod = q.mod(d);
+    // Should be x + 1
+    Polynomial div = q.divide(d);
+    // Big!
+    //generatePrimitivePolys(95, 2, true);
+
+    //generateMinimalPrimitivePolys(4, 5);
+    //generateMinimalPrimitivePolys(12, 5);
+    //generateMinimalPrimePolys(5);
+    generatePrimitivePolysUpToDegree(13, 3, true);
+    generatePrimitivePolysUpToDegree(13, 3, false);
+    //generateMinimalPrimePolysUpToDegree(96);
+    generatePrimitivePolys(95, 1, true);
+    generatePrimitivePolys(95, 1, false);
+    generatePrimitivePolys(96, 1, false);
+    generatePrimitivePolys(255, 1, false);
+    generatePrimitivePolys(256, 1, false);
+  }
+
+  private static void generatePrimePolysUpToDegree(int d, int max, boolean minimal) {
+    for (int degree = 2; degree < d; degree++) {
+      generatePrimePolys(degree, max, minimal);
+    }
+  }
+
+  private static void generatePrimePolys(int degree, int count, boolean minimal) {
+    System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
+    int seen = 0;
+    for (Polynomial p : new PrimePolynomials(degree, false, minimal ? false : true)) {
+      // Prime Polynomials!
+      System.out.println("Prime poly: " + p);
+      seen += 1;
+      if (seen >= count) {
+        // Stop after the 1st 10 for speed - one day enumerate all.
+        System.out.println("...");
+        break;
+      }
+
+    }
+  }
+
+  private static void generatePrimitivePolysUpToDegree(int d, int max, boolean minimal) {
+    for (int degree = 2; degree < d; degree++) {
+      generatePrimitivePolys(degree, max, minimal);
+    }
+  }
+
+  private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
+    System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
+    int seen = 0;
+    for (Polynomial p : new PrimePolynomials(degree, true, minimal ? false : true)) {
+      // Prime Polynomials!
+      System.out.println("Primitive poly: " + p);
+      seen += 1;
+      if (seen >= count) {
+        // Stop after the 1st 10 for speed - one day enumerate all.
+        System.out.println("...");
+        break;
+      }
+
+    }
   }
 }

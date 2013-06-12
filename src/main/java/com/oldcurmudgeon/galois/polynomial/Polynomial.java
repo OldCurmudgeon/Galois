@@ -405,7 +405,8 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * lose information if the degrees of the terms are larger than
    * Integer.MAX_VALUE;
    */
-  public BigInteger toBigInteger() {
+  @Override
+  public BigInteger asBigInteger() {
     BigInteger b = BigInteger.ZERO;
     for (BigInteger degree : degrees) {
 // technically accurate but slow as hell:
@@ -422,14 +423,14 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * Returns a string of hex characters representing this polynomial
    */
   public String toHexString() {
-    return toBigInteger().toString(16).toUpperCase();
+    return asBigInteger().toString(16).toUpperCase();
   }
 
   /**
    * Returns a string of digits presenting this polynomial
    */
   public String toDecimalString() {
-    return toBigInteger().toString();
+    return asBigInteger().toString();
   }
 
   /**

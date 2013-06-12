@@ -128,6 +128,11 @@ public class FastPolynomial
      return BigInteger.valueOf(degrees.bitLength());
   }
    
+  @Override
+  public BigInteger asBigInteger() {
+    return degrees;
+  }
+
   /**
    * Computes ( x^(2^p) - x ) mod f
    *

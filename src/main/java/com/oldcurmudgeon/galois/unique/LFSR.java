@@ -15,6 +15,8 @@
  */
 package com.oldcurmudgeon.galois.unique;
 
+import com.oldcurmudgeon.galois.polynomial.FastPolynomial;
+import com.oldcurmudgeon.galois.polynomial.GaloisPoly;
 import com.oldcurmudgeon.galois.polynomial.Polynomial;
 import com.oldcurmudgeon.toolbox.twiddlers.Strings;
 import java.math.BigInteger;
@@ -40,26 +42,30 @@ public class LFSR implements Iterable<BigInteger> {
   private final BigInteger start;
 
   // The poly must be prime to span the full sequence.
-  public LFSR(Polynomial primePoly, BigInteger start) {
+  public LFSR(BigInteger primePoly, BigInteger start) {
     // Where to start from (and stop).
     this.start = start;
     // Knock off the 2^0 coefficient of the polynomial for the TAP.
-    this.tapsMask = primePoly.toBigInteger().shiftRight(1);
+    this.tapsMask = primePoly;
   }
 
-  public LFSR(Polynomial primePoly) {
+  public LFSR(GaloisPoly primePoly, BigInteger start) {
+    this(primePoly.asBigInteger(), start);
+  }
+
+  public LFSR(GaloisPoly primePoly) {
     // Default to start at 1.
-    this(primePoly, BigInteger.ONE);
+    this(primePoly.asBigInteger(), BigInteger.ONE);
   }
 
   public LFSR(int bits) {
     // Default to first found prime poly.
-    this(new Polynomial.PrimePolynomials(bits).iterator().next());
+    this(new FastPolynomial().new PrimePolynomials(bits, true, true).iterator().next());
   }
 
   public LFSR(int bits, BigInteger start) {
     // Default to first prime poly.
-    this(new Polynomial.PrimePolynomials(bits).iterator().next(), start);
+    this(new FastPolynomial().new PrimePolynomials(bits, true, true).iterator().next(), start);
   }
 
   @Override
@@ -129,7 +135,7 @@ public class LFSR implements Iterable<BigInteger> {
 
   private static void test(int bits) {
     System.out.println("==== Bits " + bits + " ====");
-    Polynomial p = new Polynomial.PrimePolynomials(bits,true,true).iterator().next();
+    FastPolynomial p = new FastPolynomial().new PrimePolynomials(bits,true,true).iterator().next();
     System.out.println("Poly " + p);
     LFSR lfsr = new LFSR(p);
     int count = 0;

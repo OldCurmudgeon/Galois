@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author OldCurmudgeon
  */
-public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
+public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T> {
   /**
    * number of elements in the finite field GF(2)
    */
@@ -51,6 +51,7 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
   public abstract T zero();
   public abstract T one();
 
+  public abstract BigInteger asBigInteger();
   // What degree am I.
   public abstract BigInteger degree();
   
@@ -290,7 +291,7 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
   }
 
   // Iterate over prime polynomials.
-  public class PrimePolynomials implements Iterable<GaloisPoly> {
+  public class PrimePolynomials implements Iterable<T> {
     // TODO: Use a FilteredIterator.
     private final int degree;
     private final boolean primitive;
@@ -339,10 +340,7 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
           if (!finished && pattern.hasNext()) {
             // Roll a polynomial of base + this pattern.
             // i.e. 2^d + ... + 1
-            BigInteger m = pattern.next().multiply(TWO);
-            GaloisPoly v = valueOf(m, degree);
-            GaloisPoly valueOf = valueOf(pattern.next().multiply(TWO), degree);
-            PolyMath or = valueOf(pattern.next().multiply(TWO), degree).or(one());
+            T p = valueOf(pattern.next().multiply(TWO), degree).or(one());
             // Is it a prime poly?
             boolean ok = !p.isReducible();
             if (ok && primitive) {
@@ -378,33 +376,33 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
 
     @Override
     public Iterator<T> iterator() {
-      return new PrimeIterator<T>();
+      return new PrimeIterator();
     }
   }
   
   public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
 
   public static void main(String[] args) {
-    Polynomial q = new Polynomial().valueOf(4,1);
-    Polynomial d = new Polynomial().valueOf(1,2);
+    FastPolynomial q = new FastPolynomial().valueOf(4,1);
+    FastPolynomial d = new FastPolynomial().valueOf(1,2);
     // Should be 0
-    Polynomial mod = q.mod(d);
+    FastPolynomial mod = q.mod(d);
     // Should be x + 1
-    Polynomial div = q.divide(d);
+    FastPolynomial div = q.divide(d);
     // Big!
     //generatePrimitivePolys(95, 2, true);
 
     //generateMinimalPrimitivePolys(4, 5);
     //generateMinimalPrimitivePolys(12, 5);
     //generateMinimalPrimePolys(5);
-    generatePrimitivePolysUpToDegree(13, 3, true);
-    generatePrimitivePolysUpToDegree(13, 3, false);
+    generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
-    generatePrimitivePolys(95, 1, true);
-    generatePrimitivePolys(95, 1, false);
-    generatePrimitivePolys(96, 1, false);
-    generatePrimitivePolys(255, 1, false);
-    generatePrimitivePolys(256, 1, false);
+    //generatePrimitivePolys(95, 1, true);
+    //generatePrimitivePolys(95, 1, false);
+    //generatePrimitivePolys(96, 1, false);
+    //generatePrimitivePolys(255, 1, false);
+    //generatePrimitivePolys(256, 1, false);
   }
 
   private static void generatePrimePolysUpToDegree(int d, int max, boolean minimal) {
@@ -416,7 +414,7 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
   private static void generatePrimePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (Polynomial p : new PrimePolynomials(degree, false, minimal ? false : true)) {
+    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, false, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Prime poly: " + p);
       seen += 1;
@@ -438,7 +436,7 @@ public abstract class GaloisPoly<T extends PolyMath<T>> implements PolyMath<T> {
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (Polynomial p : new PrimePolynomials(degree, true, minimal ? false : true)) {
+    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, true, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Primitive poly: " + p);
       seen += 1;

@@ -223,7 +223,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         // Do it for myself.
         for (BigInteger e = start; e.compareTo(stop) < 0 && !failed.get(); e = e.add(BigInteger.ONE)) {
           // p = (x^e + 1)
-          GaloisPoly p = it.valueOf(e.intValue(), 1);
+          GaloisPoly p = it.valueOf(e.intValue(), 0);
           PolyMath mod = p.mod(it);
           if (true) {
             // We failed - but are we the first?
@@ -386,9 +386,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     FastPolynomial q = new FastPolynomial().valueOf(4,1);
     FastPolynomial d = new FastPolynomial().valueOf(1,2);
     // Should be 0
-    FastPolynomial mod = q.mod(d);
+    FastPolynomial mod = new FastPolynomial(q).mod(d);
     // Should be x + 1
-    FastPolynomial div = q.divide(d);
+    FastPolynomial div = new FastPolynomial(q).divide(d);
     // Big!
     //generatePrimitivePolys(95, 2, true);
 

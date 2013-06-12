@@ -6,6 +6,7 @@
 package com.oldcurmudgeon.galois.polynomial;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * @author OldCurmudgeon
@@ -21,26 +22,27 @@ public class FastPolynomial
    *
    * ToDo: Use FastBitSet because it is mutable and may therefore be faster.
    */
-  private BigInteger degrees = BigInteger.ZERO;
+  private final BigInteger degrees;
   // Base ones.
   static final FastPolynomial ZERO = new FastPolynomial();
-  static final FastPolynomial ONE = new FastPolynomial(0);
-  static final FastPolynomial X = new FastPolynomial(1);
-  @Override
-  public FastPolynomial x () {
-    return X;
-  }
+  static final FastPolynomial ONE = new FastPolynomial(1);
+  static final FastPolynomial X = new FastPolynomial(2);
   @Override
   public FastPolynomial zero () {
-    return ZERO;
+    return new FastPolynomial();
   }
   @Override
   public FastPolynomial one () {
-    return ONE;
+    return new FastPolynomial(1);
+  }
+  @Override
+  public FastPolynomial x () {
+    return new FastPolynomial(2);
   }
   
   // Leave it empty.
   public FastPolynomial() {
+    degrees = BigInteger.ZERO;
   }
 
   // Set my degrees from the clone.
@@ -60,11 +62,11 @@ public class FastPolynomial
 
   @Override
   public FastPolynomial valueOf(int ... powers) {
-    FastPolynomial p = new FastPolynomial();
+    BigInteger big = BigInteger.ZERO;
     for ( int i : powers ) {
-      degrees = degrees.setBit(i);
+      big = big.setBit(i);
     }
-    return p;
+    return new FastPolynomial(big);
   }
 
   /**
@@ -72,50 +74,42 @@ public class FastPolynomial
    */
   @Override
   public FastPolynomial valueOf(BigInteger big, long degree) {
-    degrees = big.setBit((int)degree);
-    return this;
+    return new FastPolynomial(big.setBit((int)degree));
   }
 
   @Override
   public FastPolynomial multiply(FastPolynomial p) {
-    degrees = degrees.multiply(p.degrees);
-    return this;
+    return new FastPolynomial(degrees.multiply(p.degrees));
   }
 
   @Override
   public FastPolynomial and(FastPolynomial p) {
-    degrees = degrees.and(p.degrees);
-    return this;
+    return new FastPolynomial(degrees.and(p.degrees));
   }
 
   @Override
   public FastPolynomial or(FastPolynomial p) {
-    degrees = degrees.or(p.degrees);
-    return this;
+    return new FastPolynomial(degrees.or(p.degrees));
   }
 
   @Override
   public FastPolynomial xor(FastPolynomial p) {
-    degrees = degrees.xor(p.degrees);
-    return this;
+    return new FastPolynomial(degrees.xor(p.degrees));
   }
 
   @Override
   public FastPolynomial mod(FastPolynomial p) {
-    degrees = degrees.mod(p.degrees);
-    return this;
+    return new FastPolynomial(degrees.mod(p.degrees));
   }
 
   @Override
   public FastPolynomial divide(FastPolynomial p) {
-    degrees = degrees.divide(p.degrees);
-    return this;
+    return new FastPolynomial(degrees.divide(p.degrees));
   }
 
   @Override
   public FastPolynomial gcd(FastPolynomial p) {
-    degrees = degrees.gcd(p.degrees);
-    return this;
+    return new FastPolynomial(degrees.gcd(p.degrees));
   }
 
   @Override
@@ -131,6 +125,20 @@ public class FastPolynomial
   @Override
   public BigInteger asBigInteger() {
     return degrees;
+  }
+
+  @Override
+  public boolean equals (Object it) {
+    return it != null &&
+            it instanceof FastPolynomial &&
+            ((FastPolynomial) it).degrees.equals(degrees);
+  }
+  
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 67 * hash + Objects.hashCode(this.degrees);
+    return hash;
   }
 
   /**

@@ -99,7 +99,15 @@ public class FastPolynomial
 
   @Override
   public FastPolynomial mod(FastPolynomial p) {
-    return new FastPolynomial(degrees.mod(p.degrees));
+    BigInteger da = this.degree();
+    BigInteger db = p.degree();
+    BigInteger mod = degrees;
+    for (BigInteger i = da.subtract(db); i.compareTo(BigInteger.ZERO) >= 0; i = i.subtract(BigInteger.ONE)) {
+      if (mod.testBit(i.add(db).intValue())) {
+        mod = mod.xor(p.degrees.shiftLeft(i.intValue()));
+      }
+    }
+    return new FastPolynomial(mod);
   }
 
   @Override

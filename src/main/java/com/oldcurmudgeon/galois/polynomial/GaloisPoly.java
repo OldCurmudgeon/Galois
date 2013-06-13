@@ -225,6 +225,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           // p = (x^e + 1)
           GaloisPoly p = it.valueOf(e.intValue(), 0);
           PolyMath mod = p.mod(it);
+          System.out.println("("+p+").mod(" + it + ") = (" + mod + ")");
           if (false) {
             // We failed - but are we the first?
             if (failed.getAndSet(true) == false) {

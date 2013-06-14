@@ -396,6 +396,21 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //generateMinimalPrimitivePolys(4, 5);
     //generateMinimalPrimitivePolys(12, 5);
     //generateMinimalPrimePolys(5);
+    /* Should see at least:
+     * Degree: 2 minimal
+     * Primitive poly: x^2 + x + 1
+     * Degree: 3 minimal
+     * Primitive poly: x^3 + x + 1
+     * Primitive poly: x^3 + x^2 + 1
+     * Degree: 4 minimal
+     * Primitive poly: x^4 + x + 1
+     * Primitive poly: x^4 + x^3 + 1
+     * Reject x^4 + x^3 + x^2 + x + 1 = (x^5 + 1)/(x + 1)
+     * Degree: 5 minimal
+     * Primitive poly: x^5 + x^2 + 1
+     * Primitive poly: x^5 + x^3 + 1
+     * Primitive poly: x^5 + x^3 + x^2 + x + 1
+     */
     generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, true);
     generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);

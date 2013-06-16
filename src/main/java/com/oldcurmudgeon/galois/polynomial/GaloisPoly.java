@@ -4,10 +4,14 @@
  */
 package com.oldcurmudgeon.galois.polynomial;
 
+import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
@@ -179,7 +183,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       // Initially not failed.
       AtomicBoolean failed = new AtomicBoolean(false);
       // Build the task.
-      Task task = new Task(p, BigInteger.ONE, o, failed);
+      Task task = new Task(p, ONE, o, failed);
       // Process it in the pool.
       pool.invoke(task);
       // Deliver the answer.
@@ -195,6 +199,15 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       final BigInteger stop;
       // Has the whole test failed?
       final AtomicBoolean failed;
+      // Rejects we've seen before.
+      /*
+       * Observation suggests that if a 2^e+1 is found 
+       * to be a factor then it is a factor more than once.
+       * 
+       * We therefore record the factors used to reject 
+       * and try them first.
+       */
+      Set<BigInteger> culprits = new ConcurrentSkipListSet<>();
 
       public Task(GaloisPoly it, BigInteger start, BigInteger stop, AtomicBoolean failed) {
         this.it = it;
@@ -225,19 +238,35 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       }
 
       protected Boolean computeDirectly() {
-        // Do it for myself.
+        // Walk the culprits first.
+        for (BigInteger e : culprits) {
+          check(e);
+          // Get out of a culprit rejected.
+          if ( failed.get() ) {
+            break;
+          }
+        }
+        // Do the rest.
         for (BigInteger e = start; e.compareTo(stop) < 0 && !failed.get(); e = e.add(BigInteger.ONE)) {
-          // p = (x^e + 1)
-          GaloisPoly p = it.valueOf(e.intValue(), 0);
-          GaloisPoly mod = p.mod(it);
-          if (mod.degree().equals(MINUS1)) {
-            // We failed - but are we the first?
-            if (failed.getAndSet(true) == false) {
-              System.out.println("Prime: " + it + " = (" + p + ")/(" + p.divide(it) + ")");
-            }
+          if ( !culprits.contains(e)) {
+            // Not already checked.
+            check(e);
           }
         }
         return !failed.get();
+      }
+
+      protected void check(BigInteger e) {
+        // p = (x^e + 1)
+        GaloisPoly p = it.valueOf(e.intValue(), 0);
+        GaloisPoly mod = p.mod(it);
+        if (mod.degree().equals(MINUS1)) {
+          // We failed - but are we the first?
+          if (failed.getAndSet(true) == false) {
+            culprits.add(e);
+            System.out.println("Prime: " + it + " = (" + p + ")/(" + p.divide(it) + ")");
+          }
+        }
       }
     }
   }
@@ -413,7 +442,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     // 1101101 * x6 + x5 + x3 + x2 + 1
     // 1110011 * x6 + x5 + x4 + x + 1
     // 1110101 = x6 + x5 + x4 + x2 + 1
-    generatePrimitivePolys(6, Integer.MAX_VALUE, true);
+    //generatePrimitivePolys(6, Integer.MAX_VALUE, true);
     // Big!
     //generatePrimitivePolys(95, 2, true);
 
@@ -435,7 +464,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + 1
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
-    generatePrimitivePolysUpToDegree(11, Integer.MAX_VALUE, true);
+    ProcessTimer t = new ProcessTimer();
+    generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);
+    System.out.println("Took: "+t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
     //generatePrimitivePolys(95, 1, true);

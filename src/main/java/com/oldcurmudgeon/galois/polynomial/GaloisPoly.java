@@ -23,6 +23,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   protected static final long Q = 2L;
   // A BigInteger version of it.
   protected static final BigInteger BQ = BigInteger.valueOf(Q);
+  // A BigInteger -1.
+  protected static final BigInteger MINUS1 = BigInteger.valueOf(-1);
 
   @Override
   public abstract T xor(T o);
@@ -46,17 +48,20 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
   @Override
   public abstract T gcd(T o);
-  
+
   public abstract T x();
+
   public abstract T zero();
+
   public abstract T one();
 
   public abstract BigInteger asBigInteger();
   // What degree am I.
+
   public abstract BigInteger degree();
-  
+
   // Should be static - but no way to do that in Java.
-  public abstract GaloisPoly valueOf(int ... powers);
+  public abstract GaloisPoly valueOf(int... powers);
 
   /**
    * Constructs a polynomial using the bits from a BigInteger.
@@ -111,11 +116,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
    * Computes ( x^(2^p) - x ) mod f
    *
    * This function is useful for computing the reducibility of the polynomial
-   * 
+   *
    * ToDo: Move this to GaloisPoly
    */
   abstract T reduceExponent(final int p);
-  
+
   /*
    * An irreducible polynomial of degree m, 
    * F(x) over GF(p) for prime p, is a primitive polynomial 
@@ -224,9 +229,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         for (BigInteger e = start; e.compareTo(stop) < 0 && !failed.get(); e = e.add(BigInteger.ONE)) {
           // p = (x^e + 1)
           GaloisPoly p = it.valueOf(e.intValue(), 0);
-          PolyMath mod = p.mod(it);
-          System.out.println("("+p+").mod(" + it + ") = (" + mod + ")");
-          if (false) {
+          GaloisPoly mod = p.mod(it);
+          if (mod.degree().equals(MINUS1)) {
             // We failed - but are we the first?
             if (failed.getAndSet(true) == false) {
               System.out.println("Reject " + it + " = (" + p + ")/(" + p.divide(it) + ")");
@@ -380,16 +384,36 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       return new PrimeIterator();
     }
   }
-  
   public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
 
   public static void main(String[] args) {
-    FastPolynomial q = new FastPolynomial().valueOf(4,1);
-    FastPolynomial d = new FastPolynomial().valueOf(1,2);
-    // Should be 0
-    FastPolynomial mod = new FastPolynomial(q).mod(d);
-    // Should be x + 1
-    FastPolynomial div = new FastPolynomial(q).divide(d);
+    // x^2 + 1
+    Polynomial p = new Polynomial().valueOf(2, 0);
+    // x + 1
+    Polynomial q = new Polynomial().valueOf(1, 0);
+    // (x^2 + 1) + (x + 1) = x^2 + x
+    System.out.println("(" + p + ") + (" + q + ") = " + p.plus(q) + "");
+    // (x^2 + 1) - (x + 1) = x^2 + x
+    System.out.println("(" + p + ") - (" + q + ") = " + p.minus(q) + "");
+    // (x^2 + 1) * (x + 1) = x^3 + x^2 + x + 1
+    System.out.println("(" + p + ") * (" + q + ") = " + p.multiply(q) + "");
+    // (x^2 + 1) / (x + 1) = x + 1
+    System.out.println("(" + p + ") / (" + q + ") = " + p.divide(q) + "");
+    // (x^2 + 1) % (x + 1) =
+    System.out.println("(" + p + ") % (" + q + ") = " + p.mod(q) + "");
+    // (x^2 + 1) %^ (2,x + 1) =
+    System.out.println("(" + p + ") %^ (2," + q + ") = " + p.modPow(TWO, q) + "");
+    // Should be (* -> Primitive, = -> Prime)
+    // 1000011 * x6 + x + 1
+    // 1001001 = x6 + x3 + 1
+    // 1100001 * x6 + x5 + 1 
+    // 1010111 = x6 + x4 + x2 + x + 1
+    // 1011011 * x6 + x4 + x3 + x + 1
+    // 1100111 * x6 + x5 + x2 + x + 1
+    // 1101101 * x6 + x5 + x3 + x2 + 1
+    // 1110011 * x6 + x5 + x4 + x + 1
+    // 1110101 = x6 + x5 + x4 + x2 + 1
+    generatePrimitivePolys(6, Integer.MAX_VALUE, true);
     // Big!
     //generatePrimitivePolys(95, 2, true);
 
@@ -430,7 +454,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, false, minimal ? false : true)) {
+    for (Polynomial p : new Polynomial().new PrimePolynomials(degree, false, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Prime poly: " + p);
       seen += 1;
@@ -452,7 +476,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, true, minimal ? false : true)) {
+    for (Polynomial p : new Polynomial().new PrimePolynomials(degree, true, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Primitive poly: " + p);
       seen += 1;

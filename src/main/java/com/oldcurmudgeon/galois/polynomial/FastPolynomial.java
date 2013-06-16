@@ -25,8 +25,9 @@ public class FastPolynomial
   private final BigInteger degrees;
   // Base ones.
   static final FastPolynomial ZERO = new FastPolynomial();
-  static final FastPolynomial ONE = new FastPolynomial(1);
-  static final FastPolynomial X = new FastPolynomial(2);
+  // Avoids the `long` implementation.
+  static final FastPolynomial ONE = new FastPolynomial().valueOf(0, 0);
+  static final FastPolynomial X = new FastPolynomial().valueOf(1, 1);
   @Override
   public FastPolynomial zero () {
     return new FastPolynomial();

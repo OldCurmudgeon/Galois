@@ -28,11 +28,11 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   /**
    * the polynomial "x"
    */
-  public static final Polynomial X = new Polynomial().valueOf(1);
+  public static final Polynomial X = new Polynomial().valueOf(1,  1);
   /**
    * the polynomial "1"
    */
-  public static final Polynomial ONE = new Polynomial().valueOf(0);
+  public static final Polynomial ONE = new Polynomial().valueOf(0, 0);
 
   @Override
   public Polynomial x () {
@@ -145,7 +145,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
 
   protected Polynomial(Collection<BigInteger> degrees) {
     this();
-    degrees.addAll(degrees);
+    this.degrees.addAll(degrees);
   }
 
   public Polynomial(Polynomial p) {

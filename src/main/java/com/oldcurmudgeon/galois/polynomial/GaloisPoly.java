@@ -241,6 +241,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       protected Boolean computeDirectly() {
         // Walk the culprits first.
         for (BigInteger e : culprits) {
+          // Check previous culprits first.
           check(e);
           // Get out if a culprit rejected.
           if (failed.get()) {
@@ -249,11 +250,13 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         }
         // Do the rest.
         for (BigInteger e = start; e.compareTo(stop) < 0 && !failed.get(); e = e.add(BigInteger.ONE)) {
+          // Skip the already known culprits - we dealt with them in the previous loop.
           if (!culprits.contains(e)) {
             // Not already checked.
             check(e);
           }
         }
+        // Stop now if we failed.
         return !failed.get();
       }
 

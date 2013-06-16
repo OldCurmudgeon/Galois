@@ -164,6 +164,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
     return degrees.first();
   }
 
+  @Override
   public boolean isEmpty() {
     return degrees.isEmpty();
   }

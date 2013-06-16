@@ -58,6 +58,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
   public abstract T one();
 
+  public abstract boolean isEmpty();
+  
   public abstract BigInteger asBigInteger();
   // What degree am I.
 
@@ -258,8 +260,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       protected void check(BigInteger e) {
         // p = (x^e + 1)
         GaloisPoly p = it.valueOf(e.intValue(), 0);
-        GaloisPoly mod = p.mod(it);
-        if (mod.degree().equals(MINUS1)) {
+        if (p.mod(it).isEmpty()) {
           // We failed - but are we the first?
           if (failed.getAndSet(true) == false) {
             culprits.add(e);

@@ -28,19 +28,22 @@ public class FastPolynomial
   // Avoids the `long` implementation.
   static final FastPolynomial ONE = new FastPolynomial().valueOf(0, 0);
   static final FastPolynomial X = new FastPolynomial().valueOf(1, 1);
+
   @Override
-  public FastPolynomial zero () {
+  public FastPolynomial zero() {
     return new FastPolynomial();
   }
+
   @Override
-  public FastPolynomial one () {
+  public FastPolynomial one() {
     return new FastPolynomial(1);
   }
+
   @Override
-  public FastPolynomial x () {
+  public FastPolynomial x() {
     return new FastPolynomial(2);
   }
-  
+
   // Leave it empty.
   public FastPolynomial() {
     degrees = BigInteger.ZERO;
@@ -62,9 +65,9 @@ public class FastPolynomial
   }
 
   @Override
-  public FastPolynomial valueOf(int ... powers) {
+  public FastPolynomial valueOf(int... powers) {
     BigInteger big = BigInteger.ZERO;
-    for ( int i : powers ) {
+    for (int i : powers) {
       big = big.setBit(i);
     }
     return new FastPolynomial(big);
@@ -75,7 +78,7 @@ public class FastPolynomial
    */
   @Override
   public FastPolynomial valueOf(BigInteger big, long degree) {
-    return new FastPolynomial(big.setBit((int)degree));
+    return new FastPolynomial(big.setBit((int) degree));
   }
 
   @Override
@@ -137,7 +140,7 @@ public class FastPolynomial
   @Override
   public FastPolynomial gcd(FastPolynomial p) {
     FastPolynomial gcd = new FastPolynomial(this);
-    while(!p.degrees.equals(BigInteger.ZERO)) {
+    while (!p.degrees.equals(BigInteger.ZERO)) {
       FastPolynomial t = new FastPolynomial(p);
       p = gcd.mod(p);
       gcd = t;
@@ -146,27 +149,32 @@ public class FastPolynomial
   }
 
   @Override
+  public boolean isEmpty() {
+    return degrees.equals(BigInteger.ZERO);
+  }
+
+  @Override
   public int compareTo(FastPolynomial p) {
     return degrees.compareTo(p.degrees);
   }
 
-   @Override
+  @Override
   public BigInteger degree() {
-     return BigInteger.valueOf(degrees.bitLength()-1);
+    return BigInteger.valueOf(degrees.bitLength() - 1);
   }
-   
+
   @Override
   public BigInteger asBigInteger() {
     return degrees;
   }
 
   @Override
-  public boolean equals (Object it) {
-    return it != null &&
-            it instanceof FastPolynomial &&
-            ((FastPolynomial) it).degrees.equals(degrees);
+  public boolean equals(Object it) {
+    return it != null
+            && it instanceof FastPolynomial
+            && ((FastPolynomial) it).degrees.equals(degrees);
   }
-  
+
   @Override
   public int hashCode() {
     int hash = 7;
@@ -178,7 +186,7 @@ public class FastPolynomial
    * Computes ( x^(2^p) - x ) mod f
    *
    * This function is useful for computing the reducibility of the polynomial
-   * 
+   *
    * ToDo: Move this to GaloisPoly
    */
   @Override
@@ -190,14 +198,14 @@ public class FastPolynomial
     // subtract (x mod f)
     return x_to_q_to_p.xor(X).mod(this);
   }
-  
+
   /**
    * Computes x^e mod m.
    *
    * This algorithm requires at most this.degree() + m.degree() space.'
    *
    * http://en.wikipedia.org/wiki/Modular_exponentiation
-   * 
+   *
    * ToDo: Move this up into GaloisPoly
    */
   @Override
@@ -216,15 +224,15 @@ public class FastPolynomial
     return result;
   }
 
- /**
+  /**
    * Returns standard ascii representation of this polynomial in the form:
    *
    * e.g.: x^8 + x^4 + x^3 + x + 1
    */
   public String toPolynomialString() {
     StringBuilder str = new StringBuilder();
-    for ( int i = degrees.bitLength(); i >= 0; i-- ) {
-      if ( degrees.testBit(i)) {
+    for (int i = degrees.bitLength(); i >= 0; i--) {
+      if (degrees.testBit(i)) {
         if (str.length() != 0) {
           str.append(" + ");
         }
@@ -248,19 +256,18 @@ public class FastPolynomial
   public String toString() {
     return toPolynomialString();
   }
-  
-  private static void test ( FastPolynomial p ) {
-    System.out.println(p.degrees.toString(2)+"="+p.toString());
+
+  private static void test(FastPolynomial p) {
+    System.out.println(p.degrees.toString(2) + "=" + p.toString());
   }
-  
+
   public static void main(String[] args) {
     FastPolynomial p = new FastPolynomial();
     test(p);
     test(p.plus(ONE));
     test(p.multiply(X));
     test(p.plus(X));
-    p = p.valueOf(8,6,4,2,1,0);
+    p = p.valueOf(8, 6, 4, 2, 1, 0);
     test(p);
   }
-
 }

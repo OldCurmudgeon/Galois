@@ -233,7 +233,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           if (mod.degree().equals(MINUS1)) {
             // We failed - but are we the first?
             if (failed.getAndSet(true) == false) {
-              System.out.println("Reject " + it + " = (" + p + ")/(" + p.divide(it) + ")");
+              System.out.println("Prime: " + it + " = (" + p + ")/(" + p.divide(it) + ")");
             }
           }
         }
@@ -446,7 +446,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   private static void generatePrimePolysUpToDegree(int d, int max, boolean minimal) {
-    for (int degree = 2; degree < d; degree++) {
+    for (int degree = 2; degree <= d; degree++) {
       generatePrimePolys(degree, max, minimal);
     }
   }
@@ -468,7 +468,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   private static void generatePrimitivePolysUpToDegree(int d, int max, boolean minimal) {
-    for (int degree = 2; degree < d; degree++) {
+    for (int degree = 2; degree <= d; degree++) {
       generatePrimitivePolys(degree, max, minimal);
     }
   }
@@ -478,7 +478,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     int seen = 0;
     for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, true, minimal ? false : true)) {
       // Prime Polynomials!
-      System.out.println("Primitive poly: " + p);
+      System.out.println("Primitive: " + p);
       seen += 1;
       if (seen >= count) {
         // Stop after the 1st 10 for speed - one day enumerate all.

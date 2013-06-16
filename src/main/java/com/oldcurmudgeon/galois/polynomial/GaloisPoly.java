@@ -8,7 +8,6 @@ import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;

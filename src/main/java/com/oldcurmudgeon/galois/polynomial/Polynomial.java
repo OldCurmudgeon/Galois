@@ -170,22 +170,6 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   }
 
   /**
-   * Computes (this + that) in GF(2^k)
-   */
-  @Override
-  public Polynomial plus(Polynomial that) {
-    return xor(that);
-  }
-
-  /**
-   * Computes (this - that) in GF(2^k)
-   */
-  @Override
-  public Polynomial minus(Polynomial that) {
-    return xor(that);
-  }
-
-  /**
    * Computes (this * that) in GF(2^k)
    */
   @Override

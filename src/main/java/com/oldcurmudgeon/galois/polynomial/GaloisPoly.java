@@ -59,7 +59,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   public abstract T one();
 
   public abstract boolean isEmpty();
-  
+
   public abstract BigInteger asBigInteger();
   // What degree am I.
 
@@ -242,14 +242,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         // Walk the culprits first.
         for (BigInteger e : culprits) {
           check(e);
-          // Get out of a culprit rejected.
-          if ( failed.get() ) {
+          // Get out if a culprit rejected.
+          if (failed.get()) {
             break;
           }
         }
         // Do the rest.
         for (BigInteger e = start; e.compareTo(stop) < 0 && !failed.get(); e = e.add(BigInteger.ONE)) {
-          if ( !culprits.contains(e)) {
+          if (!culprits.contains(e)) {
             // Not already checked.
             check(e);
           }
@@ -261,9 +261,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         // p = (x^e + 1)
         GaloisPoly p = it.valueOf(e.intValue(), 0);
         if (p.mod(it).isEmpty()) {
+          // Found a new culprit.
+          culprits.add(e);
           // We failed - but are we the first?
           if (failed.getAndSet(true) == false) {
-            culprits.add(e);
+            // Its only prime - not primitive.
             System.out.println("Prime: " + it + " = (" + p + ")/(" + p.divide(it) + ")");
           }
         }
@@ -466,7 +468,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      */
     ProcessTimer t = new ProcessTimer();
     generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);
-    System.out.println("Took: "+t);
+    System.out.println("Took: " + t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
     //generatePrimitivePolys(95, 1, true);

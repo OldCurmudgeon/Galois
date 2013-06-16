@@ -64,28 +64,6 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
   }
 
   /**
-   * Constructs a polynomial using the bits from an array of bytes, limiting
-   * the degree to the specified size.
-   *
-   * We set the final degree to ensure a monic polynomial of the correct
-   * degree.
-   */
-  public static Polynomial valueOf(byte[] bytes, long degree) {
-    Set<BigInteger> dgrs = createDegreesCollection();
-    // Stop when we hit the byte limit too - just for safety.
-    for (int i = 0; i < degree && i / 8 < bytes.length; i++) {
-      int aidx = (i / 8); // byte array index
-      int bidx = i % 8; // bit index
-      byte b = bytes[aidx];
-      if (((b >> bidx) & 1) == 1) {
-        dgrs.add(BigInteger.valueOf(i));
-      }
-    }
-    dgrs.add(BigInteger.valueOf(degree));
-    return new Polynomial(dgrs);
-  }
-
-  /**
    * Constructs a polynomial using the bits from a BigInteger.
    */
   @Override
@@ -115,28 +93,6 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
       dgrs.add(BigInteger.valueOf(i));
     }
     return new Polynomial(dgrs);
-  }
-
-  /**
-   * Constructs a random polynomial of degree "degree"
-   */
-  public static Polynomial newRandom(long degree) {
-    Random random = new Random();
-    byte[] bytes = new byte[(int) (degree / 8) + 1];
-    random.nextBytes(bytes);
-    return valueOf(bytes, degree);
-  }
-
-  /**
-   * Finds a random irreducible polynomial of degree "degree"
-   */
-  public static Polynomial newIrreducible(long degree) {
-    while (true) {
-      Polynomial p = newRandom(degree);
-      if (p.getReducibility() == Reducibility.IRREDUCIBLE) {
-        return p;
-      }
-    }
   }
 
   public Polynomial() {

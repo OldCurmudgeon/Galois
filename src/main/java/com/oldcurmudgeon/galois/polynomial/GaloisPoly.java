@@ -435,8 +435,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + 1
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
-    generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, true);
-    generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
+    generatePrimitivePolysUpToDegree(11, Integer.MAX_VALUE, true);
+    //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
     //generatePrimitivePolys(95, 1, true);
     //generatePrimitivePolys(95, 1, false);

@@ -98,16 +98,12 @@ public class FastPolynomial
     return new FastPolynomial(degrees.xor(p.degrees));
   }
 
+  private FastPolynomial shiftLeft(BigInteger i) {
+    return new FastPolynomial(degrees.shiftLeft(i.intValue()));
+  }
+
   @Override
   public FastPolynomial mod(FastPolynomial p) {
-    //BigInteger da = this.degree();
-    //BigInteger db = that.degree();
-    //Polynomial mod = new Polynomial(this);
-    //for (BigInteger i = da.subtract(db); i.compareTo(BigInteger.ZERO) >= 0; i = i.subtract(BigInteger.ONE)) {
-    //  if (mod.hasDegree(i.add(db))) {
-    //    mod = mod.xor(that.shiftLeft(i));
-    //  }
-    //}
     BigInteger da = this.degree();
     BigInteger db = p.degree();
     BigInteger mod = degrees;
@@ -125,7 +121,17 @@ public class FastPolynomial
 
   @Override
   public FastPolynomial divide(FastPolynomial p) {
-    return new FastPolynomial(degrees.divide(p.degrees));
+    BigInteger da = this.degree();
+    BigInteger db = p.degree();
+    FastPolynomial mod = new FastPolynomial(this);
+    FastPolynomial div = new FastPolynomial();
+    for (BigInteger i = da.subtract(db); i.compareTo(BigInteger.ZERO) >= 0; i = i.subtract(BigInteger.ONE)) {
+      if (mod.degrees.testBit(i.add(db).intValue())) {
+        mod = mod.xor(p.shiftLeft(i));
+        div = div.or(one().shiftLeft(i));
+      }
+    }
+    return div;
   }
 
   @Override

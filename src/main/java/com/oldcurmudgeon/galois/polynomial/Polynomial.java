@@ -371,11 +371,11 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * http://en.wikipedia.org/wiki/Euclids_algorithm
    */
   @Override
-  public Polynomial gcd(Polynomial b) {
+  public Polynomial gcd(Polynomial p) {
     Polynomial a = new Polynomial(this);
-    while (!b.isEmpty()) {
-      Polynomial t = new Polynomial(b);
-      b = a.mod(b);
+    while (!p.isEmpty()) {
+      Polynomial t = new Polynomial(p);
+      p = a.mod(p);
       a = t;
     }
     return a;

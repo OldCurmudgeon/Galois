@@ -388,9 +388,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
   public static void main(String[] args) {
     // x^2 + 1
-    Polynomial p = new Polynomial().valueOf(2, 0);
+    FastPolynomial p = new FastPolynomial().valueOf(2, 0);
     // x + 1
-    Polynomial q = new Polynomial().valueOf(1, 0);
+    FastPolynomial q = new FastPolynomial().valueOf(1, 0);
     // (x^2 + 1) + (x + 1) = x^2 + x
     System.out.println("(" + p + ") + (" + q + ") = " + p.plus(q) + "");
     // (x^2 + 1) - (x + 1) = x^2 + x
@@ -454,7 +454,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (Polynomial p : new Polynomial().new PrimePolynomials(degree, false, minimal ? false : true)) {
+    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, false, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Prime poly: " + p);
       seen += 1;
@@ -476,7 +476,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (Polynomial p : new Polynomial().new PrimePolynomials(degree, true, minimal ? false : true)) {
+    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, true, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Primitive poly: " + p);
       seen += 1;

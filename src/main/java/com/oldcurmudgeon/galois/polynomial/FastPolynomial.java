@@ -130,7 +130,13 @@ public class FastPolynomial
 
   @Override
   public FastPolynomial gcd(FastPolynomial p) {
-    return new FastPolynomial(degrees.gcd(p.degrees));
+    FastPolynomial gcd = new FastPolynomial(this);
+    while(!p.degrees.equals(BigInteger.ZERO)) {
+      FastPolynomial t = new FastPolynomial(p);
+      p = gcd.mod(p);
+      gcd = t;
+    }
+    return gcd;
   }
 
   @Override

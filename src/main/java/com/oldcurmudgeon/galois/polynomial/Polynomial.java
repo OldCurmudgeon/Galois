@@ -95,6 +95,15 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
     return new Polynomial(dgrs);
   }
 
+  @Override
+  public Polynomial valueOf(BigInteger... powers) {
+    Set<BigInteger> dgrs = createDegreesCollection();
+    for (BigInteger i : powers) {
+      dgrs.add(i);
+    }
+    return new Polynomial(dgrs);
+  }
+
   public Polynomial() {
     degrees = createDegreesCollection();
   }

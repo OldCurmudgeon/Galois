@@ -28,6 +28,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   protected static final BigInteger BQ = BigInteger.valueOf(Q);
   // A BigInteger -1.
   protected static final BigInteger MINUS1 = BigInteger.valueOf(-1);
+  // Big Max Int
+  protected static final BigInteger MAX = BigInteger.valueOf(Integer.MAX_VALUE);
 
   @Override
   public abstract T xor(T o);
@@ -67,6 +69,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
   // Should be static - but no way to do that in Java.
   public abstract GaloisPoly valueOf(int... powers);
+  public abstract GaloisPoly valueOf(BigInteger... powers);
 
   /**
    * Constructs a polynomial using the bits from a BigInteger.
@@ -262,7 +265,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
       protected void check(BigInteger e) {
         // p = (x^e + 1)
-        GaloisPoly p = it.valueOf(e.intValue(), 0);
+        GaloisPoly p = it.valueOf(e, BigInteger.ZERO);
         if (p.mod(it).isEmpty()) {
           // Found a new culprit.
           culprits.add(e);
@@ -470,11 +473,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);
+    //generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);
+    generatePrimitivePolys(95, 1, true);
     System.out.println("Took: " + t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
-    //generatePrimitivePolys(95, 1, true);
     //generatePrimitivePolys(95, 1, false);
     //generatePrimitivePolys(96, 1, false);
     //generatePrimitivePolys(255, 1, false);

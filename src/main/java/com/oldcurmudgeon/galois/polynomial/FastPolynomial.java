@@ -73,6 +73,19 @@ public class FastPolynomial
     return new FastPolynomial(big);
   }
 
+  @Override
+  public FastPolynomial valueOf(BigInteger... powers) {
+    BigInteger big = BigInteger.ZERO;
+    for (BigInteger i : powers) {
+      if ( i.compareTo(MAX) < 0 ) {
+        big = big.setBit(i.intValue());
+      } else {
+        System.out.println("MAX Exceeded!");
+      }
+    }
+    return new FastPolynomial(big);
+  }
+
   /**
    * Constructs a polynomial using the bits from a BigInteger.
    */

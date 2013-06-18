@@ -36,5 +36,5 @@ import java.util.Iterator;
  */
 public interface IndexedIterator<T,I extends Number> extends Iterator<T> {
   // Return the current index.
-  public I getIndex();
+  public I i();
 }

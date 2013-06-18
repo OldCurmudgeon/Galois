@@ -13,51 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.oldcurmudgeon.galois.math;
-
-import java.util.Iterator;
 
 /**
  * Defines a stream of bits to perform maths over.
- * 
+ *
  * It should be possible to step through two streams of bits
  * at once and do the maths on them.
- * 
+ *
  * Underneath, it should be possible to ask the stream to skip
  * uninteresting sequences of bits such as all zeros.
- * 
+ *
  * Going forward I hope to perform the actual math using lambdas
  * and closures but for now we will merely iterate.
- * 
+ *
  * T is the type of each part.
- * 
+ * I is the type of the index.
+ *
  * @author OldCurmudgeon
  */
-public class Bits<T extends Number, I extends Number> implements IndexedIterator<T,I> {
+public abstract class Bits<T extends Number, I extends Number>
+        implements IndexedIterator<T, I> {
+  // The last returned - populated by next.
+  T prev = null;
+  // The next to return - populate in hasNext please.
+  T next = null;
+  // The indext it is at - populate in hasNext please.
+  I i = null;
 
+  // hasNext must prime both next and i.
   @Override
-  public boolean hasNext() {
-    // To change body of generated methods, choose Tools | Templates.
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+  public abstract boolean hasNext();
 
   @Override
   public T next() {
-    // To change body of generated methods, choose Tools | Templates.
-    throw new UnsupportedOperationException("Not supported yet.");
+    // Standard pattern for next.
+    if (hasNext()) {
+      prev = next;
+      next = null;
+      return prev;
+    } else {
+      return null;
+    }
   }
 
   @Override
   public void remove() {
-    // To change body of generated methods, choose Tools | Templates.
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new UnsupportedOperationException("Not supported.");
   }
 
   @Override
-  public I getIndex() {
-    // To change body of generated methods, choose Tools | Templates.
-    throw new UnsupportedOperationException("Not supported yet.");
+  public I i() {
+    return i;
   }
-
 }

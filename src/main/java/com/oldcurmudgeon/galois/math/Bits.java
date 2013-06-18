@@ -15,6 +15,8 @@
  */
 package com.oldcurmudgeon.galois.math;
 
+import java.math.BigInteger;
+
 /**
  * Defines a stream of bits to perform maths over.
  *
@@ -32,21 +34,28 @@ package com.oldcurmudgeon.galois.math;
  *
  * @author OldCurmudgeon
  */
-public abstract class Bits<T extends Number, I extends Number>
-        implements IndexedIterator<T, I> {
+public abstract class Bits implements IndexedIterator<BigInteger, BigInteger> {
+
   // The last returned - populated by next.
-  T prev = null;
+  BigInteger prev = null;
   // The next to return - populate in hasNext please.
-  T next = null;
-  // The indext it is at - populate in hasNext please.
-  I i = null;
-
-  // hasNext must prime both next and i.
-  @Override
-  public abstract boolean hasNext();
+  BigInteger next = null;
+  // The index it is at - populate in hasNext please.
+  BigInteger i = null;
 
   @Override
-  public T next() {
+  public boolean hasNext() {
+    if ( next == null ) {
+      getNextAndSetIndex ();
+    }
+    return next != null;
+  }
+
+  // getNext must prime both next and i.
+  protected abstract void getNextAndSetIndex();
+
+  @Override
+  public BigInteger next() {
     // Standard pattern for next.
     if (hasNext()) {
       prev = next;
@@ -63,7 +72,32 @@ public abstract class Bits<T extends Number, I extends Number>
   }
 
   @Override
-  public I i() {
+  public BigInteger i() {
     return i;
+  }
+  
+  // Actual Bits processes that do things.
+  // ToDo: Use ForkJoinPools for some of thois stuff.
+  public static Bits xor (Bits a, Bits b) {
+    // Ultimately use a lambda but for now I will use a loop and ops.
+    // ToDo: Use an enum for the op.
+    return iterateIgnoringZeros ( a, b, Op.xor);
+  }
+  
+  enum Op {
+    xor {
+      public BigInteger op( BigInteger a, BigInteger b ) {
+        return a.xor(b);
+      }
+    };
+  }
+  
+  private static Bits iterateIgnoringZeros(Bits a, Bits b, Op op) {
+    // Prime each one.
+    BigInteger abi = a.next();
+    BigInteger bbi = b.next();
+    BigInteger ai = a.i();
+    BigInteger bi = b.i();
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 }

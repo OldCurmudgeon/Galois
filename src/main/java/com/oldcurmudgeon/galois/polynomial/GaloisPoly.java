@@ -4,6 +4,7 @@
  */
 package com.oldcurmudgeon.galois.polynomial;
 
+import com.oldcurmudgeon.galois.math.PolyMath;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;

@@ -1,9 +1,9 @@
 package com.oldcurmudgeon.galois.polynomial;
 
+import com.oldcurmudgeon.galois.math.PolyMath;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 

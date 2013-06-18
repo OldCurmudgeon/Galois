@@ -1,4 +1,4 @@
-package com.oldcurmudgeon.galois.polynomial;
+package com.oldcurmudgeon.galois.math;
 
 /**
  * What should be possible with a polynomial.

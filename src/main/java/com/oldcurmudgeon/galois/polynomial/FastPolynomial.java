@@ -80,7 +80,8 @@ public class FastPolynomial
       if ( i.compareTo(MAX) < 0 ) {
         big = big.setBit(i.intValue());
       } else {
-        System.out.println("MAX Exceeded!");
+        System.out.println("MAX Exceeded! "+i);
+        throw new IllegalArgumentException("Power too big "+i);
       }
     }
     return new FastPolynomial(big);

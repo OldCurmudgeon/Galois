@@ -48,16 +48,21 @@ public class HugeBits extends Bits {
     walker = bits.navigableKeySet().iterator();
   }
 
+  // Does this interfere with the iterator?
+  public void add ( Big big ) {
+    bits.put(big.index, big.value);
+  }
+  
   @Override
   protected void getNextAndSetIndex() {
     if ( walker.hasNext() ) {
       // Next index.
-      i = walker.next();
+      index = walker.next();
       // Next value.
-      next = bits.get(i);
+      next = bits.get(index);
     } else {
       // Finished!
-      i = null;
+      index = null;
       next = null;
     }
   }

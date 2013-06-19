@@ -35,7 +35,7 @@ public class BigBits extends Bits {
     // The bits to deliver.
     next = bits;
     // The power of the lowest bit.
-    i = BigInteger.ZERO;
+    index = BigInteger.ZERO;
   }
   
 }

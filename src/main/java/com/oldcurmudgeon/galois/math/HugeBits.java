@@ -30,17 +30,6 @@ public class HugeBits extends Bits {
   // The iterator over them.
   private final Iterator<BigInteger> walker;
 
-  // A packet to define a section of bits that fit into a BigInteger.
-  public static class Big {
-    final BigInteger index;
-    final BigInteger value;
-
-    public Big(BigInteger index, BigInteger value) {
-      this.index = index;
-      this.value = value;
-    }
-  }
-
   public HugeBits(Big... bigs) {
     for (Big i : bigs) {
       bits.put(i.index, i.value);

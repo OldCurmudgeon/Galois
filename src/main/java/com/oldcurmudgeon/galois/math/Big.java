@@ -16,27 +16,23 @@
 package com.oldcurmudgeon.galois.math;
 
 import java.math.BigInteger;
-import java.util.Iterator;
 
 /**
- * Bits implementation using BigIntegers.
- * 
+ * A packet to define a section of bits that fit into a BigInteger.
+ *
  * @author OldCurmudgeon.
  */
-public class BigBits extends Bits {
-  // The actual bits.
-  private final BigInteger bits;
-  
-  public BigBits(BigInteger bits) {
-    this.bits = bits;
+public class Big implements Indexed<BigInteger>{
+  final BigInteger index;
+  final BigInteger value;
+
+  public Big(BigInteger index, BigInteger value) {
+    this.index = index;
+    this.value = value;
   }
 
   @Override
-  protected void getNextAndSetIndex() {
-    // The bits to deliver.
-    next = bits;
-    // The power of the lowest bit.
-    index = BigInteger.ZERO;
+  public BigInteger index() {
+    return index;
   }
-
 }

@@ -15,8 +15,8 @@
  */
 package com.oldcurmudgeon.galois.math;
 
-import com.oldcurmudgeon.galois.math.HugeBits.Big;
 import java.math.BigInteger;
+import java.util.Iterator;
 
 /**
  * Defines a stream of bits to perform maths over.
@@ -35,7 +35,13 @@ import java.math.BigInteger;
  *
  * @author OldCurmudgeon
  */
-public abstract class Bits implements IndexedIterator<BigInteger, BigInteger> {
+public abstract class Bits implements IndexedIterable<Big, BigInteger> {
+  @Override
+  public Iterator<Big> iterator() {
+    // To change body of generated methods, choose Tools | Templates.
+    xxx;
+  }
+  
   // The last returned - populated by next.
   BigInteger prev = null;
   // The next to return - populate in hasNext please.
@@ -43,7 +49,6 @@ public abstract class Bits implements IndexedIterator<BigInteger, BigInteger> {
   // The index it is at - populate in hasNext please.
   BigInteger index = null;
 
-  @Override
   public boolean hasNext() {
     if (next == null) {
       getNextAndSetIndex();
@@ -54,7 +59,6 @@ public abstract class Bits implements IndexedIterator<BigInteger, BigInteger> {
   // getNext must prime both next and index.
   protected abstract void getNextAndSetIndex();
 
-  @Override
   public BigInteger next() {
     // Standard pattern for next.
     if (hasNext()) {
@@ -66,12 +70,10 @@ public abstract class Bits implements IndexedIterator<BigInteger, BigInteger> {
     }
   }
 
-  @Override
   public void remove() {
     throw new UnsupportedOperationException("Not supported.");
   }
 
-  @Override
   public BigInteger i() {
     return hasNext() ? index : null;
   }

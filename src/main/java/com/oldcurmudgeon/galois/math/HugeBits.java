@@ -17,6 +17,7 @@ public class HugeBits extends Bits {
   // The iterator over them.
   private final Iterator<BigInteger> walker;
 
+  // A packet to define a section of bits that fit into a BigInteger.
   public static class Big {
     final BigInteger index;
     final BigInteger value;
@@ -36,9 +37,15 @@ public class HugeBits extends Bits {
 
   @Override
   protected void getNextAndSetIndex() {
-    // Next index.
-    i = walker.next();
-    // Next value.
-    next = bits.get(i);
+    if ( walker.hasNext() ) {
+      // Next index.
+      i = walker.next();
+      // Next value.
+      next = bits.get(i);
+    } else {
+      // Finished!
+      i = null;
+      next = null;
+    }
   }
 }

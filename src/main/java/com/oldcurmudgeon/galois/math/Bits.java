@@ -29,7 +29,7 @@ import java.math.BigInteger;
  * Going forward I hope to perform the actual math using lambdas
  * and closures but for now we will merely iterate.
  *
- * T is the type of each part.
+ * T is the type of each chunk.
  * I is the type of the index.
  *
  * @author OldCurmudgeon

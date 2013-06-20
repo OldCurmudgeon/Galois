@@ -83,7 +83,6 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     public BigInteger length() {
       return hasNext() ? next.length() : null;
     }
-
   }
 
   @Override
@@ -104,24 +103,20 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.xor(b);
       }
-
     },
     and {
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.and(b);
       }
-
     },
     or {
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.or(b);
       }
-
     };
     // Perform the op.
 
     abstract BigInteger op(BigInteger a, BigInteger b);
-
   }
 
   // Where to pull next from - a or b.
@@ -146,7 +141,6 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       Next other() {
         return Next.B;
       }
-
     },
     B {
       @Override
@@ -168,14 +162,15 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       Next other() {
         return Next.A;
       }
-
     };
 
     // The index of the next value.
     abstract <T extends Sparse<BigInteger, BigInteger>> BigInteger index(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b);
     // Its length.
+
     abstract <T extends Sparse<BigInteger, BigInteger>> BigInteger length(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b);
     // The next value.
+
     abstract <T extends Sparse<BigInteger, BigInteger>> BigInteger value(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b);
 
     abstract Next other();
@@ -185,22 +180,21 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       // If they both exist compare them - if one exists return it - otherwise return null.
       BigInteger ai = a.index();
       BigInteger bi = b.index();
-      if ( ai == null && bi == null ) {
+      if (ai == null && bi == null) {
         // Both null.
         return null;
       }
-      if ( ai == null ) {
+      if (ai == null) {
         // A null - return B.
         return B;
       }
-      if ( bi == null ) {
+      if (bi == null) {
         // B null - return A.
         return A;
       }
       // Neither null - return lowest index with priority A.
       return a.index().compareTo(b.index()) <= 0 ? A : B;
     }
-
   }
 
   // Applies the op to the bits.
@@ -211,9 +205,12 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     // Which one is next.
     for (Next next = Next.next(ia, ib); next != null; next = Next.next(ia, ib)) {
       BigInteger index = next.index(ia, ib);
+      BigInteger length = next.length(ia, ib);
       BigInteger value = next.value(ia, ib);
       Next other = next.other();
-      if (index.equals(other.index(ia, ib))) {
+      if (overlaps(index, length, other.index(ia, ib), other.length(ia, ib))) {
+        // Work out the shift.
+        xxx
         // Perform the op.
         applied.add(new Big(index, op.op(value, other.value(ia, ib))));
       } else {
@@ -222,6 +219,19 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       }
     }
     return applied;
+  }
+
+  private static boolean overlaps(BigInteger aIndex, BigInteger aLength, BigInteger bIndex, BigInteger bLength) {
+    // Wholly below?
+    if (aIndex.add(aLength).compareTo(bIndex) <= 0) {
+      return false;
+    }
+    // Wholly above?
+    if (bIndex.add(bLength).compareTo(aIndex) <= 0) {
+      return false;
+    }
+    // There is some intersection.
+    return true;
   }
 
   public static void main(String[] args) {
@@ -237,5 +247,4 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     System.out.println("a xor c = " + apply(a, c, Op.xor));
     System.out.println("b xor c = " + apply(b, c, Op.xor));
   }
-
 }

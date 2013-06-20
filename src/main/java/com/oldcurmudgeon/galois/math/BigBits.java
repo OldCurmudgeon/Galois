@@ -16,7 +16,6 @@
 package com.oldcurmudgeon.galois.math;
 
 import java.math.BigInteger;
-import java.util.Iterator;
 
 /**
  * Bits implementation using BigIntegers.

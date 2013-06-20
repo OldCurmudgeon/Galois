@@ -40,7 +40,7 @@ public class HugeBits extends Bits<Big> {
   }
   
  @Override
-  public IndexedIterator<Big,BigInteger> iterator() {
+  public SparseIterator<Big,BigInteger> iterator() {
     return new HugeBitsIterator(bits.values().iterator());
   }
 

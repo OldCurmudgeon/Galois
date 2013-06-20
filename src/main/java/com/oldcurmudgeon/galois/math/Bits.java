@@ -36,11 +36,11 @@ import java.util.Iterator;
  *
  * @author OldCurmudgeon
  */
-public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements IndexedIterable<T, BigInteger> {
+public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements SparseIterable<T, BigInteger> {
   @Override
-  public abstract IndexedIterator<T, BigInteger> iterator();
+  public abstract SparseIterator<T, BigInteger> iterator();
 
-  protected abstract class BitsIterator implements IndexedIterator<T, BigInteger> {
+  protected abstract class BitsIterator implements SparseIterator<T, BigInteger> {
     // The next to return - populate in getNext please.
     T next = null;
 
@@ -76,6 +76,12 @@ public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements
     @Override
     public BigInteger index() {
       return hasNext() ? next.index() : null;
+    }
+
+    // Return its length.
+    @Override
+    public BigInteger length() {
+      return hasNext() ? next.length() : null;
     }
 
   }
@@ -122,12 +128,17 @@ public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements
   private enum Next {
     A {
       @Override
-      <T extends Indexed<BigInteger, BigInteger>> BigInteger index(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b) {
+      <T extends Sparse<BigInteger, BigInteger>> BigInteger index(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b) {
         return a.index();
       }
 
       @Override
-      <T extends Indexed<BigInteger, BigInteger>> BigInteger value(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b) {
+      <T extends Sparse<BigInteger, BigInteger>> BigInteger length(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b) {
+        return a.length();
+      }
+
+      @Override
+      <T extends Sparse<BigInteger, BigInteger>> BigInteger value(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b) {
         return a.next().value();
       }
 
@@ -139,12 +150,17 @@ public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements
     },
     B {
       @Override
-      <T extends Indexed<BigInteger, BigInteger>> BigInteger index(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b) {
+      <T extends Sparse<BigInteger, BigInteger>> BigInteger index(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b) {
         return b.index();
       }
 
       @Override
-      <T extends Indexed<BigInteger, BigInteger>> BigInteger value(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b) {
+      <T extends Sparse<BigInteger, BigInteger>> BigInteger length(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b) {
+        return b.length();
+      }
+
+      @Override
+      <T extends Sparse<BigInteger, BigInteger>> BigInteger value(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b) {
         return b.next().value();
       }
 
@@ -156,15 +172,16 @@ public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements
     };
 
     // The index of the next value.
-    abstract <T extends Indexed<BigInteger, BigInteger>> BigInteger index(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b);
+    abstract <T extends Sparse<BigInteger, BigInteger>> BigInteger index(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b);
+    // Its length.
+    abstract <T extends Sparse<BigInteger, BigInteger>> BigInteger length(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b);
     // The next value.
-
-    abstract <T extends Indexed<BigInteger, BigInteger>> BigInteger value(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b);
+    abstract <T extends Sparse<BigInteger, BigInteger>> BigInteger value(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b);
 
     abstract Next other();
 
     // Determine next.
-    static Next next(IndexedIterator<?, BigInteger> a, IndexedIterator<?, BigInteger> b) {
+    static Next next(SparseIterator<?, BigInteger> a, SparseIterator<?, BigInteger> b) {
       // If they both exist compare them - if one exists return it - otherwise return null.
       BigInteger ai = a.index();
       BigInteger bi = b.index();
@@ -189,8 +206,8 @@ public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements
   // Applies the op to the bits.
   private static Bits apply(Bits<Big> a, Bits<Big> b, Op op) {
     HugeBits applied = new HugeBits();
-    IndexedIterator<Big, BigInteger> ia = a.iterator();
-    IndexedIterator<Big, BigInteger> ib = b.iterator();
+    SparseIterator<Big, BigInteger> ia = a.iterator();
+    SparseIterator<Big, BigInteger> ib = b.iterator();
     // Which one is next.
     for (Next next = Next.next(ia, ib); next != null; next = Next.next(ia, ib)) {
       BigInteger index = next.index(ia, ib);

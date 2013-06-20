@@ -13,28 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.oldcurmudgeon.galois.math;
 
 import java.util.Iterator;
 
 /**
- * Defines a stream of bits to perform maths over.
- * 
+ * Defines a sparse stream of bits to perform maths over.
+ *
  * It should be possible to step through two streams of bits
  * at once and do the maths on them.
- * 
+ *
  * Underneath, it should be possible to ask the stream to skip
  * uninteresting sequences of bits such as all zeros.
- * 
+ *
  * Going forward I hope to perform the actual math using lambdas
  * and closures but for now we will merely iterate.
- * 
+ *
  * T is the type of each part. I is the type o the index.
- * 
+ *
  * @author OldCurmudgeon
  */
-public interface IndexedIterator<T,I extends Number> extends Iterator<T> {
-  // Return the current index.
+public interface SparseIterator<T, I extends Number> extends Iterator<T> {
+  /**
+   * Return the index of the current value, 
+   * or that of the first value if it has not 
+   * as yet been collected.
+   */
   public I index();
+  public I length();
 }

@@ -16,9 +16,15 @@
 package com.oldcurmudgeon.galois.math;
 
 /**
- * An Iterable across indexed items.
- *
+ * Something that has an index.
+ * 
  * @author OldCurmudgeon.
  */
-public interface IndexedIterable<T extends Indexed<?,I>, I extends Number> extends Iterable<T> {
+public interface Sparse<T, I extends Number> {
+  // Return the current bit index.
+  public I index();
+  // Return the bits length.
+  public I length();
+  // Return the current value.
+  public T value();
 }

@@ -20,5 +20,5 @@ package com.oldcurmudgeon.galois.math;
  *
  * @author OldCurmudgeon.
  */
-public interface IndexedIterable<T extends Indexed<I>, I extends Number> extends Iterable<T> {
+public interface IndexedIterable<T extends Indexed<?,I>, I extends Number> extends Iterable<T> {
 }

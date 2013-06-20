@@ -32,7 +32,7 @@ public class BigBits extends Bits<Big> {
   }
 
   @Override
-  public Iterator<Big> iterator() {
+  public IndexedIterator<Big,BigInteger> iterator() {
     return new BigBitsIterator(bits);
   }
 

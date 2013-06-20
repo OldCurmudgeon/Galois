@@ -38,7 +38,7 @@ import java.util.Iterator;
  */
 public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements IndexedIterable<T, BigInteger> {
   @Override
-  public abstract Iterator<T> iterator();
+  public abstract IndexedIterator<T, BigInteger> iterator();
 
   protected abstract class BitsIterator implements IndexedIterator<T, BigInteger> {
     // The next to return - populate in getNext please.
@@ -99,6 +99,18 @@ public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements
         return a.xor(b);
       }
 
+    },
+    and {
+      public BigInteger op(BigInteger a, BigInteger b) {
+        return a.and(b);
+      }
+
+    },
+    or {
+      public BigInteger op(BigInteger a, BigInteger b) {
+        return a.or(b);
+      }
+
     };
     // Perform the op.
 
@@ -152,23 +164,37 @@ public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements
     abstract Next other();
 
     // Determine next.
-    static Next next(Bits a, Bits b) {
+    static Next next(IndexedIterator<?, BigInteger> a, IndexedIterator<?, BigInteger> b) {
       // If they both exist compare them - if one exists return it - otherwise return null.
-      return a.i() != null ? b.i() != null ? a.i().compareTo(b.i()) < 0 ? A : B : A : null;
+      BigInteger ai = a.index();
+      BigInteger bi = b.index();
+      if ( ai == null && bi == null ) {
+        // Both null.
+        return null;
+      }
+      if ( ai == null || bi == null ) {
+        // One null - return the other.
+        return ai == null ? B : A;
+      }
+      // Neither null - return lowest index with priority A.
+      return a.index().compareTo(b.index()) <= 0 ? A : B;
     }
 
   }
 
-  private static Bits apply(Bits a, Bits b, Op op) {
+  // Applies the op to the bits.
+  private static Bits apply(Bits<Big> a, Bits<Big> b, Op op) {
     HugeBits applied = new HugeBits();
+    IndexedIterator<Big, BigInteger> ia = a.iterator();
+    IndexedIterator<Big, BigInteger> ib = b.iterator();
     // Which one is next.
-    for (Next next = Next.next(a, b); next != null; next = Next.next(a, b)) {
-      BigInteger index = next.index(a, b);
-      BigInteger value = next.value(a, b);
+    for (Next next = Next.next(ia, ib); next != null; next = Next.next(ia, ib)) {
+      BigInteger index = next.index(ia, ib);
+      BigInteger value = next.value(ia, ib);
       Next other = next.other();
-      if (index.equals(other.index(a, b))) {
+      if (index.equals(other.index(ia, ib))) {
         // Perform the op.
-        applied.add(new Big(index, op.op(value, other.value(a, b))));
+        applied.add(new Big(index, op.op(value, other.value(ia, ib))));
       } else {
         // No counterpart - add it directly.
         applied.add(new Big(index, value));

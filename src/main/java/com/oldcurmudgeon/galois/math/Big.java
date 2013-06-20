@@ -19,10 +19,12 @@ import java.math.BigInteger;
 
 /**
  * A packet to define a section of bits that fit into a BigInteger.
+ * 
+ * Both the object and the index are big.
  *
  * @author OldCurmudgeon.
  */
-public class Big implements Indexed<BigInteger>{
+public class Big implements Indexed<BigInteger,BigInteger> {
   final BigInteger index;
   final BigInteger value;
 
@@ -31,8 +33,24 @@ public class Big implements Indexed<BigInteger>{
     this.value = value;
   }
 
+  public Big( BigInteger value) {
+    this.index = BigInteger.ZERO;
+    this.value = value;
+  }
+
   @Override
   public BigInteger index() {
     return index;
   }
+
+  @Override
+  public BigInteger value() {
+    return value;
+  }
+
+  @Override
+  public String toString() {
+    return ("[" + index.toString() + "]:" + value.toString(16));
+  }
+
 }

@@ -24,35 +24,38 @@ import java.util.TreeMap;
  * 
  * @author OldCurmudgeon.
  */
-public class HugeBits extends Bits {
+public class HugeBits extends Bits<Big> {
   // The actual bits.
-  private final TreeMap<BigInteger, BigInteger> bits = new TreeMap<>();
-  // The iterator over them.
-  private final Iterator<BigInteger> walker;
+  private final TreeMap<BigInteger, Big> bits = new TreeMap<>();
 
   public HugeBits(Big... bigs) {
     for (Big i : bigs) {
-      bits.put(i.index, i.value);
+      bits.put(i.index, i);
     }
-    walker = bits.navigableKeySet().iterator();
   }
 
   // Does this interfere with the iterator?
   public void add ( Big big ) {
-    bits.put(big.index, big.value);
+    bits.put(big.index, big);
   }
   
-  @Override
-  protected void getNextAndSetIndex() {
-    if ( walker.hasNext() ) {
-      // Next index.
-      index = walker.next();
-      // Next value.
-      next = bits.get(index);
-    } else {
-      // Finished!
-      index = null;
-      next = null;
+ @Override
+  public Iterator<Big> iterator() {
+    return new HugeBitsIterator(bits.values().iterator());
+  }
+
+  class HugeBitsIterator extends Bits.BitsIterator {
+    private Iterator<Big> it;
+
+    private HugeBitsIterator(Iterator<Big> it) {
+      this.it = it;
     }
+
+
+    @Override
+    protected void getNext() {
+      next = it.hasNext()?it.next():null;
+    }
+
   }
 }

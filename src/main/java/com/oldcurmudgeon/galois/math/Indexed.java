@@ -20,7 +20,9 @@ package com.oldcurmudgeon.galois.math;
  * 
  * @author OldCurmudgeon.
  */
-public interface Indexed<I extends Number> {
+public interface Indexed<T, I extends Number> {
   // Return the current index.
   public I index();
+  // Return the current value.
+  public T value();
 }

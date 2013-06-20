@@ -15,6 +15,7 @@
  */
 package com.oldcurmudgeon.galois.math;
 
+import com.oldcurmudgeon.toolbox.walkers.Separator;
 import java.math.BigInteger;
 import java.util.Iterator;
 
@@ -35,58 +36,53 @@ import java.util.Iterator;
  *
  * @author OldCurmudgeon
  */
-public abstract class Bits implements IndexedIterable<Big, BigInteger> {
+public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements IndexedIterable<T, BigInteger> {
   @Override
-  public Iterator<Big> iterator() {
-    // To change body of generated methods, choose Tools | Templates.
-    xxx;
-  }
-  
-  // The last returned - populated by next.
-  BigInteger prev = null;
-  // The next to return - populate in hasNext please.
-  BigInteger next = null;
-  // The index it is at - populate in hasNext please.
-  BigInteger index = null;
+  public abstract Iterator<T> iterator();
 
-  public boolean hasNext() {
-    if (next == null) {
-      getNextAndSetIndex();
+  protected abstract class BitsIterator implements IndexedIterator<T, BigInteger> {
+    // The next to return - populate in getNext please.
+    T next = null;
+
+    @Override
+    public boolean hasNext() {
+      if (next == null) {
+        getNext();
+      }
+      return next != null;
     }
-    return next != null;
-  }
 
-  // getNext must prime both next and index.
-  protected abstract void getNextAndSetIndex();
+    // Obtain the next Big.
+    protected abstract void getNext();
 
-  public BigInteger next() {
-    // Standard pattern for next.
-    if (hasNext()) {
-      prev = next;
-      next = null;
-      return prev;
-    } else {
-      return null;
+    @Override
+    public T next() {
+      // Standard pattern for next.
+      if (hasNext()) {
+        T n = next;
+        next = null;
+        return n;
+      } else {
+        return null;
+      }
     }
-  }
 
-  public void remove() {
-    throw new UnsupportedOperationException("Not supported.");
-  }
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException("Not supported.");
+    }
 
-  public BigInteger i() {
-    return hasNext() ? index : null;
+    // Return the current index.
+    @Override
+    public BigInteger index() {
+      return hasNext() ? next.index() : null;
+    }
+
   }
 
   @Override
   public String toString() {
-    // Hmmm ... I think I need to be Iterable because now I want a new independant iterator.
-    //for ( IndexedIterator it = this )
-    return (index != null ? index.toString(16) : "")
-            + ":"
-            + (prev != null ? prev.toString(16) : "")
-            + ":"
-            + (next != null ? next.toString(16) : "");
+    return Separator.separate("{", ",", "}", iterator());
   }
 
   // Actual Bits processes that do things.
@@ -114,13 +110,13 @@ public abstract class Bits implements IndexedIterable<Big, BigInteger> {
   private enum Next {
     A {
       @Override
-      BigInteger i(Bits a, Bits b) {
-        return a.i();
+      <T extends Indexed<BigInteger, BigInteger>> BigInteger index(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b) {
+        return a.index();
       }
 
       @Override
-      BigInteger v(Bits a, Bits b) {
-        return a.next();
+      <T extends Indexed<BigInteger, BigInteger>> BigInteger value(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b) {
+        return a.next().value();
       }
 
       @Override
@@ -131,13 +127,13 @@ public abstract class Bits implements IndexedIterable<Big, BigInteger> {
     },
     B {
       @Override
-      BigInteger i(Bits a, Bits b) {
-        return b.i();
+      <T extends Indexed<BigInteger, BigInteger>> BigInteger index(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b) {
+        return b.index();
       }
 
       @Override
-      BigInteger v(Bits a, Bits b) {
-        return b.next();
+      <T extends Indexed<BigInteger, BigInteger>> BigInteger value(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b) {
+        return b.next().value();
       }
 
       @Override
@@ -147,15 +143,17 @@ public abstract class Bits implements IndexedIterable<Big, BigInteger> {
 
     };
 
-    // Which index to return next.
-    abstract BigInteger i(Bits a, Bits b);
+    // The index of the next value.
+    abstract <T extends Indexed<BigInteger, BigInteger>> BigInteger index(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b);
+    // The next value.
 
-    abstract BigInteger v(Bits a, Bits b);
+    abstract <T extends Indexed<BigInteger, BigInteger>> BigInteger value(IndexedIterator<T, BigInteger> a, IndexedIterator<T, BigInteger> b);
 
     abstract Next other();
 
     // Determine next.
     static Next next(Bits a, Bits b) {
+      // If they both exist compare them - if one exists return it - otherwise return null.
       return a.i() != null ? b.i() != null ? a.i().compareTo(b.i()) < 0 ? A : B : A : null;
     }
 
@@ -165,12 +163,12 @@ public abstract class Bits implements IndexedIterable<Big, BigInteger> {
     HugeBits applied = new HugeBits();
     // Which one is next.
     for (Next next = Next.next(a, b); next != null; next = Next.next(a, b)) {
-      BigInteger index = next.i(a, b);
-      BigInteger value = next.v(a, b);
+      BigInteger index = next.index(a, b);
+      BigInteger value = next.value(a, b);
       Next other = next.other();
-      if (index.equals(other.i(a, b))) {
+      if (index.equals(other.index(a, b))) {
         // Perform the op.
-        applied.add(new Big(index, op.op(value, other.v(a, b))));
+        applied.add(new Big(index, op.op(value, other.value(a, b))));
       } else {
         // No counterpart - add it directly.
         applied.add(new Big(index, value));
@@ -181,17 +179,16 @@ public abstract class Bits implements IndexedIterable<Big, BigInteger> {
 
   public static void main(String[] args) {
     HugeBits a = new HugeBits(new Big(BigInteger.ZERO, BigInteger.valueOf(0xFEDCBA987654321L)));
-    System.out.println("a = "+a);
+    System.out.println("a = " + a);
     HugeBits b = new HugeBits(new Big(BigInteger.ZERO, BigInteger.valueOf(0x123456789ABCDEFL)));
-    System.out.println("b = "+b);
+    System.out.println("b = " + b);
     HugeBits c = new HugeBits(
             new Big(BigInteger.ZERO, BigInteger.ONE),
-            new Big(BigInteger.TEN, BigInteger.ONE)
-            );
-    System.out.println("c = "+c);
-    System.out.println("a xor b = "+apply(a, b, Op.xor));
-    System.out.println("a xor c = "+apply(a, c, Op.xor));
-    System.out.println("b xor c = "+apply(b, c, Op.xor));
+            new Big(BigInteger.TEN, BigInteger.ONE));
+    System.out.println("c = " + c);
+    System.out.println("a xor b = " + apply(a, b, Op.xor));
+    System.out.println("a xor c = " + apply(a, c, Op.xor));
+    System.out.println("b xor c = " + apply(b, c, Op.xor));
   }
 
 }

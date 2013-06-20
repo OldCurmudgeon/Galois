@@ -20,23 +20,34 @@ import java.util.Iterator;
 
 /**
  * Bits implementation using BigIntegers.
- * 
+ *
  * @author OldCurmudgeon.
  */
-public class BigBits extends Bits {
+public class BigBits extends Bits<Big> {
   // The actual bits.
-  private final BigInteger bits;
-  
+  private final Big bits;
+
   public BigBits(BigInteger bits) {
-    this.bits = bits;
+    this.bits = new Big(bits);
   }
 
   @Override
-  protected void getNextAndSetIndex() {
-    // The bits to deliver.
-    next = bits;
-    // The power of the lowest bit.
-    index = BigInteger.ZERO;
+  public Iterator<Big> iterator() {
+    return new BigBitsIterator(bits);
   }
 
+  class BigBitsIterator extends Bits.BitsIterator {
+    private Big it;
+
+    private BigBitsIterator(Big bits) {
+      it = bits;
+    }
+
+    @Override
+    protected void getNext() {
+      next = it;
+      it = null;
+    }
+
+  }
 }

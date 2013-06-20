@@ -172,9 +172,13 @@ public abstract class Bits<T extends Indexed<BigInteger, BigInteger>> implements
         // Both null.
         return null;
       }
-      if ( ai == null || bi == null ) {
-        // One null - return the other.
-        return ai == null ? B : A;
+      if ( ai == null ) {
+        // A null - return B.
+        return B;
+      }
+      if ( bi == null ) {
+        // B null - return A.
+        return A;
       }
       // Neither null - return lowest index with priority A.
       return a.index().compareTo(b.index()) <= 0 ? A : B;

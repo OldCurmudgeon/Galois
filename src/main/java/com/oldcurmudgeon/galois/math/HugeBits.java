@@ -30,6 +30,7 @@ public class HugeBits extends Bits<Big> {
 
   public HugeBits(Big... bigs) {
     for (Big i : bigs) {
+      // What do we do if two intersect?
       bits.put(i.index, i);
     }
   }

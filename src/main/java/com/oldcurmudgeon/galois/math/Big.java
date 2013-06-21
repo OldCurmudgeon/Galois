@@ -16,26 +16,39 @@
 package com.oldcurmudgeon.galois.math;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A packet to define a section of bits that fit into a BigInteger.
- * 
+ *
  * Both the object and the index are big.
  *
  * @author OldCurmudgeon.
  */
-public class Big implements Sparse<BigInteger,BigInteger> {
+public class Big implements Sparse<BigInteger, BigInteger> {
+  // The granuality.
+  private static final int G = 8;
+  private static final BigInteger BG = BigInteger.valueOf(G);
+  // A zero for me.
+  static final Big ZERO = new Big(BigInteger.ZERO);
+  // My sparse value.
   final BigInteger index;
   final BigInteger value;
 
   public Big(BigInteger index, BigInteger value) {
-    this.index = index;
-    this.value = value;
+    // Shift to get the lowest bit at 0.
+    BigInteger shift = index.add(BigInteger.valueOf(value.getLowestSetBit()));
+    // Record index and value.
+    this.index = shift.divide(BG).multiply(BG);
+    this.value = value.shiftLeft(index.subtract(this.index).intValue());
   }
 
-  public Big( BigInteger value) {
-    this.index = BigInteger.ZERO;
-    this.value = value;
+  public Big(long index, BigInteger value) {
+    this(BigInteger.valueOf(index), value);
+  }
+
+  public Big(BigInteger value) {
+    this(BigInteger.ZERO, value);
   }
 
   @Override
@@ -55,7 +68,22 @@ public class Big implements Sparse<BigInteger,BigInteger> {
 
   @Override
   public String toString() {
-    return ("[" + index.toString() + "]:" + value.toString(16));
+    return ("[" + index.toString() + "]:" + value.toString(2));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof Big) {
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 17 * hash + Objects.hashCode(this.index);
+    hash = 17 * hash + Objects.hashCode(this.value);
+    return hash;
   }
 
 }

@@ -17,7 +17,6 @@ package com.oldcurmudgeon.galois.math;
 
 import com.oldcurmudgeon.toolbox.walkers.Separator;
 import java.math.BigInteger;
-import java.util.Iterator;
 
 /**
  * Defines a stream of bits to perform maths over.
@@ -210,7 +209,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       Next other = next.other();
       if (overlaps(index, length, other.index(ia, ib), other.length(ia, ib))) {
         // Work out the shift.
-        xxx
+        //xxx
         // Perform the op.
         applied.add(new Big(index, op.op(value, other.value(ia, ib))));
       } else {
@@ -222,6 +221,10 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
   }
 
   private static boolean overlaps(BigInteger aIndex, BigInteger aLength, BigInteger bIndex, BigInteger bLength) {
+    // Any missing?
+    if ( aIndex == null || aLength == null || bIndex == null || bLength == null ) {
+      return false;
+    }
     // Wholly below?
     if (aIndex.add(aLength).compareTo(bIndex) <= 0) {
       return false;
@@ -235,16 +238,25 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
   }
 
   public static void main(String[] args) {
+    // 2^10 = 4 * 2^8
+    Big x = new Big(BigInteger.TEN, BigInteger.ONE);
+    System.out.println("x = " + x);
+    // 2^10 * 2^6 = 2^16
+    Big y = new Big(BigInteger.TEN, BigInteger.valueOf(64));
+    System.out.println("y = " + y);
     HugeBits a = new HugeBits(new Big(BigInteger.ZERO, BigInteger.valueOf(0xFEDCBA987654321L)));
     System.out.println("a = " + a);
     HugeBits b = new HugeBits(new Big(BigInteger.ZERO, BigInteger.valueOf(0x123456789ABCDEFL)));
     System.out.println("b = " + b);
-    HugeBits c = new HugeBits(
+    HugeBits c = new HugeBits(new Big(BigInteger.ONE), x);
+    System.out.println("c = " + c);
+    HugeBits d = new HugeBits(
             new Big(BigInteger.ZERO, BigInteger.ONE),
-            new Big(BigInteger.TEN, BigInteger.ONE));
+            new Big(BigInteger.ONE, BigInteger.ONE));
     System.out.println("c = " + c);
     System.out.println("a xor b = " + apply(a, b, Op.xor));
     System.out.println("a xor c = " + apply(a, c, Op.xor));
     System.out.println("b xor c = " + apply(b, c, Op.xor));
+    System.out.println("d xor d = " + apply(d, d, Op.xor));
   }
 }

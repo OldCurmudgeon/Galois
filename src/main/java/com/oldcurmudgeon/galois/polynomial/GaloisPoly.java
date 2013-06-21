@@ -474,8 +474,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
+    //generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
+    generatePrimitivePolys(13, Integer.MAX_VALUE, true);
+    generatePrimitivePolys(14, Integer.MAX_VALUE, true);
     System.out.println("Took: " + t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);

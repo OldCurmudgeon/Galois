@@ -24,7 +24,7 @@ import java.math.BigInteger;
  *
  * @author OldCurmudgeon.
  */
-public class Big implements Indexed<BigInteger,BigInteger> {
+public class Big implements Sparse<BigInteger,BigInteger> {
   final BigInteger index;
   final BigInteger value;
 
@@ -41,6 +41,11 @@ public class Big implements Indexed<BigInteger,BigInteger> {
   @Override
   public BigInteger index() {
     return index;
+  }
+
+  @Override
+  public BigInteger length() {
+    return BigInteger.valueOf(value.bitLength());
   }
 
   @Override

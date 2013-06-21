@@ -31,7 +31,7 @@ public class BigBits extends Bits<Big> {
   }
 
   @Override
-  public IndexedIterator<Big,BigInteger> iterator() {
+  public SparseIterator<Big,BigInteger> iterator() {
     return new BigBitsIterator(bits);
   }
 

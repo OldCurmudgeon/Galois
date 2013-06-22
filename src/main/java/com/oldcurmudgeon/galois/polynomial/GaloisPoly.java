@@ -336,6 +336,38 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   public class PolyIterator implements Iterator<T> {
+    private final int degree;
+    private final int toDegree;
+    private final boolean reverse;
+    
+    public PolyIterator (int fromDegree, int toDegree, boolean reverse) {
+      this.degree = fromDegree;
+      this.toDegree = toDegree;
+      this.reverse = reverse;
+    }
+    
+    public PolyIterator (int degree, boolean reverse) {
+      this(degree, degree, reverse);
+    }
+    
+    public PolyIterator (int degree) {
+      this(degree, degree, false);
+    }
+
+    @Override
+    public boolean hasNext() {
+      return false;
+    }
+
+    @Override
+    public T next() {
+      return null;
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException("Not supported.");
+    }
     
   }
   

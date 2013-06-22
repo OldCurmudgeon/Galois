@@ -364,61 +364,68 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       Set<BigInteger> primeFutures = new HashSet<>();
       Set<BigInteger> primitiveFutures = new HashSet<>();
 
+      private BigInteger nextBitPattern() {
+        BigInteger nextPattern = null;
+        if (!pattern.hasNext()) {
+          // Exhausted! Step bits.
+          bits += 1;
+          // Note when we've finished.
+          finished = bits >= degree;
+          // Next bit pattern.
+          if (!finished) {
+            pattern = new BitPattern(bits, degree - 1, reverse).iterator();
+          }
+        }
+        if (!finished && pattern.hasNext()) {
+          nextPattern = pattern.next();
+        }
+        return nextPattern;
+      }
+      
       @Override
       public boolean hasNext() {
 
         while (next == null && !finished) {
-          // Turn the wheels.
-          if (!pattern.hasNext()) {
-            // Exhausted! Step bits.
-            bits += 1;
-            // Note when we've finished.
-            finished = bits >= degree;
-            // Next bit pattern.
-            if (!finished) {
-              pattern = new BitPattern(bits, degree - 1, reverse).iterator();
-            }
-          }
-          if (!finished && pattern.hasNext()) {
-            // Roll a polynomial of base + this pattern.
-            BigInteger bitPattern = pattern.next();
-            boolean reversed = false;
-            
+          // Roll a polynomial of base + this pattern.
+          BigInteger bitPattern = nextBitPattern();
+          if (bitPattern != null) {
+            // Did it come put of the futures?
+            boolean future = false;
             boolean prime = false;
             boolean primitive = false;
             // i.e. 2^d + ... + 1
             T p = valueOf(bitPattern.multiply(TWO), degree).or(one());
-            
-            if ( primeFutures.contains(bitPattern) ) {
+
+            if (primeFutures.contains(bitPattern)) {
               // It's the reverse of one we've already seen.
               prime = true;
               primeFutures.remove(bitPattern);
-              reversed = true;
+              future = true;
             }
-            if ( primitiveFutures.contains(bitPattern) ) {
+            if (primitiveFutures.contains(bitPattern)) {
               // It's the reverse of one we've already seen.
               primitive = true;
               primitiveFutures.remove(bitPattern);
-              reversed = true;
+              future = true;
             }
-            if ( !prime ) {
+            if (!prime) {
               // Is it a prime poly?
               prime = !p.isReducible();
             }
-            if ( prime && !primitive ) {
+            if (prime && !primitive) {
               primitive = p.isPrimitive();
             }
-            if (prime || primitive ) {
-              if ( primitive ) {
+            if (prime || primitive) {
+              if (primitive) {
                 next = p;
               }
-              if ( !reversed ) {
+              if (!future) {
                 // Keep track of the reverse-pattern ones because they are prime/primitive too.
                 BigInteger reversePattern = reverse(bitPattern, degree - 1);
                 // Don't bother if it is a palindrome.
-                if ( reversePattern.compareTo(bitPattern) != 0 ) {
+                if (reversePattern.compareTo(bitPattern) != 0) {
                   primeFutures.add(reversePattern);
-                  if ( primitive ) {
+                  if (primitive) {
                     primitiveFutures.add(reversePattern);
                   }
                 }
@@ -448,6 +455,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public String toString() {
         return next != null ? next.toString() : last != null ? last.toString() : "";
       }
+
     }
 
     @Override
@@ -459,25 +467,25 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
   /**
    * From bit twiddling:
-   * 
-   * unsigned int v;     // input bits to be reversed
+   *
+   * unsigned int v; // input bits to be reversed
    * unsigned int r = v; // r will be reversed bits of v; first get LSB of v
    * int s = sizeof(v) * CHAR_BIT - 1; // extra shift needed at end
-   * 
+   *
    * for (v >>= 1; v; v >>= 1)
-   * {   
-   *   r <<= 1;
-   *   r |= v & 1;
-   *   s--;
+   * {
+   * r <<= 1;
+   * r |= v & 1;
+   * s--;
    * }
    * r <<= s; // shift when v's highest bits are zero
-   * 
+   *
    * @param bitPattern
    * @return the bit pattern reversed.
    */
   private static BigInteger reverse(BigInteger v, int bits) {
     BigInteger r = v;
-    for ( v = v.shiftRight(1); !v.equals(BigInteger.ZERO); v = v.shiftRight(1)) {
+    for (v = v.shiftRight(1); !v.equals(BigInteger.ZERO); v = v.shiftRight(1)) {
       r = r.shiftLeft(1).or(v.and(BigInteger.ONE));
       bits -= 1;
     }

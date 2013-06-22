@@ -9,6 +9,7 @@ import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -70,6 +71,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
   // Should be static - but no way to do that in Java.
   public abstract GaloisPoly valueOf(int... powers);
+
   public abstract GaloisPoly valueOf(BigInteger... powers);
 
   /**
@@ -334,24 +336,18 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   // Iterate over prime polynomials.
-  public class PrimePolynomials implements Iterable<T> {
+  public class PrimitivePolynomials implements Iterable<T> {
     // TODO: Use a FilteredIterator.
     private final int degree;
-    private final boolean primitive;
     private final boolean reverse;
 
-    public PrimePolynomials(int degree, boolean primitive, boolean reverse) {
+    public PrimitivePolynomials(int degree, boolean reverse) {
       this.degree = degree;
-      this.primitive = primitive;
       this.reverse = reverse;
     }
 
-    public PrimePolynomials(int degree, boolean primitive) {
-      this(degree, primitive, false);
-    }
-
-    public PrimePolynomials(int degree) {
-      this(degree, false, false);
+    public PrimitivePolynomials(int degree) {
+      this(degree, false);
     }
 
     private class PrimeIterator implements Iterator<T> {
@@ -364,6 +360,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       T last = null;
       // Have we finished?
       boolean finished = false;
+      // The flpped versions.
+      Set<BigInteger> primeFutures = new HashSet<>();
+      Set<BigInteger> primitiveFutures = new HashSet<>();
 
       @Override
       public boolean hasNext() {
@@ -382,16 +381,50 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           }
           if (!finished && pattern.hasNext()) {
             // Roll a polynomial of base + this pattern.
+            BigInteger bitPattern = pattern.next();
+            boolean reversed = false;
+            
+            boolean prime = false;
+            boolean primitive = false;
             // i.e. 2^d + ... + 1
-            T p = valueOf(pattern.next().multiply(TWO), degree).or(one());
-            // Is it a prime poly?
-            boolean ok = !p.isReducible();
-            if (ok && primitive) {
-              ok &= p.isPrimitive();
+            T p = valueOf(bitPattern.multiply(TWO), degree).or(one());
+            
+            if ( primeFutures.contains(bitPattern) ) {
+              // It's the reverse of one we've already seen.
+              prime = true;
+              primeFutures.remove(bitPattern);
+              reversed = true;
             }
-            if (ok) {
-              next = p;
+            if ( primitiveFutures.contains(bitPattern) ) {
+              // It's the reverse of one we've already seen.
+              primitive = true;
+              primitiveFutures.remove(bitPattern);
+              reversed = true;
             }
+            if ( !prime ) {
+              // Is it a prime poly?
+              prime = !p.isReducible();
+            }
+            if ( prime && !primitive ) {
+              primitive = p.isPrimitive();
+            }
+            if (prime || primitive ) {
+              if ( primitive ) {
+                next = p;
+              }
+              if ( !reversed ) {
+                // Keep track of the reverse-pattern ones because they are prime/primitive too.
+                BigInteger reversePattern = reverse(bitPattern, degree - 1);
+                // Don't bother if it is a palindrome.
+                if ( reversePattern.compareTo(bitPattern) != 0 ) {
+                  primeFutures.add(reversePattern);
+                  if ( primitive ) {
+                    primitiveFutures.add(reversePattern);
+                  }
+                }
+              }
+            }
+
           }
         }
         return next != null;
@@ -423,6 +456,33 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     }
   }
   public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
+
+  /**
+   * From bit twiddling:
+   * 
+   * unsigned int v;     // input bits to be reversed
+   * unsigned int r = v; // r will be reversed bits of v; first get LSB of v
+   * int s = sizeof(v) * CHAR_BIT - 1; // extra shift needed at end
+   * 
+   * for (v >>= 1; v; v >>= 1)
+   * {   
+   *   r <<= 1;
+   *   r |= v & 1;
+   *   s--;
+   * }
+   * r <<= s; // shift when v's highest bits are zero
+   * 
+   * @param bitPattern
+   * @return the bit pattern reversed.
+   */
+  private static BigInteger reverse(BigInteger v, int bits) {
+    BigInteger r = v;
+    for ( v = v.shiftRight(1); !v.equals(BigInteger.ZERO); v = v.shiftRight(1)) {
+      r = r.shiftLeft(1).or(v.and(BigInteger.ONE));
+      bits -= 1;
+    }
+    return r.shiftLeft(bits - 1);
+  }
 
   public static void main(String[] args) {
     // x^2 + 1
@@ -474,7 +534,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
     ProcessTimer t = new ProcessTimer();
-    //generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
     generatePrimitivePolys(13, Integer.MAX_VALUE, true);
     generatePrimitivePolys(14, Integer.MAX_VALUE, true);
@@ -487,28 +547,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //generatePrimitivePolys(256, 1, false);
   }
 
-  private static void generatePrimePolysUpToDegree(int d, int max, boolean minimal) {
-    for (int degree = 2; degree <= d; degree++) {
-      generatePrimePolys(degree, max, minimal);
-    }
-  }
-
-  private static void generatePrimePolys(int degree, int count, boolean minimal) {
-    System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
-    int seen = 0;
-    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, false, minimal ? false : true)) {
-      // Prime Polynomials!
-      System.out.println("Prime poly: " + p);
-      seen += 1;
-      if (seen >= count) {
-        // Stop after the 1st 10 for speed - one day enumerate all.
-        System.out.println("...");
-        break;
-      }
-
-    }
-  }
-
   private static void generatePrimitivePolysUpToDegree(int d, int max, boolean minimal) {
     for (int degree = 2; degree <= d; degree++) {
       generatePrimitivePolys(degree, max, minimal);
@@ -518,7 +556,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, true, minimal ? false : true)) {
+    for (FastPolynomial p : new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Primitive: " + p);
       seen += 1;

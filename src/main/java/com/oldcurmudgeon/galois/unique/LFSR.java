@@ -60,12 +60,12 @@ public class LFSR implements Iterable<BigInteger> {
 
   public LFSR(int bits) {
     // Default to first found prime poly.
-    this(new FastPolynomial().new PrimePolynomials(bits, true, true).iterator().next());
+    this(new FastPolynomial().new PrimitivePolynomials(bits, true).iterator().next());
   }
 
   public LFSR(int bits, BigInteger start) {
     // Default to first prime poly.
-    this(new FastPolynomial().new PrimePolynomials(bits, true, true).iterator().next(), start);
+    this(new FastPolynomial().new PrimitivePolynomials(bits, true).iterator().next(), start);
   }
 
   @Override
@@ -135,7 +135,7 @@ public class LFSR implements Iterable<BigInteger> {
 
   private static void test(int bits) {
     System.out.println("==== Bits " + bits + " ====");
-    FastPolynomial p = new FastPolynomial().new PrimePolynomials(bits,true,true).iterator().next();
+    FastPolynomial p = new FastPolynomial().new PrimitivePolynomials(bits,true).iterator().next();
     System.out.println("Poly " + p);
     LFSR lfsr = new LFSR(p);
     int count = 0;

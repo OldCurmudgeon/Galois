@@ -335,6 +335,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     return Reducibility.IRREDUCIBLE;
   }
 
+  // Filter primes out of these.
   public class PolyIterator implements Iterator<T> {
     private final int degree;
     private final int toDegree;
@@ -425,8 +426,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           // Roll a polynomial of base + this pattern.
           BigInteger bitPattern = nextBitPattern();
           if (bitPattern != null) {
-            // Is it prime?
-            boolean prime = false;
             // Is it primitive.
             boolean primitive = false;
             // i.e. 2^d + ... + 1
@@ -436,17 +435,16 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             if (primitiveFutures.contains(bitPattern)) {
               // It's the reverse of one we've already seen.
               primitive = true;
-              // Done with it.
+              // Done with it - it wont come around again.
               primitiveFutures.remove(bitPattern);
             } else if (primeFutures.contains(bitPattern)) {
-              // We know it is prime but not primitove - ignore it.
-              // Done with it.
+              // We know it is prime but not primitive - ignore it.
+              // Done with it - it wont come around again.
               primeFutures.remove(bitPattern);
-              // Remember we got it from a future.
             } else {
               // Not in either future set.
               // New pattern - Is it a prime poly?
-              prime = !p.isReducible();
+              boolean prime = !p.isReducible();
               if (prime) {
                 // Primitive too?
                 primitive = p.isPrimitive();

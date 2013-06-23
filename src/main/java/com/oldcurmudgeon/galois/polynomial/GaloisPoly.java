@@ -374,9 +374,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             pattern = null;
           }
         }
-      }
-      if (pattern != null && pattern.hasNext()) {
-        next = pattern.next();
+        if (pattern != null && pattern.hasNext()) {
+          next = pattern.next();
+          //System.out.println("Next poly: " + next.toString(2));
+        }
       }
       return next != null;
     }
@@ -449,6 +450,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             // Only deliver primitives.
             if (prime) {
               next = p;
+              //System.out.println("Next prime: " + next);
             }
           }
         }
@@ -537,6 +539,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           // Only deliver primitives.
           if (primitive) {
             next = p;
+            //System.out.println("Next primitive: " + next);
           }
 
         }
@@ -644,12 +647,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + 1
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
-    generatePrimitivePolys(3, Integer.MAX_VALUE, true);
+    //generatePrimitivePolys(3, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
-    generatePrimitivePolys(13, Integer.MAX_VALUE, true);
-    generatePrimitivePolys(14, Integer.MAX_VALUE, true);
     System.out.println("Took: " + t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);

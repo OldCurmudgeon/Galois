@@ -644,6 +644,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + 1
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
+    generatePrimitivePolys(3, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
     generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
@@ -667,7 +668,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, minimal ? false : true)) {
+    for (FastPolynomial p : new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Primitive: " + p);
       seen += 1;

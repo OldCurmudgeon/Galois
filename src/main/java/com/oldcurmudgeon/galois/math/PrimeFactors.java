@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 OldCurmudgeon
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.oldcurmudgeon.galois.math;
 
@@ -8,13 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Expression project.property.user is undefined on line 11, column 14 in Templates/Classes/Class.java.
+ * Find prime factors of ints.
+ * 
+ * @author OldCurmudgeon
  */
 public class PrimeFactors {
-  public static List<Integer> primeFactors(int numbers) {
-    int n = numbers;
-    List<Integer> factors = new ArrayList<Integer>();
-    for (int i = 2; i <= n / i; i++) {
+  public static List<Long> primeFactors(long n) {
+    List<Long> factors = new ArrayList<>();
+    for (long i = 2; i <= n / i; i++) {
       while (n % i == 0) {
         factors.add(i);
         n /= i;
@@ -28,16 +40,16 @@ public class PrimeFactors {
 
   public static void main(String[] args) {
     System.out.println("Primefactors of 44");
-    for (Integer integer : primeFactors(44)) {
-      System.out.println(integer);
+    for (Long i : primeFactors(44)) {
+      System.out.println(i);
     }
     System.out.println("Primefactors of 3");
-    for (Integer integer : primeFactors(3)) {
-      System.out.println(integer);
+    for (Long i : primeFactors(3)) {
+      System.out.println(i);
     }
     System.out.println("Primefactors of 32");
-    for (Integer integer : primeFactors(32)) {
-      System.out.println(integer);
+    for (Long i : primeFactors(32)) {
+      System.out.println(i);
     }
   }
 }

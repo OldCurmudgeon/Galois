@@ -4,6 +4,7 @@
  */
 package com.oldcurmudgeon.galois.polynomial;
 
+import com.oldcurmudgeon.galois.math.EnhancedAtomicLong;
 import com.oldcurmudgeon.galois.math.PolyMath;
 import com.oldcurmudgeon.galois.math.PrimeFactors;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
@@ -183,17 +184,15 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     private static final BigInteger GRANULARITY = BigInteger.valueOf(1000);
     private static final BigInteger ONE = BigInteger.valueOf(1);
     private static final BigInteger TWO = BigInteger.valueOf(2);
-    // Find all factors when testing primitivity.
-    private static boolean findAllFactors = false;
 
     // Tests primitivity of a GaloisPoly using the pool.
     private static boolean test(GaloisPoly p) throws InterruptedException, ExecutionException {
       // The required order o = 2^r - 1
       BigInteger o = BQ.pow(p.degree().intValue()).subtract(BigInteger.ONE);
       // Initially not failed.
-      AtomicBoolean failed = new AtomicBoolean(false);
+      EnhancedAtomicLong factor = new EnhancedAtomicLong(Long.MAX_VALUE);
       // Build the task.
-      Task task = new Task(p, ONE, o, failed);
+      Task task = new Task(p, ONE, o, factor);
       // Process it in the pool.
       pool.invoke(task);
       // Deliver the answer.
@@ -208,7 +207,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       // Where to stop.
       final BigInteger stop;
       // Has the whole test failed?
-      final AtomicBoolean failed;
+      final EnhancedAtomicLong factor;
       // Rejects we've seen before.
       /*
        * Observation suggests that if a 2^e+1 is found 
@@ -219,37 +218,41 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
        */
       Set<BigInteger> culprits = new ConcurrentSkipListSet<>();
 
-      public Task(GaloisPoly it, BigInteger start, BigInteger stop, AtomicBoolean failed) {
+      public Task(GaloisPoly it, BigInteger start, BigInteger stop, EnhancedAtomicLong factor) {
         this.it = it;
         this.start = start;
         this.stop = stop;
-        this.failed = failed;
+        this.factor = factor;
+        // ToDo - Use the BigInteger - not the long.
+        BigInteger degree = it.degree();
+        xxx
       }
 
       @Override
       protected Boolean compute() {
         // Do nothing if failed already.
-        if (!failed.get()) {
+        if (!factored()) {
           // Compute or fork?
           if (stop.subtract(start).compareTo(GRANULARITY) < 0) {
             return computeDirectly();
           } else {
             // Fork!
             BigInteger split = stop.subtract(start).divide(TWO).add(start);
-            Task is1 = new Task(it, start, split, failed);
-            Task is2 = new Task(it, split, stop, failed);
-            is1.fork();
+            Task is1 = new Task(it, start, split, factor);
+            Task is2 = new Task(it, split, stop, factor);
+            // Fork.
+            is2.fork();
             // Join.
-            return is2.compute().booleanValue() && is1.join().booleanValue();
+            return is1.compute().booleanValue() && is2.join().booleanValue();
           }
         }
         // Definitely not if failed.
-        return false;
+        return factored();
       }
 
       // Stop when failed.
-      protected boolean stop() {
-        return !findAllFactors && failed.get();
+      protected boolean factored() {
+        return factor.get() != Long.MAX_VALUE;
       }
       
       protected Boolean computeDirectly() {
@@ -258,12 +261,12 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           // Check previous culprits first.
           check(e);
           // Get out if a culprit rejected.
-          if (stop()) {
+          if (factored()) {
             break;
           }
         }
         // Do the rest.
-        for (BigInteger e = start; e.compareTo(stop) < 0 && !stop(); e = e.add(BigInteger.ONE)) {
+        for (BigInteger e = start; e.compareTo(stop) < 0 && !factored(); e = e.add(BigInteger.ONE)) {
           // Skip the already known culprits - we dealt with them in the previous loop.
           if (!culprits.contains(e)) {
             // Not already checked.
@@ -271,7 +274,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           }
         }
         // Stop now if we failed.
-        return !failed.get();
+        return !factored();
       }
 
       protected void check(BigInteger e) {
@@ -279,11 +282,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         GaloisPoly p = it.valueOf(e, BigInteger.ZERO);
         if (p.mod(it).isEmpty()) {
           // Found a new culprit.
-          if ( findAllFactors ) {
-            culprits.add(e);
-          }
-          // We failed - but are we the first?
-          if (failed.getAndSet(true) == false || findAllFactors) {
+          culprits.add(e);
+          // We failed - but are we the lowest factor?
+          if (factor.setIf(EnhancedAtomicLong.Op.lt, e.longValue())) {
             // Its only prime - not primitive.
             System.out.println("Prime: " + it + " = (" + p + ")/(" + p.divide(it) + ")");
           }
@@ -656,7 +657,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
     // While testing I want all factors printed.
-    Primitivity.findAllFactors = true;
+    //Primitivity.findAllFactors = true;
     //generatePrimitivePolys(3, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
     generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);

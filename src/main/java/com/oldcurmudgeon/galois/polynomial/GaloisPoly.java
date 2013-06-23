@@ -32,6 +32,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   protected static final BigInteger MINUS1 = BigInteger.valueOf(-1);
   // Big Max Int
   protected static final BigInteger MAX = BigInteger.valueOf(Integer.MAX_VALUE);
+  // Big 2
+  public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
 
   @Override
   public abstract T xor(T o);
@@ -336,139 +338,118 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   // Filter primes out of these.
-  public class PolyIterator implements Iterator<T> {
-    private final int degree;
-    private final int toDegree;
+  public class PolyIterator implements Iterator<BigInteger> {
+    // Degree of the poly to generate.
+    private int degree;
+    // Start with no bits - will step up to 1 first time around..
+    private int bits = 0;
+    // Invert the bits?
     private final boolean reverse;
-    
-    public PolyIterator (int fromDegree, int toDegree, boolean reverse) {
-      this.degree = fromDegree;
-      this.toDegree = toDegree;
+    // The current pattern.
+    Iterator<BigInteger> pattern = null;
+    // Next to deliver.
+    BigInteger next = null;
+
+    public PolyIterator(int degree, boolean reverse) {
+      this.degree = degree;
       this.reverse = reverse;
     }
-    
-    public PolyIterator (int degree, boolean reverse) {
-      this(degree, degree, reverse);
-    }
-    
-    public PolyIterator (int degree) {
-      this(degree, degree, false);
+
+    public PolyIterator(int degree) {
+      this(degree, false);
     }
 
     @Override
     public boolean hasNext() {
-      return false;
+      // Next number of bits?
+      if (next == null) {
+        if (pattern == null || !pattern.hasNext()) {
+          // Exhausted! Step bits.
+          bits += 1;
+          // Next bit pattern.
+          if (bits < degree) {
+            pattern = new BitPattern(bits, degree - 1, reverse).iterator();
+          } else {
+            // Finished.
+            pattern = null;
+          }
+        }
+      }
+      if (pattern != null && pattern.hasNext()) {
+        next = pattern.next();
+      }
+      return next != null;
     }
 
     @Override
-    public T next() {
-      return null;
+    public BigInteger next() {
+      BigInteger it = hasNext() ? next : null;
+      next = null;
+      return it;
     }
 
     @Override
     public void remove() {
       throw new UnsupportedOperationException("Not supported.");
     }
-    
   }
-  
-  // Iterate over prime polynomials.
-  public class PrimitivePolynomials implements Iterable<T> {
-    // TODO: Use a FilteredIterator.
-    private final int degree;
-    private final boolean reverse;
 
-    public PrimitivePolynomials(int degree, boolean reverse) {
+  // Iterate over prime polynomials.
+  public class PrimePolynomials implements Iterable<T> {
+    // Degree of the poly to generate.
+    private final int degree;
+    // The poly iterator.
+    final Iterator<BigInteger> polys;
+
+    public PrimePolynomials(int degree, boolean reverse) {
       this.degree = degree;
-      this.reverse = reverse;
+      polys = new PolyIterator(degree, reverse);
     }
 
-    public PrimitivePolynomials(int degree) {
+    public PrimePolynomials(int degree) {
       this(degree, false);
     }
 
-    private class PrimitiveIterator implements Iterator<T> {
-      // How many bits we are working on right now.
-      int bits = 1;
-      // The current pattern.
-      Iterator<BigInteger> pattern = new BitPattern(bits, degree - 1, reverse).iterator();
+    private class PrimeIterator implements Iterator<T> {
       // Next one to deliver.
       T next = null;
-      T last = null;
-      // Have we finished?
-      boolean finished = false;
-      // The flpped versions - which also are prime/primitive.
+      // The flpped versions - which also are prime.
       Set<BigInteger> primeFutures = new HashSet<>();
-      Set<BigInteger> primitiveFutures = new HashSet<>();
-
-      private BigInteger nextBitPattern() {
-        BigInteger nextPattern = null;
-        if (!pattern.hasNext()) {
-          // Exhausted! Step bits.
-          bits += 1;
-          // Note when we've finished.
-          finished = bits >= degree;
-          // Next bit pattern.
-          if (!finished) {
-            pattern = new BitPattern(bits, degree - 1, reverse).iterator();
-          }
-        }
-        if (!finished && pattern.hasNext()) {
-          nextPattern = pattern.next();
-        }
-        return nextPattern;
-      }
 
       @Override
       public boolean hasNext() {
         // Need a new next?
-        while (next == null && !finished) {
+        while (next == null && polys.hasNext()) {
           // Roll a polynomial of base + this pattern.
-          BigInteger bitPattern = nextBitPattern();
+          BigInteger bitPattern = polys.next();
           if (bitPattern != null) {
-            // Is it primitive.
-            boolean primitive = false;
             // i.e. 2^d + ... + 1
             T p = valueOf(bitPattern.multiply(TWO), degree).or(one());
-
+            boolean prime = false;
             // Check first in the futures.
-            if (primitiveFutures.contains(bitPattern)) {
-              // It's the reverse of one we've already seen.
-              primitive = true;
-              // Done with it - it wont come around again.
-              primitiveFutures.remove(bitPattern);
-            } else if (primeFutures.contains(bitPattern)) {
-              // We know it is prime but not primitive - ignore it.
+            if (primeFutures.contains(bitPattern)) {
+              // We know it is prime.
+              prime = true;
               // Done with it - it wont come around again.
               primeFutures.remove(bitPattern);
             } else {
-              // Not in either future set.
+              // Not in the future set.
               // New pattern - Is it a prime poly?
-              boolean prime = !p.isReducible();
-              if (prime) {
-                // Primitive too?
-                primitive = p.isPrimitive();
-              }
+              prime = !p.isReducible();
               // Prime or primitive - record its reverse.
-              if (prime || primitive) {
+              if (prime) {
                 // Keep track of the reverse-pattern ones because they are prime/primitive too.
                 BigInteger reversePattern = reverse(bitPattern, degree - 1);
                 // Don't bother if it is a palindrome.
                 if (reversePattern.compareTo(bitPattern) != 0) {
-                  // Either primitive pr prime.
-                  if (primitive) {
-                    primitiveFutures.add(reversePattern);
-                  } else {
-                    primeFutures.add(reversePattern);
-                  }
+                  primeFutures.add(reversePattern);
                 }
               }
             }
             // Only deliver primitives.
-            if (primitive) {
+            if (prime) {
               next = p;
             }
-
           }
         }
         return next != null;
@@ -478,7 +459,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public T next() {
         T it = hasNext() ? next : null;
         next = null;
-        last = it;
         return it;
       }
 
@@ -490,7 +470,95 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
       @Override
       public String toString() {
-        return next != null ? next.toString() : last != null ? last.toString() : "";
+        return hasNext() ? next.toString() : "";
+      }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+      return new PrimeIterator();
+    }
+  }
+
+  // Iterate over prime polynomials.
+  public class PrimitivePolynomials implements Iterable<T> {
+    // TODO: Use a FilteredIterator.
+    // Degree of the poly to generate.
+    private final int degree;
+    // The poly iterator.
+    final Iterator<T> primes;
+
+    public PrimitivePolynomials(int degree, boolean reverse) {
+      this.degree = degree;
+      this.primes = new PrimePolynomials(degree, reverse).iterator();
+    }
+
+    public PrimitivePolynomials(int degree) {
+      this(degree, false);
+    }
+
+    private class PrimitiveIterator implements Iterator<T> {
+      // Next one to deliver.
+      T next = null;
+      // The flpped versions - which also are prime/primitive.
+      Set<T> primitiveFutures = new HashSet<>();
+
+      @Override
+      public boolean hasNext() {
+        // Need a new next?
+        while (next == null && primes.hasNext()) {
+          // Roll a polynomial of base + this pattern.
+          T p = primes.next();
+          // Is it primitive.
+          boolean primitive;
+
+          // Check first in the futures.
+          if (primitiveFutures.contains(p)) {
+            // It's the reverse of one we've already seen.
+            primitive = true;
+            // Done with it - it wont come around again.
+            primitiveFutures.remove(p);
+          } else {
+            // Primitive too?
+            primitive = p.isPrimitive();
+            // Prime or primitive - record its reverse.
+            if (primitive) {
+              // Keep track of the reverse-pattern ones because they are prime/primitive too.
+              BigInteger reversePattern = reverse(p.asBigInteger(), degree - 1);
+              // Don't bother if it is a palindrome.
+              if (reversePattern.compareTo(p.asBigInteger()) != 0) {
+                // Either primitive pr prime.
+                if (primitive) {
+                  primitiveFutures.add(p);
+                }
+              }
+            }
+          }
+          // Only deliver primitives.
+          if (primitive) {
+            next = p;
+          }
+
+        }
+        return next != null;
+      }
+
+      @Override
+      public T next() {
+        T it = hasNext() ? next : null;
+        next = null;
+        return it;
+      }
+
+      @Override
+      public void remove() {
+        // To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported.");
+      }
+
+      @Override
+      public String toString() {
+        return hasNext() ? next.toString() : "";
       }
     }
 
@@ -499,7 +567,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       return new PrimitiveIterator();
     }
   }
-  public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
 
   /**
    * From bit twiddling:
@@ -600,7 +667,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
     int seen = 0;
-    for (FastPolynomial p : new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true)) {
+    for (FastPolynomial p : new FastPolynomial().new PrimePolynomials(degree, minimal ? false : true)) {
       // Prime Polynomials!
       System.out.println("Primitive: " + p);
       seen += 1;

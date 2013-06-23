@@ -5,6 +5,7 @@
 package com.oldcurmudgeon.galois.polynomial;
 
 import com.oldcurmudgeon.galois.math.PolyMath;
+import com.oldcurmudgeon.galois.math.PrimeFactors;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
@@ -182,8 +183,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     private static final BigInteger GRANULARITY = BigInteger.valueOf(1000);
     private static final BigInteger ONE = BigInteger.valueOf(1);
     private static final BigInteger TWO = BigInteger.valueOf(2);
-    // Test failed.
-    //volatile static boolean failed = false;
+    // Find all factors when testing primitivity.
+    private static boolean findAllFactors = false;
 
     // Tests primitivity of a GaloisPoly using the pool.
     private static boolean test(GaloisPoly p) throws InterruptedException, ExecutionException {
@@ -246,18 +247,23 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         return false;
       }
 
+      // Stop when failed.
+      protected boolean stop() {
+        return !findAllFactors && failed.get();
+      }
+      
       protected Boolean computeDirectly() {
         // Walk the culprits first.
         for (BigInteger e : culprits) {
           // Check previous culprits first.
           check(e);
           // Get out if a culprit rejected.
-          if (failed.get()) {
+          if (stop()) {
             break;
           }
         }
         // Do the rest.
-        for (BigInteger e = start; e.compareTo(stop) < 0 && !failed.get(); e = e.add(BigInteger.ONE)) {
+        for (BigInteger e = start; e.compareTo(stop) < 0 && !stop(); e = e.add(BigInteger.ONE)) {
           // Skip the already known culprits - we dealt with them in the previous loop.
           if (!culprits.contains(e)) {
             // Not already checked.
@@ -273,9 +279,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         GaloisPoly p = it.valueOf(e, BigInteger.ZERO);
         if (p.mod(it).isEmpty()) {
           // Found a new culprit.
-          culprits.add(e);
+          if ( findAllFactors ) {
+            culprits.add(e);
+          }
           // We failed - but are we the first?
-          if (failed.getAndSet(true) == false) {
+          if (failed.getAndSet(true) == false || findAllFactors) {
             // Its only prime - not primitive.
             System.out.println("Prime: " + it + " = (" + p + ")/(" + p.divide(it) + ")");
           }
@@ -647,9 +655,12 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      * Primitive poly: x^5 + x^3 + 1
      * Primitive poly: x^5 + x^3 + x^2 + x + 1
      */
+    // While testing I want all factors printed.
+    Primitivity.findAllFactors = true;
     //generatePrimitivePolys(3, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);
+    //generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
     System.out.println("Took: " + t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
@@ -667,7 +678,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
-    System.out.println("Degree: " + degree + (minimal ? " minimal" : " maximal"));
+    int twoPowDegreeMinus1 = (int) Math.pow(2, degree) - 1;
+    System.out.println("Degree: " + degree 
+            + (minimal ? " minimal" : " maximal")
+            + " Factors of "+twoPowDegreeMinus1+": "+PrimeFactors.primeFactors(twoPowDegreeMinus1));
     int seen = 0;
     for (FastPolynomial p : new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true)) {
       // Prime Polynomials!

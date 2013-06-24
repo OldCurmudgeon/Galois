@@ -16,11 +16,15 @@
 package com.oldcurmudgeon.galois.math;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Find prime factors of ints.
- * 
+ * Find factors of ints.
+ *
  * @author OldCurmudgeon
  */
 public class PrimeFactors {
@@ -38,6 +42,27 @@ public class PrimeFactors {
     return factors;
   }
 
+  // No point in factoring these - note that these are the n of 2^n-1.
+  static final Set<Integer> MersennePrimes = new HashSet<>(
+          Arrays.asList(2,3,5,7,13,17,19,31,61,89,107,127,
+                        521,607,1279,2203,2281,3217,4253,
+                        4423,9689,9941,11213,19937,21701,
+                        23209,44497,86243,110503,132049,216091,
+                        756839,859433,1257787,1398269,2976221,
+                        3021377,6972593,13466917,20996011,
+                        24036583,25964951,30402457,32582657,
+                        37156667,42643801,43112609,57885161));
+
+  // Returns factors of 2^n-1
+  public static List<Long> mersenneFactors(long n) {
+    if ( !MersennePrimes.contains((int)n)) {
+      return primeFactors((long)Math.pow(2, n)-1);
+    } else {
+      // No factors of the primes.
+      return Collections.EMPTY_LIST;
+    }
+  }
+
   public static void main(String[] args) {
     System.out.println("Primefactors of 44");
     for (Long i : primeFactors(44)) {
@@ -52,4 +77,5 @@ public class PrimeFactors {
       System.out.println(i);
     }
   }
+
 }

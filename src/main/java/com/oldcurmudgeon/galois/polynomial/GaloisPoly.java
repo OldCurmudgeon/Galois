@@ -224,8 +224,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         this.stop = stop;
         this.factor = factor;
         // ToDo - Use the BigInteger - not the long.
-        BigInteger degree = it.degree();
-        xxx
+        //BigInteger degree = it.degree();
+        //xxx
       }
 
       @Override
@@ -682,7 +682,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     int twoPowDegreeMinus1 = (int) Math.pow(2, degree) - 1;
     System.out.println("Degree: " + degree 
             + (minimal ? " minimal" : " maximal")
-            + " Factors of "+twoPowDegreeMinus1+": "+PrimeFactors.primeFactors(twoPowDegreeMinus1));
+            + " Factors of "+twoPowDegreeMinus1+": "+PrimeFactors.mersenneFactors(degree));
     int seen = 0;
     for (FastPolynomial p : new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true)) {
       // Prime Polynomials!

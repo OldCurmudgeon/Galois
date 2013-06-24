@@ -485,7 +485,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           if (bitPattern != null) {
             // i.e. 2^d + ... + 1
             T p = valueOf(bitPattern.multiply(TWO), degree).or(one());
-            boolean prime = false;
+            boolean prime;
             // Check first in the futures.
             if (primeFutures.contains(bitPattern)) {
               // We know it is prime.

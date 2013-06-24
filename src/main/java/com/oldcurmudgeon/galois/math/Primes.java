@@ -15,9 +15,7 @@
  */
 package com.oldcurmudgeon.galois.math;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,8 +25,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Find factors of ints.
@@ -70,7 +66,7 @@ public class Primes {
       return Collections.EMPTY_LIST;
     }
   }
-  
+
   public static long twoToTheNMinus1(int n) {
     return (long) Math.pow(2, n) - 1;
   }
@@ -78,12 +74,12 @@ public class Primes {
   // 10,000 primes - from http://primes.utm.edu/lists/small/10000.txt
   private static final ArrayList<Integer> SomePrimes = new ArrayList<>();
   private static final String PrimesFileName = "10000Primes.txt";
-  
+
   static {
-    InputStream in = Primes.class.getResourceAsStream(PrimesFileName);
-    try {
-      BufferedReader r = new BufferedReader(new InputStreamReader(in));
-      for (String s; r.ready() && (s = r.readLine()) != null;) {
+    try (InputStream in = Primes.class.getResourceAsStream(PrimesFileName);
+            InputStreamReader isr = new InputStreamReader(in);
+            BufferedReader br = new BufferedReader(isr)) {
+      for (String s; br.ready() && (s = br.readLine()) != null;) {
         // Split into commas.
         String[] ps = s.split(",");
         for (String p : ps) {
@@ -92,8 +88,6 @@ public class Primes {
           }
         }
       }
-      r.close();
-      in.close();
     } catch (IOException ex) {
       System.err.println("Loading pf primes failed.");
       ex.printStackTrace(System.err);
@@ -108,7 +102,7 @@ public class Primes {
     int whereTo = whereNextPrime(to, false);
     return SomePrimes.subList(whereFrom, whereTo);
   }
-  
+
   public static int whereNextPrime(int from, boolean higher) {
     for (int i = 0; i < SomePrimes.size(); i++) {
       if (SomePrimes.get(i) > from) {
@@ -120,7 +114,7 @@ public class Primes {
     // Currently doing something that should throw an exception.
     return -1;
   }
-  
+
   public static void main(String[] args) {
     System.out.println("Primefactors of 44");
     for (Long i : primeFactors(44)) {
@@ -135,5 +129,5 @@ public class Primes {
       System.out.println(i);
     }
   }
-  
+
 }

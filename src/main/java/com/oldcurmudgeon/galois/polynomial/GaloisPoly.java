@@ -715,7 +715,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //Primitivity.findAllFactors = true;
     //generatePrimitivePolys(4, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
     System.out.println("Took: " + t);

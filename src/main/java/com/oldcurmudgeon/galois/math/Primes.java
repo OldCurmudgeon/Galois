@@ -67,7 +67,7 @@ public class Primes {
     return (long) Math.pow(2, n) - 1;
   }
 
-  // 10,000 primes - from http://primes.utm.edu/lists/small/1000.txt
+  // 1,000 primes - from http://primes.utm.edu/lists/small/1000.txt
   private static final ArrayList<Integer> Primes = new ArrayList<>(Arrays.asList(new Integer[]{
     2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
     // <editor-fold defaultstate="collapsed" desc="...">
@@ -188,7 +188,7 @@ public class Primes {
       }
     }
     // Not sure what to do here.
-    // We were given a from which is beyoind my range.
+    // We were given a from which is beyond my range.
     // Currently doing something that should throw an exception.
     return -1;
   }

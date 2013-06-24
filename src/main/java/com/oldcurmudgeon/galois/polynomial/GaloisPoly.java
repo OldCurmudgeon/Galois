@@ -13,7 +13,9 @@ import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -191,12 +193,49 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       BigInteger o = BQ.pow(p.degree().intValue()).subtract(BigInteger.ONE);
       // Initially not failed.
       EnhancedAtomicLong factor = new EnhancedAtomicLong(Long.MAX_VALUE);
+      // Build the factors.
+      Set<BigInteger> factors = buildFactors(p.degree().intValue());
+      //System.out.println("Factors: " + factors);
       // Build the task.
-      Task task = new Task(p, ONE, o, factor);
+      Task task = new Task(p, ONE, o, factor, factors);
       // Process it in the pool.
       pool.invoke(task);
       // Deliver the answer.
       return !task.get();
+    }
+
+    // Memoized.
+    private static int lastDegrees = -1;
+    private static Set<BigInteger> lastFactors;
+
+    private static Set<BigInteger> buildFactors(int degrees) {
+      if (degrees != lastDegrees) {
+        Set<BigInteger> factors = new TreeSet<>();
+        int limit = (int) Primes.twoToTheNMinus1(degrees);
+        List<Long> primeFactors = Primes.primeFactors(limit);
+        List<Integer> primes = Primes.primes(degrees, limit-1);
+        for (Long f : primeFactors) {
+          // Strangely - my algorithm believes 3 is a prime factor of 3.
+          if ( f < limit ) {
+            // All of my factors.
+            factors.add(BigInteger.valueOf(f));
+            // And all prime multiples of it.
+            for (Integer i : primes) {
+              // Up to the limit of course.
+              if ( f * i < limit ) {
+                factors.add(BigInteger.valueOf(f * i));
+              } else {
+                break;
+              }
+            }
+          }
+        }
+        lastDegrees = degrees;
+        System.out.println("Factors("+limit+"): "+factors);
+        return lastFactors = factors;
+      } else {
+        return lastFactors;
+      }
     }
 
     private static class Task extends RecursiveTask<Boolean> {
@@ -215,24 +254,31 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
        * 
        * We therefore record the factors used to reject 
        * and try them first.
+       * Set<BigInteger> culprits = new ConcurrentSkipListSet<>();
        */
-      Set<BigInteger> culprits = new ConcurrentSkipListSet<>();
+      /*
+       * Observation suggests that if a 2^e+1 is found 
+       * to be a factor then it is a factor more than once.
+       * 
+       * We therefore record the factors used to reject 
+       * and try them first.
+       * Set<BigInteger> culprits = new ConcurrentSkipListSet<>();
+       */
+      final Set<BigInteger> factors;
 
-      public Task(GaloisPoly it, BigInteger start, BigInteger stop, EnhancedAtomicLong factor) {
+      public Task(GaloisPoly it, BigInteger start, BigInteger stop, EnhancedAtomicLong factor, Set<BigInteger> factors) {
         this.it = it;
         this.start = start;
         this.stop = stop;
         this.factor = factor;
-        // ToDo - Use the BigInteger - not the long.
-        //BigInteger degree = it.degree();
-        //xxx
+        this.factors = factors;
       }
 
       @Override
-      public String toString () {
-        return it+" ["+start+"-"+stop+"]";
+      public String toString() {
+        return it + " [" + start + "-" + stop + "]";
       }
-      
+
       @Override
       protected Boolean compute() {
         // Do nothing if failed already.
@@ -243,8 +289,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           } else {
             // Fork!
             BigInteger split = stop.subtract(start).divide(TWO).add(start);
-            Task is1 = new Task(it, start, split, factor);
-            Task is2 = new Task(it, split, stop, factor);
+            Task is1 = new Task(it, start, split, factor, factors);
+            Task is2 = new Task(it, split, stop, factor, factors);
             // Fork.
             is2.fork();
             // Join.
@@ -262,7 +308,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
       protected Boolean computeDirectly() {
         // Walk the culprits first.
-        for (BigInteger e : culprits) {
+        for (BigInteger e : factors) {
           // Check previous culprits first.
           check(e);
           // Get out if a culprit rejected.
@@ -273,7 +319,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         // Do the rest.
         for (BigInteger e = start; e.compareTo(stop) < 0 && !factored(); e = e.add(BigInteger.ONE)) {
           // Skip the already known culprits - we dealt with them in the previous loop.
-          if (!culprits.contains(e)) {
+          if (!factors.contains(e)) {
             // Not already checked.
             check(e);
           }
@@ -286,8 +332,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         // p = (x^e + 1)
         GaloisPoly p = it.valueOf(e, BigInteger.ZERO);
         if (p.mod(it).isEmpty()) {
-          // Found a new culprit.
-          culprits.add(e);
           // We failed - but are we the lowest factor?
           if (factor.setIf(EnhancedAtomicLong.Op.lt, e.longValue())) {
             // Its only prime - not primitive.
@@ -669,7 +713,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
      */
     // While testing I want all factors printed.
     //Primitivity.findAllFactors = true;
-    //generatePrimitivePolys(3, Integer.MAX_VALUE, true);
+    //generatePrimitivePolys(4, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
     generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
     //generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
@@ -692,7 +736,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     long twoPowDegreeMinus1 = Primes.twoToTheNMinus1(degree);
     System.out.println("Degree: " + degree
-            + (minimal ? " minimal" : " maximal")
+            //+ (minimal ? " minimal" : " maximal")
             + " Factors of " + twoPowDegreeMinus1 + ": " + Primes.mersenneFactors(degree));
     int seen = 0;
     for (FastPolynomial p : new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true)) {

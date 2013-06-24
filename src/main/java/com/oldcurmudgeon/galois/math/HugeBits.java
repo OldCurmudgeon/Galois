@@ -15,6 +15,7 @@
  */
 package com.oldcurmudgeon.galois.math;
 
+import com.oldcurmudgeon.galois.math.sparse.SparseIterator;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.TreeMap;

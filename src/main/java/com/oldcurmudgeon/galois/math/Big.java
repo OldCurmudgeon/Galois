@@ -15,6 +15,7 @@
  */
 package com.oldcurmudgeon.galois.math;
 
+import com.oldcurmudgeon.galois.math.sparse.Sparse;
 import java.math.BigInteger;
 import java.util.Objects;
 

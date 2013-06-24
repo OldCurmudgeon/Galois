@@ -15,6 +15,9 @@
  */
 package com.oldcurmudgeon.galois.math;
 
+import com.oldcurmudgeon.galois.math.sparse.SparseIterator;
+import com.oldcurmudgeon.galois.math.sparse.Sparse;
+import com.oldcurmudgeon.galois.math.sparse.SparseIterable;
 import com.oldcurmudgeon.toolbox.walkers.Separator;
 import java.math.BigInteger;
 

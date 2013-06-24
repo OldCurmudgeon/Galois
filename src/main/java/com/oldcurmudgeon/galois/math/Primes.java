@@ -27,7 +27,7 @@ import java.util.Set;
  *
  * @author OldCurmudgeon
  */
-public class PrimeFactors {
+public class Primes {
   public static List<Long> primeFactors(long n) {
     List<Long> factors = new ArrayList<>();
     for (long i = 2; i <= n / i; i++) {
@@ -54,15 +54,19 @@ public class PrimeFactors {
                         37156667,42643801,43112609,57885161));
 
   // Returns factors of 2^n-1
-  public static List<Long> mersenneFactors(long n) {
-    if ( !MersennePrimes.contains((int)n)) {
-      return primeFactors((long)Math.pow(2, n)-1);
+  public static List<Long> mersenneFactors(int n) {
+    if ( !MersennePrimes.contains(n)) {
+      return primeFactors(twoToTheNMinus1(n));
     } else {
       // No factors of the primes.
       return Collections.EMPTY_LIST;
     }
   }
 
+  public static long twoToTheNMinus1(int n) {
+    return (long)Math.pow(2, n)-1;
+  }
+  
   public static void main(String[] args) {
     System.out.println("Primefactors of 44");
     for (Long i : primeFactors(44)) {

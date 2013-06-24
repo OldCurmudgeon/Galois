@@ -6,7 +6,7 @@ package com.oldcurmudgeon.galois.polynomial;
 
 import com.oldcurmudgeon.galois.math.EnhancedAtomicLong;
 import com.oldcurmudgeon.galois.math.PolyMath;
-import com.oldcurmudgeon.galois.math.PrimeFactors;
+import com.oldcurmudgeon.galois.math.Primes;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author OldCurmudgeon
@@ -104,6 +103,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     public int compare(BigInteger o1, BigInteger o2) {
       return -1 * o1.compareTo(o2);
     }
+
   }
 
   // In a Galois field plus and minus are xor.
@@ -196,7 +196,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       // Process it in the pool.
       pool.invoke(task);
       // Deliver the answer.
-      return task.get();
+      return !task.get();
     }
 
     private static class Task extends RecursiveTask<Boolean> {
@@ -229,6 +229,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       }
 
       @Override
+      public String toString () {
+        return it+" ["+start+"-"+stop+"]";
+      }
+      
+      @Override
       protected Boolean compute() {
         // Do nothing if failed already.
         if (!factored()) {
@@ -243,7 +248,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             // Fork.
             is2.fork();
             // Join.
-            return is1.compute().booleanValue() && is2.join().booleanValue();
+            return is1.compute().booleanValue() || is2.join().booleanValue();
           }
         }
         // Definitely not if failed.
@@ -254,7 +259,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       protected boolean factored() {
         return factor.get() != Long.MAX_VALUE;
       }
-      
+
       protected Boolean computeDirectly() {
         // Walk the culprits first.
         for (BigInteger e : culprits) {
@@ -274,7 +279,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           }
         }
         // Stop now if we failed.
-        return !factored();
+        return factored();
       }
 
       protected void check(BigInteger e) {
@@ -290,6 +295,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           }
         }
       }
+
     }
   }
 
@@ -402,6 +408,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     public void remove() {
       throw new UnsupportedOperationException("Not supported.");
     }
+
   }
 
   // Iterate over prime polynomials.
@@ -483,12 +490,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public String toString() {
         return hasNext() ? next.toString() : "";
       }
+
     }
 
     @Override
     public Iterator<T> iterator() {
       return new PrimeIterator();
     }
+
   }
 
   // Iterate over prime polynomials.
@@ -572,12 +581,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public String toString() {
         return hasNext() ? next.toString() : "";
       }
+
     }
 
     @Override
     public Iterator<T> iterator() {
       return new PrimitiveIterator();
     }
+
   }
 
   /**
@@ -660,7 +671,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //Primitivity.findAllFactors = true;
     //generatePrimitivePolys(3, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
     //generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
     System.out.println("Took: " + t);
@@ -679,10 +690,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
-    int twoPowDegreeMinus1 = (int) Math.pow(2, degree) - 1;
-    System.out.println("Degree: " + degree 
+    long twoPowDegreeMinus1 = Primes.twoToTheNMinus1(degree);
+    System.out.println("Degree: " + degree
             + (minimal ? " minimal" : " maximal")
-            + " Factors of "+twoPowDegreeMinus1+": "+PrimeFactors.mersenneFactors(degree));
+            + " Factors of " + twoPowDegreeMinus1 + ": " + Primes.mersenneFactors(degree));
     int seen = 0;
     for (FastPolynomial p : new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true)) {
       // Prime Polynomials!
@@ -696,4 +707,5 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
     }
   }
+
 }

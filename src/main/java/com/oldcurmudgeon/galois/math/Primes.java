@@ -116,17 +116,9 @@ public class Primes {
   }
 
   public static void main(String[] args) {
-    System.out.println("Primefactors of 44");
-    for (Long i : primeFactors(44)) {
-      System.out.println(i);
-    }
-    System.out.println("Primefactors of 3");
-    for (Long i : primeFactors(3)) {
-      System.out.println(i);
-    }
-    System.out.println("Primefactors of 32");
-    for (Long i : primeFactors(32)) {
-      System.out.println(i);
+    int[] ints = new int[] {527,1143,1581,2635,2667,7905,8001};
+    for ( int i : ints ) {
+      System.out.println("Factors of "+i+"="+primeFactors(i));
     }
   }
 

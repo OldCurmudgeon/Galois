@@ -334,7 +334,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           // We failed - but are we the lowest factor?
           if (factor.setIf(EnhancedAtomicLong.Op.lt, e.longValue())) {
             // Its only prime - not primitive.
-            System.out.println("Prime: " + it + " = (" + p + ")/(" + p.divide(it) + ")");
+            System.out.println("Prime: " + it + " divides " + p);
           }
         }
       }

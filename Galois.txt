@@ -2780,3 +2780,106 @@ Primitive: x^14 + x^11 + x^9 + x^8 + x^7 + x^6 + x^3 + x^2 + 1
 Primitive: x^14 + x^11 + x^9 + x^8 + x^7 + x^6 + x^4 + x^2 + 1
 Prime: x^14 + x^11 + x^9 + x^8 + x^7 + x^6 + x^4 + x^3 + 1 divides x^5355 + 1
 Prime: x^14 + x^11 + x^9 + x^8 + x^7 + x^6 + x^5 + x + 1 divides x^15841 + 1
+Primitive: x^14 + x^11 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + 1
+Primitive: x^14 + x^11 + x^10 + x^5 + x^4 + x^3 + x^2 + x + 1
+Prime: x^14 + x^11 + x^10 + x^6 + x^5 + x^4 + x^2 + x + 1 divides x^15841 + 1
+Primitive: x^14 + x^11 + x^10 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
+Prime: x^14 + x^11 + x^10 + x^7 + x^4 + x^3 + x^2 + x + 1 divides x^15841 + 1
+Prime: x^14 + x^11 + x^10 + x^7 + x^5 + x^3 + x^2 + x + 1 divides x^254 + 1
+Prime: x^14 + x^11 + x^10 + x^7 + x^5 + x^4 + x^2 + x + 1 divides x^5355 + 1
+Primitive: x^14 + x^11 + x^10 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
+Primitive: x^14 + x^11 + x^10 + x^7 + x^6 + x^4 + x^2 + x + 1
+Primitive: x^14 + x^11 + x^10 + x^7 + x^6 + x^5 + x^3 + x^2 + 1
+Prime: x^14 + x^11 + x^10 + x^7 + x^6 + x^5 + x^4 + x + 1 divides x^15841 + 1
+Prime: x^14 + x^11 + x^10 + x^7 + x^6 + x^5 + x^4 + x^2 + 1 divides x^5355 + 1
+Primitive: x^14 + x^11 + x^10 + x^8 + x^4 + x^3 + x^2 + x + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^5 + x^4 + x^3 + x + 1 divides x^15841 + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^5 + x^4 + x^3 + x^2 + 1 divides x^5355 + 1
+Primitive: x^14 + x^11 + x^10 + x^8 + x^6 + x^3 + x^2 + x + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^6 + x^4 + x^2 + x + 1 divides x^15841 + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^6 + x^5 + x^3 + x + 1 divides x^15841 + 1
+Primitive: x^14 + x^11 + x^10 + x^8 + x^6 + x^5 + x^4 + x^2 + 1
+Primitive: x^14 + x^11 + x^10 + x^8 + x^7 + x^3 + x^2 + x + 1
+Primitive: x^14 + x^11 + x^10 + x^8 + x^7 + x^5 + x^3 + x^2 + 1
+Primitive: x^14 + x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^7 + x^6 + x^2 + x + 1 divides x^254 + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^7 + x^6 + x^4 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^7 + x^6 + x^4 + x^2 + 1 divides x^15841 + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^3 + 1 divides x^5355 + 1
+Prime: x^14 + x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^4 + 1 divides x^5461 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^5 + x^3 + x^2 + x + 1 divides x^5355 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^5 + x^4 + x^2 + x + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^6 + x^3 + x^2 + x + 1 divides x^15841 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^6 + x^4 + x^3 + x^2 + 1 divides x^15841 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^6 + x^5 + x^2 + x + 1 divides x^15841 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^6 + x^5 + x^3 + x + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^6 + x^5 + x^3 + x^2 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^6 + x^5 + x^4 + x^3 + 1 divides x^15841 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^7 + x^4 + x^3 + x + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^7 + x^5 + x^4 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^7 + x^5 + x^4 + x^2 + 1 divides x^5355 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^7 + x^6 + x^3 + x + 1 divides x^5355 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^7 + x^6 + x^4 + x + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^7 + x^6 + x^5 + x^2 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^7 + x^6 + x^5 + x^3 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^4 + x^2 + x + 1 divides x^254 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^8 + x^4 + x^3 + x^2 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^5 + x^2 + x + 1 divides x^254 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^5 + x^4 + x^3 + 1 divides x^15841 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^6 + x^3 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^6 + x^3 + x^2 + 1 divides x^5355 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^8 + x^6 + x^4 + x^2 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x + 1 divides x^15841 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + 1 divides x^5355 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^7 + x^3 + x^2 + 1 divides x^5461 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x + 1 divides x^254 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^2 + 1 divides x^5461 + 1
+Primitive: x^14 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^3 + 1
+Prime: x^14 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^3 + 1 divides x^15841 + 1
+Prime: x^14 + x^12 + x^7 + x^6 + x^5 + x^3 + x^2 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + 1 divides x^5355 + 1
+Prime: x^14 + x^12 + x^8 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^5461 + 1
+Primitive: x^14 + x^12 + x^8 + x^6 + x^4 + x^3 + x^2 + x + 1
+Prime: x^14 + x^12 + x^8 + x^6 + x^5 + x^3 + x^2 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^8 + x^6 + x^5 + x^4 + x^2 + x + 1 divides x^15841 + 1
+Primitive: x^14 + x^12 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
+Prime: x^14 + x^12 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1 divides x^381 + 1
+Prime: x^14 + x^12 + x^8 + x^7 + x^6 + x^3 + x^2 + x + 1 divides x^5461 + 1
+Primitive: x^14 + x^12 + x^8 + x^7 + x^6 + x^4 + x^3 + x + 1
+Primitive: x^14 + x^12 + x^8 + x^7 + x^6 + x^5 + x^3 + x + 1
+Primitive: x^14 + x^12 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + 1
+Primitive: x^14 + x^12 + x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
+Prime: x^14 + x^12 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1 divides x^15841 + 1
+Prime: x^14 + x^12 + x^9 + x^6 + x^4 + x^3 + x^2 + x + 1 divides x^5355 + 1
+Prime: x^14 + x^12 + x^9 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^15841 + 1
+Prime: x^14 + x^12 + x^9 + x^7 + x^5 + x^4 + x^3 + x + 1 divides x^5355 + 1
+Prime: x^14 + x^12 + x^9 + x^7 + x^5 + x^4 + x^3 + x^2 + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^9 + x^7 + x^6 + x^3 + x^2 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^9 + x^7 + x^6 + x^4 + x^2 + x + 1 divides x^15841 + 1
+Primitive: x^14 + x^12 + x^9 + x^7 + x^6 + x^5 + x^2 + x + 1
+Prime: x^14 + x^12 + x^9 + x^7 + x^6 + x^5 + x^3 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^9 + x^7 + x^6 + x^5 + x^4 + x + 1 divides x^254 + 1
+Prime: x^14 + x^12 + x^9 + x^7 + x^6 + x^5 + x^4 + x^3 + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^4 + x^3 + x^2 + x + 1 divides x^15841 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^5 + x^4 + x^2 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^5 + x^4 + x^3 + x + 1 divides x^15841 + 1
+Primitive: x^14 + x^12 + x^9 + x^8 + x^6 + x^4 + x^3 + x + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^6 + x^5 + x^2 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^6 + x^5 + x^3 + x^2 + 1 divides x^5355 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^6 + x^5 + x^4 + x + 1 divides x^15841 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^6 + x^5 + x^4 + x^2 + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^7 + x^3 + x^2 + x + 1 divides x^5355 + 1
+Primitive: x^14 + x^12 + x^9 + x^8 + x^7 + x^4 + x^3 + x + 1
+Primitive: x^14 + x^12 + x^9 + x^8 + x^7 + x^4 + x^3 + x^2 + 1
+Primitive: x^14 + x^12 + x^9 + x^8 + x^7 + x^5 + x^2 + x + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^7 + x^5 + x^4 + x^2 + 1 divides x^15841 + 1
+Primitive: x^14 + x^12 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + 1
+Primitive: x^14 + x^12 + x^9 + x^8 + x^7 + x^6 + x^2 + x + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^7 + x^6 + x^3 + x + 1 divides x^254 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1 divides x^5461 + 1
+Prime: x^14 + x^12 + x^9 + x^8 + x^7 + x^6 + x^5 + x^2 + 1 divides x^129 + 1
+Primitive: x^14 + x^12 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + 1
+Primitive: x^14 + x^12 + x^10 + x^6 + x^4 + x^3 + x^2 + x + 1
+Primitive: x^14 + x^12 + x^10 + x^6 + x^5 + x^4 + x^3 + x + 1

@@ -170,9 +170,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
    * In particular, the order of a polynomial P(x) with P(0)!=0 is the 
    * smallest integer e for which P(x) divides x^e+1 (Lidl and Niederreiter 1994).
    */
-  public boolean isPrimitive() {
+  public boolean isPrimitive(Set<BigInteger> culprits) {
     try {
-      return Primitivity.test(this);
+      return Primitivity.test(this, culprits);
     } catch (InterruptedException | ExecutionException ex) {
       // Rethrow it as a runtime exception.
       throw new RuntimeException(ex);
@@ -188,13 +188,13 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     private static final BigInteger TWO = BigInteger.valueOf(2);
 
     // Tests primitivity of a GaloisPoly using the pool.
-    private static boolean test(GaloisPoly p) throws InterruptedException, ExecutionException {
+    private static boolean test(GaloisPoly p, Set<BigInteger> culprits) throws InterruptedException, ExecutionException {
       // The required order o = 2^r - 1
       BigInteger o = BQ.pow(p.degree().intValue()).subtract(BigInteger.ONE);
       // Initially not failed.
       EnhancedAtomicLong factor = new EnhancedAtomicLong(Long.MAX_VALUE);
       // Build the task.
-      Task task = new Task(p, ONE, o, factor);
+      Task task = new Task(p, ONE, o, factor, culprits);
       // Process it in the pool.
       pool.invoke(task);
       // Deliver the answer.
@@ -218,13 +218,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
        * We therefore record the factors used to reject 
        * and try them first.
        */
-      Set<BigInteger> culprits = new ConcurrentSkipListSet<>();
+      final Set<BigInteger> culprits;
 
-      public Task(GaloisPoly it, BigInteger start, BigInteger stop, EnhancedAtomicLong factor) {
+      public Task(GaloisPoly it, BigInteger start, BigInteger stop, EnhancedAtomicLong factor, Set<BigInteger> culprits) {
         this.it = it;
         this.start = start;
         this.stop = stop;
         this.factor = factor;
+        this.culprits = culprits;
       }
 
       @Override
@@ -242,8 +243,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           } else {
             // Fork!
             BigInteger split = stop.subtract(start).divide(TWO).add(start);
-            Task is1 = new Task(it, start, split, factor);
-            Task is2 = new Task(it, split, stop, factor);
+            Task is1 = new Task(it, start, split, factor, culprits);
+            Task is2 = new Task(it, split, stop, factor, culprits);
             // Fork.
             is2.fork();
             // Join.
@@ -506,6 +507,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     private final int degree;
     // The poly iterator.
     final Iterator<T> primes;
+    // Keep track of the factors found.
+    final Set<BigInteger> culprits = new ConcurrentSkipListSet<>();
 
     public PrimitivePolynomials(int degree, boolean reverse) {
       this.degree = degree;
@@ -517,6 +520,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     }
 
     private class PrimitiveIterator implements Iterator<T> {
+      // The last one we delivered.
+      T prev = null;
       // Next one to deliver.
       T next = null;
       // The flpped versions - which also are prime/primitive.
@@ -526,7 +531,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public boolean hasNext() {
         // Need a new next?
         while (next == null && primes.hasNext()) {
-          // Roll a polynomial of base + this pattern.
+          // Roll a prime polynomial.
           T p = primes.next();
           // Is it primitive.
           boolean primitive;
@@ -539,7 +544,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             primitiveFutures.remove(p);
           } else {
             // Primitive too?
-            primitive = p.isPrimitive();
+            primitive = p.isPrimitive(culprits);
             // Prime or primitive - record its reverse.
             if (primitive) {
               // Keep track of the reverse-pattern ones because they are prime/primitive too.
@@ -565,7 +570,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
       @Override
       public T next() {
+        // Keep track of prev.
+        prev = next;
+        // Get the next.
         T it = hasNext() ? next : null;
+        // Given that one now.
         next = null;
         return it;
       }
@@ -578,7 +587,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
       @Override
       public String toString() {
-        return hasNext() ? next.toString() : "";
+        return next != null ? next.toString() : "";
       }
 
     }
@@ -694,7 +703,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             //+ (minimal ? " minimal" : " maximal")
             + " Factors of " + twoPowDegreeMinus1 + ": " + Primes.mersenneFactors(degree));
     int seen = 0;
-    for (FastPolynomial p : new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true)) {
+    FastPolynomial.PrimitivePolynomials primitivePolynomials = new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true);
+    for (FastPolynomial p : primitivePolynomials) {
       // Prime Polynomials!
       System.out.println("Primitive: " + p);
       seen += 1;
@@ -703,8 +713,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         System.out.println("...");
         break;
       }
-
     }
+    System.out.println("Culprits: "+primitivePolynomials.culprits);
   }
 
 }

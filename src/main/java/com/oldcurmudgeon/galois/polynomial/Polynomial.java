@@ -304,7 +304,8 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
     Polynomial result = Polynomial.ONE;
     Polynomial b = new Polynomial(this);
 
-    while (e.bitCount() != 0) {
+    while (!e.equals(BigInteger.ZERO)) {
+      //System.out.println("modPow ("+e + ","+m+") result="+result+" b="+b);
       if (e.testBit(0)) {
         result = result.multiply(b).mod(m);
       }
@@ -312,6 +313,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
       b = b.multiply(b).mod(m);
     }
 
+    //System.out.println("modPow ("+e + ","+m+") result="+result+" b="+b);
     return result;
   }
 
@@ -339,13 +341,12 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * ToDo: Move this to GaloisPoly
    */
   @Override
-  protected Polynomial xToQtoIminusXmodF(final int p) {
-    // compute (x^q^p mod f)
-    BigInteger q_to_p = BQ.pow(p);
-    Polynomial x_to_q_to_p = x().modPow(q_to_p, this);
-
-    // subtract (x mod f)
-    return x_to_q_to_p.xor(X).mod(this);
+  protected Polynomial xToQtoIminusXmodF(final int i) {
+    BigInteger qToI = BQ.pow(i);
+    Polynomial xToQtoImodF = X.modPow(qToI, this);
+    Polynomial xToQtoIminusXmodF = xToQtoImodF.xor(X).mod(this);
+    //System.out.println("Q2Q2I-X%F qToI="+qToI + " xToQtoImodF="+xToQtoImodF+" xToQtoIminusXmodF="+xToQtoIminusXmodF);
+    return xToQtoIminusXmodF;
   }
   
   /**

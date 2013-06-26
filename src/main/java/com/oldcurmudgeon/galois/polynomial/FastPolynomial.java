@@ -21,7 +21,7 @@ import java.util.Objects;
 
 /**
  * Fast implementation of PolyNomial.
- * 
+ *
  * @author OldCurmudgeon
  */
 public class FastPolynomial
@@ -90,11 +90,11 @@ public class FastPolynomial
   public FastPolynomial valueOf(BigInteger... powers) {
     BigInteger big = BigInteger.ZERO;
     for (BigInteger i : powers) {
-      if ( i.compareTo(MAX) < 0 ) {
+      if (i.compareTo(MAX) < 0) {
         big = big.setBit(i.intValue());
       } else {
-        System.out.println("MAX Exceeded! "+i);
-        throw new IllegalArgumentException("Power too big "+i);
+        System.out.println("MAX Exceeded! " + i);
+        throw new IllegalArgumentException("Power too big " + i);
       }
     }
     return new FastPolynomial(big);
@@ -110,7 +110,16 @@ public class FastPolynomial
 
   @Override
   public FastPolynomial multiply(FastPolynomial p) {
-    return new FastPolynomial(degrees.multiply(p.degrees));
+    BigInteger me = this.degrees;
+    BigInteger it = p.degrees;
+    BigInteger r = BigInteger.ZERO;
+    for ( int i = 0; i < me.bitLength(); i++ ) {
+      if ( me.testBit(i) ) {
+        r = r.xor(it);
+      }
+      it = it.shiftLeft(1);
+    }
+    return new FastPolynomial(r);
   }
 
   @Override
@@ -223,6 +232,7 @@ public class FastPolynomial
     FastPolynomial xToQtoImodF = X.modPow(qToI, this);
     // - x mod f
     FastPolynomial xToQtoIminusXmodF = xToQtoImodF.xor(X).mod(this);
+    //System.out.println("Q2Q2I-X%F qToI=" + qToI + " xToQtoImodF=" + xToQtoImodF + " xToQtoIminusXmodF=" + xToQtoIminusXmodF);
     return xToQtoIminusXmodF;
   }
 
@@ -240,7 +250,8 @@ public class FastPolynomial
     FastPolynomial result = ONE;
     FastPolynomial b = new FastPolynomial(this);
 
-    while (e.bitCount() != 0) {
+    while (!e.equals(BigInteger.ZERO)) {
+      //System.out.println("modPow (" + e + "," + m + ") result=" + result + " b=" + b);
       if (e.testBit(0)) {
         result = result.multiply(b).mod(m);
       }
@@ -248,6 +259,7 @@ public class FastPolynomial
       b = b.multiply(b).mod(m);
     }
 
+    //System.out.println("modPow (" + e + "," + m + ") result=" + result + " b=" + b);
     return result;
   }
 
@@ -297,4 +309,5 @@ public class FastPolynomial
     p = p.valueOf(8, 6, 4, 2, 1, 0);
     test(p);
   }
+
 }

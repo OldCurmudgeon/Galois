@@ -325,7 +325,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     for (int i = 1; i <= (int) (degree / 2); i++) {
       T b = xToQtoIminusXmodF(i);
       T g = gcd(b);
-      System.out.println("GRBO: "+this+" b="+b+" g="+g);
+      //System.out.println("GRBO: "+this+" b="+b+" g="+g);
       if (!g.equals(one())) {
         return Reducibility.REDUCIBLE;
       }
@@ -642,6 +642,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     System.out.println("(" + p + ") + (" + q + ") = " + p.plus(q) + "");
     // (x^2 + 1) - (x + 1) = x^2 + x
     System.out.println("(" + p + ") - (" + q + ") = " + p.minus(q) + "");
+    // (x^2 + 1) * (x^ + 1) = x^4 + 1
+    System.out.println("(" + p + ") * (" + p + ") = " + p.multiply(p) + "");
     // (x^2 + 1) * (x + 1) = x^3 + x^2 + x + 1
     System.out.println("(" + p + ") * (" + q + ") = " + p.multiply(q) + "");
     // (x^2 + 1) / (x + 1) = x + 1
@@ -651,9 +653,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     // (x^2 + 1) %^ (2,x + 1) =
     System.out.println("(" + p + ") %^ (2," + q + ") = " + p.modPow(TWO, q) + "");
     // Test a specific poly.
-    testPoly(new FastPolynomial().valueOf(10, 4, 0));
+    //testPoly(new FastPolynomial().valueOf(10, 4, 0));
     // Test a whole degree.
-    testDegree(10);
+    //testDegree(10);
     // Should be (* -> Primitive, = -> Prime)
     // 1000011 * x6 + x + 1
     // 1001001 = x6 + x3 + 1
@@ -690,7 +692,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //Primitivity.findAllFactors = true;
     //generatePrimitivePolys(4, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
     System.out.println("Took: " + t);

@@ -655,7 +655,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     // Test a specific poly.
     //testPoly(new FastPolynomial().valueOf(10, 4, 0));
     // Test a whole degree.
-    //testDegree(10);
+    testDegree(10);
     // Should be (* -> Primitive, = -> Prime)
     // 1000011 * x6 + x + 1
     // 1001001 = x6 + x3 + 1

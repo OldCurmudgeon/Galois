@@ -1,26 +1,3 @@
-cd C:\Users\CaswellP.VINCENT\Documents\Dev\Galois; "JAVA_HOME=C:\\Program Files\\Java\\jdk1.7.0_21" "\"C:\\Program Files\\NetBeans 7.3\\java\\maven\\bin\\mvn.bat\"" "-Dexec.args=-classpath %classpath com.oldcurmudgeon.galois.polynomial.GaloisPoly" "-Dexec.executable=C:\\Program Files\\Java\\jdk1.7.0_21\\bin\\java.exe" -Dexec.classpathScope=runtime --errors --errors --fail-at-end process-classes org.codehaus.mojo:exec-maven-plugin:1.2.1:exec
-Error stacktraces are turned on.
-Scanning for projects...
-                                                                        
-------------------------------------------------------------------------
-Building Galois 1.0
-------------------------------------------------------------------------
-
-[resources:resources]
-[debug] execute contextualize
-Using 'UTF-8' encoding to copy filtered resources.
-Copying 1 resource
-
-[compiler:compile]
-Nothing to compile - all classes are up to date
-
-[exec:exec]
-(x^2 + 1) + (x + 1) = x^2 + x
-(x^2 + 1) - (x + 1) = x^2 + x
-(x^2 + 1) * (x + 1) = x^3 + x^2 + x + 1
-(x^2 + 1) / (x + 1) = x + 1
-(x^2 + 1) % (x + 1) = 
-(x^2 + 1) %^ (2,x + 1) = 1
 Degree: 2 Factors of 3: []
 Primitive: x^2 + x + 1
 Culprits: []
@@ -3849,10 +3826,3 @@ Prime: x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + x 
 Prime: x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1 divides x^254 + 1
 Culprits: [129, 254, 381, 5355, 5461, 15841]
 Took: 57:54.271
-------------------------------------------------------------------------
-BUILD SUCCESS
-------------------------------------------------------------------------
-Total time: 12:57:55.723s
-Finished at: Tue Jun 25 23:35:08 BST 2013
-Final Memory: 5M/183M
-------------------------------------------------------------------------

@@ -38,23 +38,23 @@ public class FastPolynomial
   private final BigInteger degrees;
   // Base ones.
   static final FastPolynomial ZERO = new FastPolynomial();
-  // Avoids the `long` implementation.
+  // Say it twice to avoid the `long` implementation.
   static final FastPolynomial ONE = new FastPolynomial().valueOf(0, 0);
   static final FastPolynomial X = new FastPolynomial().valueOf(1, 1);
 
   @Override
   public FastPolynomial zero() {
-    return new FastPolynomial();
+    return ZERO;
   }
 
   @Override
   public FastPolynomial one() {
-    return new FastPolynomial(1);
+    return ONE;
   }
 
   @Override
   public FastPolynomial x() {
-    return new FastPolynomial(2);
+    return X;
   }
 
   // Leave it empty.
@@ -217,13 +217,13 @@ public class FastPolynomial
    * ToDo: Move this to GaloisPoly
    */
   @Override
-  protected FastPolynomial reduceExponent(final int p) {
-    // compute (x^q^p mod f)
-    BigInteger q_to_p = BQ.pow(p);
-    FastPolynomial x_to_q_to_p = x().modPow(q_to_p, this);
-
-    // subtract (x mod f)
-    return x_to_q_to_p.xor(X).mod(this);
+  protected FastPolynomial xToQtoIminusXmodF(final int i) {
+    // compute (x^q^i mod f)
+    BigInteger qToI = BQ.pow(i);
+    FastPolynomial xToQtoImodF = X.modPow(qToI, this);
+    // - x mod f
+    FastPolynomial xToQtoIminusXmodF = xToQtoImodF.xor(X).mod(this);
+    return xToQtoIminusXmodF;
   }
 
   /**

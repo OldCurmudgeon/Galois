@@ -134,7 +134,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
    *
    * ToDo: Move this to GaloisPoly
    */
-  abstract T reduceExponent(final int p);
+  abstract T xToQtoIminusXmodF(final int i);
 
   /*
    * An irreducible polynomial of degree m, 
@@ -168,6 +168,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
    * In particular, the order of a polynomial P(x) with P(0)!=0 is the 
    * smallest integer e for which P(x) divides x^e+1 (Lidl and Niederreiter 1994).
    */
+  public boolean isPrimitive() {
+    return isPrimitive(new HashSet<BigInteger>());
+  }
+  
   public boolean isPrimitive(Set<BigInteger> culprits) {
     try {
       return Primitivity.test(this, culprits);
@@ -300,6 +304,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   /**
    * Tests the reducibility of the polynomial
    */
+  public boolean isPrime() {
+    return getReducibility() == Reducibility.IRREDUCIBLE;
+  }
+  
   public Reducibility getReducibility() {
     return getReducibilityBenOr();
   }
@@ -315,8 +323,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   protected Reducibility getReducibilityBenOr() {
     final long degree = this.degree().longValue();
     for (int i = 1; i <= (int) (degree / 2); i++) {
-      T b = reduceExponent(i);
+      T b = xToQtoIminusXmodF(i);
       T g = gcd(b);
+      System.out.println("GRBO: "+this+" b="+b+" g="+g);
       if (!g.equals(one())) {
         return Reducibility.REDUCIBLE;
       }
@@ -335,14 +344,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     int degree = (int) degree().longValue();
     for (int i = 0; i < factors.length; i++) {
       //int n_i = factors[i];
-      T b = reduceExponent(i);
+      T b = xToQtoIminusXmodF(i);
       T g = gcd(b);
       if (!g.equals(one())) {
         return Reducibility.REDUCIBLE;
       }
     }
 
-    T g = reduceExponent(degree);
+    T g = xToQtoIminusXmodF(degree);
     if (!g.equals(zero())) {
       return Reducibility.REDUCIBLE;
     }
@@ -450,7 +459,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             } else {
               // Not in the future set.
               // New pattern - Is it a prime poly?
-              prime = !p.isReducible();
+              prime = p.isPrime();
               // Prime or primitive - record its reverse.
               if (prime) {
                 // Keep track of the reverse-pattern ones because they are prime/primitive too.
@@ -486,7 +495,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
       @Override
       public String toString() {
-        return hasNext() ? next.toString() : "";
+        return next != null ? next.toString() : "";
       }
 
     }
@@ -641,6 +650,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     System.out.println("(" + p + ") % (" + q + ") = " + p.mod(q) + "");
     // (x^2 + 1) %^ (2,x + 1) =
     System.out.println("(" + p + ") %^ (2," + q + ") = " + p.modPow(TWO, q) + "");
+    // Test a specific poly.
+    testPoly(new FastPolynomial().valueOf(10, 4, 0));
+    // Test a whole degree.
+    testDegree(10);
     // Should be (* -> Primitive, = -> Prime)
     // 1000011 * x6 + x + 1
     // 1001001 = x6 + x3 + 1
@@ -687,6 +700,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //generatePrimitivePolys(96, 1, false);
     //generatePrimitivePolys(255, 1, false);
     //generatePrimitivePolys(256, 1, false);
+  }
+
+  private static void testPoly(FastPolynomial p) {
+    System.out.println("Poly: "+p+" Prime: "+p.isPrime()+" Primitive: "+p.isPrimitive());
+  }
+
+  private static void testDegree(int d) {
+    generatePrimitivePolys(d, Integer.MAX_VALUE, true );
   }
 
   private static void generatePrimitivePolysUpToDegree(int d, int max, boolean minimal) {

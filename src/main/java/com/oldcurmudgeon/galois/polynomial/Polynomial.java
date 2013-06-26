@@ -339,7 +339,7 @@ public class Polynomial extends GaloisPoly<Polynomial> implements PolyMath<Polyn
    * ToDo: Move this to GaloisPoly
    */
   @Override
-  protected Polynomial reduceExponent(final int p) {
+  protected Polynomial xToQtoIminusXmodF(final int p) {
     // compute (x^q^p mod f)
     BigInteger q_to_p = BQ.pow(p);
     Polynomial x_to_q_to_p = x().modPow(q_to_p, this);

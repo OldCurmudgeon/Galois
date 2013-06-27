@@ -45,7 +45,6 @@ public class Primes {
     }
     return factors;
   }
-
   // No point in factoring these - note that these are the n of 2^n-1.
   static final Set<Integer> MersennePrimes = new HashSet<>(
           Arrays.asList(2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127,
@@ -70,7 +69,6 @@ public class Primes {
   public static long twoToTheNMinus1(int n) {
     return (long) Math.pow(2, n) - 1;
   }
-
   // 10,000 primes - from http://primes.utm.edu/lists/small/10000.txt
   private static final ArrayList<Integer> SomePrimes = new ArrayList<>();
   private static final String PrimesFileName = "10000Primes.txt";
@@ -115,11 +113,11 @@ public class Primes {
     return -1;
   }
 
-  // Euler pi or totient.
+  // Euler phi or totient.
   public static long totient(long n) {
     long t = n;
     for (Long f : primeFactors(n)) {
-      // t * ( 1 - (1/f) ) = (t * (a-1)) / a
+      // t * ( 1 - (1/f) ) = (t * (f-1)) / f - Avoiding doubles.
       t = (t * (f - 1)) / f;
     }
     return t;
@@ -129,7 +127,7 @@ public class Primes {
     long m = Math.round(Math.floor(Math.pow(2, d)));
     for (Long f : primeFactors(d)) {
       // m -= 2^f
-      if ( f != d ) {
+      if (f != d) {
         m -= Math.pow(2, f);
       }
     }
@@ -145,8 +143,8 @@ public class Primes {
 
     System.out.println("möbius(" + 10 + ") = " + möbius(10));
 
-    System.out.println("totient(" + 18 + ") = " + totient(18));
-    System.out.println("totient(" + 341 + ") = " + totient(341));
+    System.out.println("totient(" + 33 + ") = " + totient(33) + " should be 20.");
+    System.out.println("totient(" + 93 + ") = " + totient(93) + " should be 60.");
+    System.out.println("totient(" + 341 + ") = " + totient(341) + " should be 300.");
   }
-
 }

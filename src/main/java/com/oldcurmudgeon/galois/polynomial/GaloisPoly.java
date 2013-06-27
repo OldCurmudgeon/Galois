@@ -167,7 +167,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   private static class Primitivity {
-    // Tests primitivity of a GaloisPoly using the pool.
+    // Tests primitivity of a GaloisPoly.
     private static boolean test(GaloisPoly p, Collection<Long> dividends) {
       // Get the totient to see if there might be factors.
       boolean failed = false;
@@ -660,7 +660,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
                      " Primes: ", primitivePolynomials.primeCount,
                      " Primitives: ", primitivePolynomials.primitiveCount,
                      " Möbius: ", Primes.möbius(degree),
-                     " Totient: ", Primes.totient(degree));
+                     " Totient: ", Primes.totient(degree),
+                     " Totient(2^d-1): ", Primes.totient(twoPowDegreeMinus1)
+              );
     }
   }
 

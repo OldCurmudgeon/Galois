@@ -126,7 +126,7 @@ public class Primes {
   }
 
   public static long möbius(long d) {
-    double m = Math.pow(2, d);
+    long m = Math.round(Math.floor(Math.pow(2, d)));
     for (Long f : primeFactors(d)) {
       // m -= 2^f
       if ( f != d ) {
@@ -134,7 +134,7 @@ public class Primes {
       }
     }
     m += 2;
-    return (long) Math.floor(m / (double) d);
+    return m / d;
   }
 
   public static void main(String[] args) {

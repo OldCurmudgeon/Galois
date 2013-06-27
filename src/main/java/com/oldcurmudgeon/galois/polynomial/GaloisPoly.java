@@ -101,7 +101,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     public int compare(BigInteger o1, BigInteger o2) {
       return -1 * o1.compareTo(o2);
     }
-
   }
 
   // In a Galois field plus and minus are xor.
@@ -116,13 +115,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   public T minus(T it) {
     // plus === minus === xor
     return xor(it);
-  }
-
-  /**
-   * Tests the reducibility of the polynomial
-   */
-  public boolean isReducible() {
-    return getReducibility() == Reducibility.REDUCIBLE;
   }
 
   /**
@@ -226,13 +218,13 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         }
       }
     }
-
   }
 
   /**
    * Tests the reducibility of the polynomial
    */
   public boolean isPrime() {
+    // Even number is always reducible.
     return getReducibility() == Reducibility.IRREDUCIBLE;
   }
 
@@ -342,7 +334,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     public void remove() {
       throw new UnsupportedOperationException("Not supported.");
     }
-
   }
 
   // Iterate over prime polynomials.
@@ -424,14 +415,12 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public String toString() {
         return next != null ? next.toString() : "";
       }
-
     }
 
     @Override
     public Iterator<T> iterator() {
       return new PrimeIterator();
     }
-
   }
 
   // Iterate over prime polynomials.
@@ -530,14 +519,12 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public String toString() {
         return next != null ? next.toString() : "";
       }
-
     }
 
     @Override
     public Iterator<T> iterator() {
       return new PrimitiveIterator();
     }
-
   }
 
   /**
@@ -565,39 +552,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       bits -= 1;
     }
     return r.shiftLeft(bits - 1);
-  }
-
-  // Rudimentary logging.
-  enum Log {
-    // By default - all log.
-    // Construct with (false) not to log.
-    Tests,
-    Degrees,
-    Primes,
-    Primitives,
-    Counts,
-    Times;
-    // Should we log this level.
-    private final boolean log;
-
-    Log() {
-      this(true);
-    }
-
-    Log(boolean log) {
-      this.log = log;
-    }
-
-    public void log(Object... l) {
-      if (log) {
-        StringBuilder s = new StringBuilder();
-        for (Object o : l) {
-          s.append(o.toString());
-        }
-        System.out.println(s.toString());
-      }
-    }
-
   }
 
   public static void main(String[] args) {
@@ -661,8 +615,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     ProcessTimer t = new ProcessTimer();
     generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     Log.Times.log("Took: ", t);
-    generatePrimitivePolysUpToDegree(21, 1, true);
-    Log.Times.log("Took: ", t);
+    //generatePrimitivePolysUpToDegree(21, 1, true);
+    //Log.Times.log("Took: ", t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
     //generatePrimitivePolys(95, 1, false);
@@ -701,7 +655,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         break;
       }
     }
-    if ( count == Integer.MAX_VALUE ) {
+    if (count == Integer.MAX_VALUE) {
       Log.Counts.log("Degree: ", degree,
                      " Primes: ", primitivePolynomials.primeCount,
                      " Primitives: ", primitivePolynomials.primitiveCount,
@@ -710,4 +664,35 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     }
   }
 
+  // Rudimentary logging.
+  enum Log {
+    // By default - all log.
+    // Construct with (false) not to log.
+    Tests,
+    Degrees(false),
+    Primes(false),
+    Primitives(false),
+    Counts,
+    Times;
+    // Should we log this level.
+    private final boolean log;
+
+    Log() {
+      this(true);
+    }
+
+    Log(boolean log) {
+      this.log = log;
+    }
+
+    public void log(Object... l) {
+      if (log) {
+        StringBuilder s = new StringBuilder();
+        for (Object o : l) {
+          s.append(o.toString());
+        }
+        System.out.println(s.toString());
+      }
+    }
+  }
 }

@@ -116,9 +116,14 @@ public class Primes {
   // Euler phi or totient.
   public static long totient(long n) {
     long t = n;
+    // Only do unique ones.
+    Set<Long> done = new HashSet<> ();
     for (Long f : primeFactors(n)) {
-      // t * ( 1 - (1/f) ) = (t * (f-1)) / f - Avoiding doubles.
-      t = (t * (f - 1)) / f;
+      if ( !done.contains(f)) {
+        // t * ( 1 - (1/f) ) = (t * (f-1)) / f - Avoiding doubles.
+        t = (t * (f - 1)) / f;
+        done.add(f);
+      }
     }
     return t;
   }
@@ -146,5 +151,6 @@ public class Primes {
     System.out.println("totient(" + 33 + ") = " + totient(33) + " should be 20.");
     System.out.println("totient(" + 93 + ") = " + totient(93) + " should be 60.");
     System.out.println("totient(" + 341 + ") = " + totient(341) + " should be 300.");
+    System.out.println("totient(" + 1023 + ") = " + totient(1023) + " should be 600.");
   }
 }

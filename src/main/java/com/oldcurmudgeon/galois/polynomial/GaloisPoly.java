@@ -8,6 +8,9 @@ import com.oldcurmudgeon.galois.math.PolyMath;
 import com.oldcurmudgeon.galois.math.Primes;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
+import com.oldcurmudgeon.toolbox.walkers.Separator;
+import com.oldcurmudgeon.toolbox.walkers.Separator.Decorator;
+import java.awt.image.ImageObserver;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Comparator;
@@ -658,11 +661,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     if (count == Integer.MAX_VALUE) {
       Log.Counts.log("Degree: ", degree,
                      " Primes: ", primitivePolynomials.primeCount,
-                     " Primitives: ", primitivePolynomials.primitiveCount,
                      " Möbius: ", Primes.möbius(degree),
-                     " Totient: ", Primes.totient(degree),
-                     " Totient(2^d-1): ", Primes.totient(twoPowDegreeMinus1)
-              );
+                     " Primitives: ", primitivePolynomials.primitiveCount,
+                     " Totient: ", Primes.totient(twoPowDegreeMinus1) / degree);
     }
   }
 
@@ -671,10 +672,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     // By default - all log.
     // Construct with (false) not to log.
     Tests,
-    Degrees(false),
-    Primes(false),
-    Primitives(false),
+    Degrees,//(false),
+    Primes,//(false),
+    Primitives,//(false),
     Counts,
+    Totients,
     Times;
     // Should we log this level.
     private final boolean log;
@@ -685,6 +687,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
     Log(boolean log) {
       this.log = log;
+    }
+
+    public boolean log() {
+      return log;
     }
 
     public void log(Object... l) {

@@ -599,7 +599,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     }
 
   }
-  
+
   public static void main(String[] args) {
     // x^2 + 1
     FastPolynomial p = new FastPolynomial().valueOf(2, 0);
@@ -660,8 +660,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //generatePrimitivePolys(4, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
     generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
-    //generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
-    //generatePrimitivePolys(95, 1, true);
+    Log.Times.log("Took: ", t);
+    generatePrimitivePolysUpToDegree(21, 1, true);
     Log.Times.log("Took: ", t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
@@ -690,23 +690,24 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     int seen = 0;
     FastPolynomial.PrimitivePolynomials primitivePolynomials = new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true);
     Log.Degrees.log("Degree: ", degree //, (minimal ? " minimal" : " maximal")
-            , " Factors of ", twoPowDegreeMinus1, ": ", Primes.mersenneFactors(degree)
-            , " Dividends: ", primitivePolynomials.dividends);
+            , " Factors of ", twoPowDegreeMinus1, ": ", Primes.mersenneFactors(degree), " Dividends: ", primitivePolynomials.dividends);
     for (FastPolynomial p : primitivePolynomials) {
       // Prime Polynomials!
       Log.Primitives.log("Primitive: ", p);
       seen += 1;
       if (seen >= count) {
-        // Stop after the 1st 10 for speed - one day enumerate all.
-        Log.Primitives.log("...");
+        // Stop after count.
+        //Log.Primitives.log("...");
         break;
       }
     }
-    Log.Counts.log("Degree: ", degree,
-                   " Primes: ", primitivePolynomials.primeCount, 
-                   " Primitives: ", primitivePolynomials.primitiveCount, 
-                   " Möbius: ", Primes.möbius(degree), 
-                   " Totient: ", Primes.totient(degree));
+    if ( count == Integer.MAX_VALUE ) {
+      Log.Counts.log("Degree: ", degree,
+                     " Primes: ", primitivePolynomials.primeCount,
+                     " Primitives: ", primitivePolynomials.primitiveCount,
+                     " Möbius: ", Primes.möbius(degree),
+                     " Totient: ", Primes.totient(degree));
+    }
   }
 
 }

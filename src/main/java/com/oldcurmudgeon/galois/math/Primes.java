@@ -115,10 +115,26 @@ public class Primes {
     return -1;
   }
 
+  // Euler pi or totient.
+  public static long totient(long n) {
+    long t = n;
+    for (Long f : primeFactors(n)) {
+      // t * ( 1 - (1/f) ) = (t * (a-1)) / a
+      t = (t * (f - 1)) / f;
+    }
+    return t;
+  }
+
   public static void main(String[] args) {
-    int[] ints = new int[] {527,1143,1581,2635,2667,7905,8001};
-    for ( int i : ints ) {
-      System.out.println("Factors of "+i+"="+primeFactors(i));
+    int[] ints = new int[]{527, 1143, 1581, 2635, 2667, 7905, 8001};
+    for (int i : ints) {
+      System.out.println("Factors of " + i + "=" + primeFactors(i));
+    }
+    
+    System.out.println("totient(" + 18 + ") = " + totient(18));
+    System.out.println("totient(" + 341 + ") = " + totient(341));
+    for ( int i = 30; i < 100; i++ ) {
+      System.out.println("totient(" + i + ") = " + totient(i));
     }
   }
 

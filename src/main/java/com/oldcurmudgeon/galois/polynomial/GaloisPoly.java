@@ -10,10 +10,15 @@ import com.oldcurmudgeon.galois.math.Primes;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -169,136 +174,66 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
    * smallest integer e for which P(x) divides x^e+1 (Lidl and Niederreiter 1994).
    */
   public boolean isPrimitive() {
-    return isPrimitive(new HashSet<BigInteger>());
+    return isPrimitive(Primitivity.dividends(this.degree().intValue()));
   }
-  
-  public boolean isPrimitive(Set<BigInteger> culprits) {
-    try {
-      return Primitivity.test(this, culprits);
-    } catch (InterruptedException | ExecutionException ex) {
-      // Rethrow it as a runtime exception.
-      throw new RuntimeException(ex);
-    }
+
+  public boolean isPrimitive(Collection<Long> dividends) {
+    return Primitivity.test(this, dividends);
   }
 
   private static class Primitivity {
-    // The common pool.
-    private static ForkJoinPool pool = new ForkJoinPool();
-    // How many calculations per task.
-    private static final BigInteger GRANULARITY = BigInteger.valueOf(1000);
-    private static final BigInteger ONE = BigInteger.valueOf(1);
-    private static final BigInteger TWO = BigInteger.valueOf(2);
-
     // Tests primitivity of a GaloisPoly using the pool.
-    private static boolean test(GaloisPoly p, Set<BigInteger> culprits) throws InterruptedException, ExecutionException {
-      // The required order o = 2^r - 1
-      BigInteger o = BQ.pow(p.degree().intValue()).subtract(BigInteger.ONE);
-      // Initially not failed.
-      EnhancedAtomicLong factor = new EnhancedAtomicLong(Long.MAX_VALUE);
-      // Build the task.
-      Task task = new Task(p, ONE, o, factor, culprits);
-      // Process it in the pool.
-      pool.invoke(task);
+    private static boolean test(GaloisPoly p, Collection<Long> dividends) {
+      // Get the totient to see if there might be factors.
+      boolean failed = false;
+      // Walk each dividend.
+      for (Long d : dividends) {
+        // Check it.
+        failed = check(p, BigInteger.valueOf(d));
+        if (failed) {
+          // Stop now if failed.
+          break;
+        }
+      }
       // Deliver the answer.
-      return !task.get();
+      return !failed;
     }
 
-    private static class Task extends RecursiveTask<Boolean> {
-      // The polynomial we are testing.
-      final GaloisPoly it;
-      // Where to start.
-      final BigInteger start;
-      // Where to stop.
-      final BigInteger stop;
-      // Has the whole test failed?
-      final EnhancedAtomicLong factor;
-      // Rejects we've seen before.
-      /*
-       * Observation suggests that if a 2^e+1 is found 
-       * to be a factor then it is a factor more than once.
-       * 
-       * We therefore record the factors used to reject 
-       * and try them first.
-       */
-      final Set<BigInteger> culprits;
-
-      public Task(GaloisPoly it, BigInteger start, BigInteger stop, EnhancedAtomicLong factor, Set<BigInteger> culprits) {
-        this.it = it;
-        this.start = start;
-        this.stop = stop;
-        this.factor = factor;
-        this.culprits = culprits;
+    static boolean check(GaloisPoly it, BigInteger e) {
+      boolean failed = false;
+      // p = (x^e + 1)
+      GaloisPoly p = it.valueOf(e, BigInteger.ZERO);
+      if (p.mod(it).isEmpty()) {
+        failed = true;
+        // Its only prime - not primitive.
+        System.out.println("Prime: " + it + " divides " + p);
       }
-
-      @Override
-      public String toString() {
-        return it + " [" + start + "-" + stop + "]";
-      }
-
-      @Override
-      protected Boolean compute() {
-        // Do nothing if failed already.
-        if (!factored()) {
-          // Compute or fork?
-          if (stop.subtract(start).compareTo(GRANULARITY) < 0) {
-            return computeDirectly();
-          } else {
-            // Fork!
-            BigInteger split = stop.subtract(start).divide(TWO).add(start);
-            Task is1 = new Task(it, start, split, factor, culprits);
-            Task is2 = new Task(it, split, stop, factor, culprits);
-            // Fork.
-            is2.fork();
-            // Join.
-            return is1.compute().booleanValue() || is2.join().booleanValue();
-          }
-        }
-        // Definitely not if failed.
-        return factored();
-      }
-
-      // Stop when failed.
-      protected boolean factored() {
-        return factor.get() != Long.MAX_VALUE;
-      }
-
-      protected Boolean computeDirectly() {
-        // Walk the culprits first.
-        for (BigInteger e : culprits) {
-          // Check previous culprits first.
-          check(e);
-          // Get out if a culprit rejected.
-          if (factored()) {
-            break;
-          }
-        }
-        // Do the rest.
-        for (BigInteger e = start; e.compareTo(stop) < 0 && !factored(); e = e.add(BigInteger.ONE)) {
-          // Skip the already known culprits - we dealt with them in the previous loop.
-          if (!culprits.contains(e)) {
-            // Not already checked.
-            check(e);
-          }
-        }
-        // Stop now if we failed.
-        return factored();
-      }
-
-      protected void check(BigInteger e) {
-        // p = (x^e + 1)
-        GaloisPoly p = it.valueOf(e, BigInteger.ZERO);
-        if (p.mod(it).isEmpty()) {
-          // Found a new culprit.
-          culprits.add(e);
-          // We failed - but are we the lowest factor?
-          if (factor.setIf(EnhancedAtomicLong.Op.lt, e.longValue())) {
-            // Its only prime - not primitive.
-            System.out.println("Prime: " + it + " divides " + p);
-          }
-        }
-      }
-
+      return failed;
     }
+
+    // Could memoize these.
+    private static Collection<Long> dividends(int d) {
+      long twoToTheNMinus1 = Primes.twoToTheNMinus1(d);
+      List<Long> factors = Primes.primeFactors(twoToTheNMinus1);
+      Set<Long> dividends = new TreeSet<>();
+      for (int i = 0; i < factors.size(); i++) {
+        // Add that factor and all products of that factor with all other factors.
+        addProducts(factors.get(i), factors, i + 1, dividends, twoToTheNMinus1);
+      }
+      return dividends;
+    }
+
+    private static void addProducts(Long f, List<Long> factors, int start, Set<Long> dividends, long limit) {
+      // Stop at limit.
+      if (f.compareTo(limit) < 0) {
+        dividends.add(f);
+        // And all multiples.
+        for (int j = start; j < factors.size(); j++) {
+          addProducts(f * factors.get(j), factors, j + 1, dividends, limit);
+        }
+      }
+    }
+
   }
 
   /**
@@ -307,7 +242,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   public boolean isPrime() {
     return getReducibility() == Reducibility.IRREDUCIBLE;
   }
-  
+
   public Reducibility getReducibility() {
     return getReducibilityBenOr();
   }
@@ -514,11 +449,15 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     private final int degree;
     // The poly iterator.
     final Iterator<T> primes;
-    // Keep track of the factors found.
-    final Set<BigInteger> culprits = new ConcurrentSkipListSet<>();
+    // Hang on to the possible dividends.
+    final Collection<Long> dividends;
+    // How many!
+    int primeCount = 0;
+    int primitiveCount = 0;
 
     public PrimitivePolynomials(int degree, boolean reverse) {
       this.degree = degree;
+      dividends = Primitivity.dividends(degree);
       this.primes = new PrimePolynomials(degree, reverse).iterator();
     }
 
@@ -538,6 +477,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public boolean hasNext() {
         // Need a new next?
         while (next == null && primes.hasNext()) {
+          // Copunt the primes.
+          primeCount += 1;
           // Roll a prime polynomial.
           T p = primes.next();
           // Is it primitive.
@@ -551,7 +492,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             primitiveFutures.remove(p);
           } else {
             // Primitive too?
-            primitive = p.isPrimitive(culprits);
+            primitive = p.isPrimitive(dividends);
             // Prime or primitive - record its reverse.
             if (primitive) {
               // Keep track of the reverse-pattern ones because they are prime/primitive too.
@@ -568,6 +509,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           // Only deliver primitives.
           if (primitive) {
             next = p;
+            primitiveCount += 1;
             //System.out.println("Next primitive: " + next);
           }
 
@@ -655,7 +597,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     // Test a specific poly.
     //testPoly(new FastPolynomial().valueOf(10, 4, 0));
     // Test a whole degree.
-    testDegree(10);
+    //testDegree(6);
     // Should be (* -> Primitive, = -> Prime)
     // 1000011 * x6 + x + 1
     // 1001001 = x6 + x3 + 1
@@ -705,11 +647,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   private static void testPoly(FastPolynomial p) {
-    System.out.println("Poly: "+p+" Prime: "+p.isPrime()+" Primitive: "+p.isPrimitive());
+    System.out.println("Poly: " + p + " Prime: " + p.isPrime() + " Primitive: " + p.isPrimitive());
   }
 
   private static void testDegree(int d) {
-    generatePrimitivePolys(d, Integer.MAX_VALUE, true );
+    generatePrimitivePolys(d, Integer.MAX_VALUE, true);
   }
 
   private static void generatePrimitivePolysUpToDegree(int d, int max, boolean minimal) {
@@ -720,11 +662,12 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     long twoPowDegreeMinus1 = Primes.twoToTheNMinus1(degree);
-    System.out.println("Degree: " + degree
-            //+ (minimal ? " minimal" : " maximal")
-            + " Factors of " + twoPowDegreeMinus1 + ": " + Primes.mersenneFactors(degree));
     int seen = 0;
     FastPolynomial.PrimitivePolynomials primitivePolynomials = new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true);
+    System.out.println("Degree: " + degree
+            //+ (minimal ? " minimal" : " maximal")
+            + " Factors of " + twoPowDegreeMinus1 + ": " + Primes.mersenneFactors(degree)
+            + " Dividends: " + primitivePolynomials.dividends);
     for (FastPolynomial p : primitivePolynomials) {
       // Prime Polynomials!
       System.out.println("Primitive: " + p);
@@ -735,7 +678,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         break;
       }
     }
-    System.out.println("Culprits: "+primitivePolynomials.culprits);
+    System.out.println("Primes: " + primitivePolynomials.primeCount + " Primitives: "+primitivePolynomials.primitiveCount);
   }
 
 }

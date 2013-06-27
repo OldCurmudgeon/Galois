@@ -571,10 +571,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   enum Log {
     // By default - all log.
     // Construct with (false) not to log.
-    Tests(false),
-    Degrees(false),
-    Primes(false),
-    Primitives(false),
+    Tests,
+    Degrees,
+    Primes,
+    Primitives,
     Counts,
     Times;
     // Should we log this level.
@@ -659,7 +659,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //Primitivity.findAllFactors = true;
     //generatePrimitivePolys(4, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
     Log.Times.log("Took: ", t);
@@ -702,10 +702,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         break;
       }
     }
-    Log.Counts.log("Primes: ", primitivePolynomials.primeCount, 
-                   " Möbius: ", Primes.möbius(degree), 
+    Log.Counts.log("Degree: ", degree,
+                   " Primes: ", primitivePolynomials.primeCount, 
                    " Primitives: ", primitivePolynomials.primitiveCount, 
-                   " Totient: ", Primes.totient(twoPowDegreeMinus1));
+                   " Möbius: ", Primes.möbius(degree), 
+                   " Totient: ", Primes.totient(degree));
   }
 
 }

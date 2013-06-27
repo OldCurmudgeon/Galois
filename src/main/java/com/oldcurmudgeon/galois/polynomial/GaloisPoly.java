@@ -4,14 +4,11 @@
  */
 package com.oldcurmudgeon.galois.polynomial;
 
-import com.oldcurmudgeon.galois.math.EnhancedAtomicLong;
 import com.oldcurmudgeon.galois.math.PolyMath;
 import com.oldcurmudgeon.galois.math.Primes;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -19,10 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveTask;
 
 /**
  * @author OldCurmudgeon
@@ -206,7 +199,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       if (p.mod(it).isEmpty()) {
         failed = true;
         // Its only prime - not primitive.
-        System.out.println("Prime: " + it + " divides " + p);
+        Log.Primes.log("Prime: ", it, " divides ", p);
       }
       return failed;
     }
@@ -260,7 +253,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     for (int i = 1; i <= (int) (degree / 2); i++) {
       T b = xToQtoIminusXmodF(i);
       T g = gcd(b);
-      //System.out.println("GRBO: "+this+" b="+b+" g="+g);
       if (!g.equals(one())) {
         return Reducibility.REDUCIBLE;
       }
@@ -575,25 +567,51 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     return r.shiftLeft(bits - 1);
   }
 
+  // Rudimentary logging.
+  enum Log {
+    Tests(true),
+    Degrees(true),
+    Primes(false),
+    Primitives(false),
+    Counts(true),
+    Times(true);
+    private final boolean log;
+
+    Log(boolean log) {
+      this.log = log;
+    }
+
+    public void log(Object... l) {
+      if (log) {
+        StringBuilder s = new StringBuilder();
+        for (Object o : l) {
+          s.append(o.toString());
+        }
+        System.out.println(s.toString());
+      }
+    }
+
+  }
+
   public static void main(String[] args) {
     // x^2 + 1
     FastPolynomial p = new FastPolynomial().valueOf(2, 0);
     // x + 1
     FastPolynomial q = new FastPolynomial().valueOf(1, 0);
     // (x^2 + 1) + (x + 1) = x^2 + x
-    System.out.println("(" + p + ") + (" + q + ") = " + p.plus(q) + "");
+    Log.Tests.log("(", p, ") + (", q, ") = ", p.plus(q));
     // (x^2 + 1) - (x + 1) = x^2 + x
-    System.out.println("(" + p + ") - (" + q + ") = " + p.minus(q) + "");
+    Log.Tests.log("(" + p + ") - (" + q + ") = " + p.minus(q), "");
     // (x^2 + 1) * (x^ + 1) = x^4 + 1
-    System.out.println("(" + p + ") * (" + p + ") = " + p.multiply(p) + "");
+    Log.Tests.log("(" + p + ") * (" + p + ") = " + p.multiply(p), "");
     // (x^2 + 1) * (x + 1) = x^3 + x^2 + x + 1
-    System.out.println("(" + p + ") * (" + q + ") = " + p.multiply(q) + "");
+    Log.Tests.log("(" + p + ") * (" + q + ") = " + p.multiply(q), "");
     // (x^2 + 1) / (x + 1) = x + 1
-    System.out.println("(" + p + ") / (" + q + ") = " + p.divide(q) + "");
+    Log.Tests.log("(" + p + ") / (" + q + ") = " + p.divide(q), "");
     // (x^2 + 1) % (x + 1) =
-    System.out.println("(" + p + ") % (" + q + ") = " + p.mod(q) + "");
+    Log.Tests.log("(" + p + ") % (" + q + ") = " + p.mod(q), "");
     // (x^2 + 1) %^ (2,x + 1) =
-    System.out.println("(" + p + ") %^ (2," + q + ") = " + p.modPow(TWO, q) + "");
+    Log.Tests.log("(" + p + ") %^ (2," + q + ") = " + p.modPow(TWO, q), "");
     // Test a specific poly.
     //testPoly(new FastPolynomial().valueOf(10, 4, 0));
     // Test a whole degree.
@@ -634,10 +652,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //Primitivity.findAllFactors = true;
     //generatePrimitivePolys(4, Integer.MAX_VALUE, true);
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(20, Integer.MAX_VALUE, true);
     //generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     //generatePrimitivePolys(95, 1, true);
-    System.out.println("Took: " + t);
+    Log.Times.log("Took: ", t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
     //generatePrimitivePolys(95, 1, false);
@@ -647,7 +665,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   private static void testPoly(FastPolynomial p) {
-    System.out.println("Poly: " + p + " Prime: " + p.isPrime() + " Primitive: " + p.isPrimitive());
+    Log.Tests.log("Poly: ", p, " Prime: ", p.isPrime(), " Primitive: ", p.isPrimitive());
   }
 
   private static void testDegree(int d) {
@@ -664,21 +682,20 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     long twoPowDegreeMinus1 = Primes.twoToTheNMinus1(degree);
     int seen = 0;
     FastPolynomial.PrimitivePolynomials primitivePolynomials = new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true);
-    System.out.println("Degree: " + degree
-            //+ (minimal ? " minimal" : " maximal")
-            + " Factors of " + twoPowDegreeMinus1 + ": " + Primes.mersenneFactors(degree)
-            + " Dividends: " + primitivePolynomials.dividends);
+    Log.Degrees.log("Degree: ", degree //, (minimal ? " minimal" : " maximal")
+            , " Factors of ", twoPowDegreeMinus1, ": ", Primes.mersenneFactors(degree)
+            , " Dividends: ", primitivePolynomials.dividends);
     for (FastPolynomial p : primitivePolynomials) {
       // Prime Polynomials!
-      System.out.println("Primitive: " + p);
+      Log.Primitives.log("Primitive: ", p);
       seen += 1;
       if (seen >= count) {
         // Stop after the 1st 10 for speed - one day enumerate all.
-        System.out.println("...");
+        Log.Primitives.log("...");
         break;
       }
     }
-    System.out.println("Primes: " + primitivePolynomials.primeCount + " Primitives: "+primitivePolynomials.primitiveCount);
+    Log.Counts.log("Primes: ", primitivePolynomials.primeCount, " Primitives: ", primitivePolynomials.primitiveCount);
   }
 
 }

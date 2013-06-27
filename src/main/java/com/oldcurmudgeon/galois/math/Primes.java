@@ -125,17 +125,28 @@ public class Primes {
     return t;
   }
 
+  public static long möbius(long d) {
+    double m = Math.pow(2, d);
+    for (Long f : primeFactors(d)) {
+      // m -= 2^f
+      if ( f != d ) {
+        m -= Math.pow(2, f);
+      }
+    }
+    m += 2;
+    return (long) Math.floor(m / (double) d);
+  }
+
   public static void main(String[] args) {
     int[] ints = new int[]{527, 1143, 1581, 2635, 2667, 7905, 8001};
     for (int i : ints) {
       System.out.println("Factors of " + i + "=" + primeFactors(i));
     }
-    
+
+    System.out.println("möbius(" + 10 + ") = " + möbius(10));
+
     System.out.println("totient(" + 18 + ") = " + totient(18));
     System.out.println("totient(" + 341 + ") = " + totient(341));
-    for ( int i = 30; i < 100; i++ ) {
-      System.out.println("totient(" + i + ") = " + totient(i));
-    }
   }
 
 }

@@ -571,8 +571,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   enum Log {
     // By default - all log.
     // Construct with (false) not to log.
-    Tests,
-    Degrees,
+    Tests(false),
+    Degrees(false),
     Primes(false),
     Primitives(false),
     Counts,
@@ -702,7 +702,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         break;
       }
     }
-    Log.Counts.log("Primes: ", primitivePolynomials.primeCount, " Primitives: ", primitivePolynomials.primitiveCount, " Totient: ", Primes.totient(twoPowDegreeMinus1));
+    Log.Counts.log("Primes: ", primitivePolynomials.primeCount, 
+                   " Möbius: ", Primes.möbius(degree), 
+                   " Primitives: ", primitivePolynomials.primitiveCount, 
+                   " Totient: ", Primes.totient(twoPowDegreeMinus1));
   }
 
 }

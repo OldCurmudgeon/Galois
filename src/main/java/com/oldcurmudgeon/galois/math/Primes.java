@@ -119,7 +119,6 @@ public class Primes {
     // n * ...
     long t = n;
     // Only do unique ones.
-    Set<Long> done = new HashSet<>();
     for (Long f : Iterables.unique(primeFactors(n))) {
       // * ( 1 - (1/f) ) = (t * (f-1)) / f - Avoiding doubles.
       t = (t * (f - 1)) / f;

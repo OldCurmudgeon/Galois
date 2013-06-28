@@ -8,9 +8,6 @@ import com.oldcurmudgeon.galois.math.PolyMath;
 import com.oldcurmudgeon.galois.math.Primes;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
-import com.oldcurmudgeon.toolbox.walkers.Separator;
-import com.oldcurmudgeon.toolbox.walkers.Separator.Decorator;
-import java.awt.image.ImageObserver;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Comparator;
@@ -672,9 +669,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     // By default - all log.
     // Construct with (false) not to log.
     Tests,
-    Degrees,//(false),
-    Primes,//(false),
-    Primitives,//(false),
+    Degrees(false),
+    Primes(false),
+    Primitives(false),
     Counts,
     Totients,
     Times;

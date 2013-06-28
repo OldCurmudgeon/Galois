@@ -15,6 +15,7 @@
  */
 package com.oldcurmudgeon.galois.math;
 
+import com.oldcurmudgeon.toolbox.walkers.Iterables;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -115,22 +116,20 @@ public class Primes {
 
   // Euler phi or totient.
   public static long totient(long n) {
+    // n * ...
     long t = n;
     // Only do unique ones.
-    Set<Long> done = new HashSet<> ();
-    for (Long f : primeFactors(n)) {
-      if ( !done.contains(f)) {
-        // t * ( 1 - (1/f) ) = (t * (f-1)) / f - Avoiding doubles.
-        t = (t * (f - 1)) / f;
-        done.add(f);
-      }
+    Set<Long> done = new HashSet<>();
+    for (Long f : Iterables.unique(primeFactors(n))) {
+      // * ( 1 - (1/f) ) = (t * (f-1)) / f - Avoiding doubles.
+      t = (t * (f - 1)) / f;
     }
     return t;
   }
 
   public static long möbius(long d) {
     long m = Math.round(Math.floor(Math.pow(2, d)));
-    for (Long f : primeFactors(d)) {
+    for (Long f : Iterables.unique(primeFactors(d))) {
       // m -= 2^f
       if (f != d) {
         m -= Math.pow(2, f);
@@ -146,7 +145,8 @@ public class Primes {
       System.out.println("Factors of " + i + "=" + primeFactors(i));
     }
 
-    System.out.println("möbius(" + 10 + ") = " + möbius(10));
+    System.out.println("möbius(" + 2 + ") = " + möbius(2) + " should be 1?.");
+    System.out.println("möbius(" + 10 + ") = " + möbius(10) + " should be 99.");
 
     System.out.println("totient(" + 33 + ") = " + totient(33) + " should be 20.");
     System.out.println("totient(" + 93 + ") = " + totient(93) + " should be 60.");

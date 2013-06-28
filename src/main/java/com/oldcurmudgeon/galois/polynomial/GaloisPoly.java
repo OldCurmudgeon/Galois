@@ -6,6 +6,7 @@ package com.oldcurmudgeon.galois.polynomial;
 
 import com.oldcurmudgeon.galois.math.PolyMath;
 import com.oldcurmudgeon.galois.math.Primes;
+import com.oldcurmudgeon.galois.unique.LFSR;
 import com.oldcurmudgeon.toolbox.twiddlers.ProcessTimer;
 import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
@@ -192,6 +193,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         failed = true;
         // Its only prime - not primitive.
         Log.Primes.log("Prime: ", it, " divides ", p);
+        if (Log.LFSR.get()) {
+          LFSR.testPoly(it);
+        }
+
       }
       return failed;
     }
@@ -612,8 +617,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     // While testing I want all factors printed.
     //Primitivity.findAllFactors = true;
     //generatePrimitivePolys(4, Integer.MAX_VALUE, true);
+    testDegree(6);
     ProcessTimer t = new ProcessTimer();
-    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
+    Log.LFSR.set(false);
+    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
     Log.Times.log("Took: ", t);
     //generatePrimitivePolysUpToDegree(21, 1, true);
     //Log.Times.log("Took: ", t);
@@ -648,6 +655,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     for (FastPolynomial p : primitivePolynomials) {
       // Prime Polynomials!
       Log.Primitives.log("Primitive: ", p);
+      if (Log.LFSR.get()) {
+        LFSR.testPoly(p);
+      }
       seen += 1;
       if (seen >= count) {
         // Stop after count.
@@ -665,18 +675,19 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   // Rudimentary logging.
-  enum Log {
+  public enum Log {
     // By default - all log.
     // Construct with (false) not to log.
     Tests,//(false),
     Degrees,//(false),
     Primes,//(false),
     Primitives,//(false),
+    LFSR,//(false),
     Counts,
     Totients,
     Times;
     // Should we log this level.
-    private final boolean log;
+    private boolean log;
 
     Log() {
       this(true);
@@ -686,8 +697,12 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       this.log = log;
     }
 
-    public boolean log() {
+    public boolean get() {
       return log;
+    }
+
+    public void set(boolean log) {
+      this.log = log;
     }
 
     public void log(Object... l) {

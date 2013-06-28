@@ -36,6 +36,7 @@ import java.util.Iterator;
  * @author OldCurmudgeon
  */
 public class LFSR implements Iterable<BigInteger> {
+
   // Bit pattern for taps.
   private final BigInteger tapsMask;
   // Where to start (and end).
@@ -126,16 +127,23 @@ public class LFSR implements Iterable<BigInteger> {
   }
 
   public static void main(String args[]) {
-    test(12);
-    test(10);
-    for (int bits = 3; bits <= 7; bits++) {
-      test(bits);
-    }
+    //test(12);
+    //test(10);
+    //for (int bits = 3; bits <= 7; bits++) {
+    //  test(bits);
+    //}
+    testPoly(new FastPolynomial().valueOf(8,7,3,1,0));
+    testPoly(new FastPolynomial().valueOf(8,5,4,3,2,1,0));
+    testPoly(new FastPolynomial().valueOf(8,7,6,5,4,3,0));
   }
 
   private static void test(int bits) {
     System.out.println("==== Bits " + bits + " ====");
-    FastPolynomial p = new FastPolynomial().new PrimePolynomials(bits,true).iterator().next();
+    testPoly(new FastPolynomial().new PrimePolynomials(bits,true).iterator().next());
+  }
+
+  private static void testPoly(FastPolynomial p) {
+    int bits = p.degree().intValue() + 1;
     System.out.println("Poly " + p);
     LFSR lfsr = new LFSR(p);
     int count = 0;
@@ -145,5 +153,4 @@ public class LFSR implements Iterable<BigInteger> {
     }
     System.out.println("Count " + count);
   }
-
 }

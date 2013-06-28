@@ -668,10 +668,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   enum Log {
     // By default - all log.
     // Construct with (false) not to log.
-    Tests,
-    Degrees(false),
-    Primes(false),
-    Primitives(false),
+    Tests,//(false),
+    Degrees,//(false),
+    Primes,//(false),
+    Primitives,//(false),
     Counts,
     Totients,
     Times;

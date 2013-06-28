@@ -1,15 +1,15 @@
 Degree: 2 Factors of 3: [] Dividends: []
 Primitive: x^2 + x + 1
-Primes: 1 Primitives: 1
+Degree: 2 Primes: 1 Möbius: 3 Primitives: 1 Totient: 1
 Degree: 3 Factors of 7: [] Dividends: []
 Primitive: x^3 + x + 1
 Primitive: x^3 + x^2 + 1
-Primes: 2 Primitives: 2
+Degree: 3 Primes: 2 Möbius: 3 Primitives: 2 Totient: 2
 Degree: 4 Factors of 15: [3, 5] Dividends: [3, 5]
 Primitive: x^4 + x + 1
 Primitive: x^4 + x^3 + 1
 Prime: x^4 + x^3 + x^2 + x + 1 divides x^5 + 1
-Primes: 3 Primitives: 2
+Degree: 4 Primes: 3 Möbius: 3 Primitives: 2 Totient: 2
 Degree: 5 Factors of 31: [] Dividends: []
 Primitive: x^5 + x^2 + 1
 Primitive: x^5 + x^3 + 1
@@ -17,7 +17,7 @@ Primitive: x^5 + x^3 + x^2 + x + 1
 Primitive: x^5 + x^4 + x^2 + x + 1
 Primitive: x^5 + x^4 + x^3 + x + 1
 Primitive: x^5 + x^4 + x^3 + x^2 + 1
-Primes: 6 Primitives: 6
+Degree: 5 Primes: 6 Möbius: 6 Primitives: 6 Totient: 6
 Degree: 6 Factors of 63: [3, 3, 7] Dividends: [3, 7, 9, 21]
 Primitive: x^6 + x + 1
 Prime: x^6 + x^3 + 1 divides x^9 + 1
@@ -28,7 +28,7 @@ Primitive: x^6 + x^5 + x^2 + x + 1
 Primitive: x^6 + x^5 + x^3 + x^2 + 1
 Primitive: x^6 + x^5 + x^4 + x + 1
 Prime: x^6 + x^5 + x^4 + x^2 + 1 divides x^21 + 1
-Primes: 9 Primitives: 6
+Degree: 6 Primes: 9 Möbius: 9 Primitives: 6 Totient: 6
 Degree: 7 Factors of 127: [] Dividends: []
 Primitive: x^7 + x + 1
 Primitive: x^7 + x^3 + 1
@@ -48,7 +48,7 @@ Primitive: x^7 + x^5 + x^4 + x^3 + x^2 + x + 1
 Primitive: x^7 + x^6 + x^5 + x^3 + x^2 + x + 1
 Primitive: x^7 + x^6 + x^5 + x^4 + x^2 + x + 1
 Primitive: x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
-Primes: 18 Primitives: 18
+Degree: 7 Primes: 18 Möbius: 18 Primitives: 18 Totient: 18
 Degree: 8 Factors of 255: [3, 5, 17] Dividends: [3, 5, 15, 17, 51, 85]
 Prime: x^8 + x^4 + x^3 + x + 1 divides x^51 + 1
 Primitive: x^8 + x^4 + x^3 + x^2 + 1
@@ -80,7 +80,7 @@ Primitive: x^8 + x^7 + x^6 + x^5 + x^2 + x + 1
 Prime: x^8 + x^7 + x^6 + x^5 + x^4 + x + 1 divides x^51 + 1
 Primitive: x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
 Prime: x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1 divides x^85 + 1
-Primes: 30 Primitives: 16
+Degree: 8 Primes: 30 Möbius: 31 Primitives: 16 Totient: 16
 Degree: 9 Factors of 511: [7, 73] Dividends: [7, 73]
 Prime: x^9 + x + 1 divides x^73 + 1
 Primitive: x^9 + x^4 + 1
@@ -138,7 +138,7 @@ Primitive: x^9 + x^8 + x^7 + x^6 + x^5 + x + 1
 Primitive: x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + 1
 Primitive: x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
 Primitive: x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1
-Primes: 56 Primitives: 48
+Degree: 9 Primes: 56 Möbius: 56 Primitives: 48 Totient: 48
 Degree: 10 Factors of 1023: [3, 11, 31] Dividends: [3, 11, 31, 33, 93, 341]
 Primitive: x^10 + x^3 + 1
 Primitive: x^10 + x^7 + 1
@@ -239,7 +239,7 @@ Prime: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + x + 1 divides x^341 + 1
 Primitive: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x + 1
 Primitive: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1
 Prime: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^11 + 1
-Primes: 99 Primitives: 60
+Degree: 10 Primes: 99 Möbius: 99 Primitives: 60 Totient: 60
 Degree: 11 Factors of 2047: [23, 89] Dividends: [23, 89]
 Primitive: x^11 + x^2 + 1
 Primitive: x^11 + x^9 + 1
@@ -427,7 +427,7 @@ Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^2 + 1
 Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + 1
 Prime: x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^89 + 1
 Prime: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^89 + 1
-Primes: 186 Primitives: 176
+Degree: 11 Primes: 186 Möbius: 186 Primitives: 176 Totient: 176
 Degree: 12 Factors of 4095: [3, 3, 5, 7, 13] Dividends: [3, 5, 7, 9, 13, 15, 21, 35, 39, 45, 63, 65, 91, 105, 117, 195, 273, 315, 455, 585, 819, 1365]
 Prime: x^12 + x^3 + 1 divides x^45 + 1
 Prime: x^12 + x^5 + 1 divides x^819 + 1
@@ -764,7 +764,7 @@ Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x + 1
 Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
 Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + 1 divides x^819 + 1
 Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^13 + 1
-Primes: 335 Primitives: 144
+Degree: 12 Primes: 335 Möbius: 340 Primitives: 144 Totient: 144
 Degree: 13 Factors of 8191: [] Dividends: []
 Primitive: x^13 + x^4 + x^3 + x + 1
 Primitive: x^13 + x^5 + x^2 + x + 1
@@ -1396,7 +1396,7 @@ Primitive: x^13 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + 
 Primitive: x^13 + x^12 + x^11 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
 Primitive: x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + x + 1
 Primitive: x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
-Primes: 630 Primitives: 630
+Degree: 13 Primes: 630 Möbius: 630 Primitives: 630 Totient: 630
 Degree: 14 Factors of 16383: [3, 43, 127] Dividends: [3, 43, 127, 129, 381, 5461]
 Prime: x^14 + x^5 + 1 divides x^5461 + 1
 Prime: x^14 + x^9 + 1 divides x^5461 + 1
@@ -2559,4 +2559,5 @@ Primitive: x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^4 + x^3 + x^2 
 Primitive: x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + x^3 + x^2 + x + 1
 Prime: x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^4 + x^2 + x + 1 divides x^5461 + 1
 Primitive: x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^2 + x + 1
-Primes: 1161 Primitives: 756
+Degree: 14 Primes: 1161 Möbius: 1161 Primitives: 756 Totient: 756
+Took: 06.474

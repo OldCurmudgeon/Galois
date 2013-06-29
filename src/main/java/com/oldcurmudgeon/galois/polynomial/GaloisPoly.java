@@ -622,8 +622,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     Log.LFSR.set(false);
     generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
     Log.Times.log("Took: ", t);
-    //generatePrimitivePolysUpToDegree(21, 1, true);
-    //Log.Times.log("Took: ", t);
+    t = new ProcessTimer();
+    generatePrimitivePolys(95, 1, true);
+    Log.Times.log("Took: ", t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
     //generatePrimitivePolys(95, 1, false);
@@ -666,7 +667,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       }
     }
     if (count == Integer.MAX_VALUE) {
-      Log.Counts.log("Degree: ", degree,
+      Log.Counts.log("Counts - Degree: ", degree,
                      " Primes: ", primitivePolynomials.primeCount,
                      " Möbius: ", Primes.möbius(degree),
                      " Primitives: ", primitivePolynomials.primitiveCount,

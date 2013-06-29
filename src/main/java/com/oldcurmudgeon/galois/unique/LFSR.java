@@ -152,7 +152,7 @@ public class LFSR implements Iterable<BigInteger> {
   }
 
   public static void testPoly(GaloisPoly p) {
-    int bits = p.degree().intValue() + 1;
+    int bits = p.degree().intValue();
     GaloisPoly.Log.LFSR.log("LFSR ", p);
     LFSR lfsr = new LFSR(p);
     int count = 0;

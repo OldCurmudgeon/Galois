@@ -47,7 +47,7 @@ public class LFSR implements Iterable<BigInteger> {
     // Where to start from (and stop).
     this.start = start;
     // Knock off the 2^0 coefficient of the polynomial for the TAP.
-    this.tapsMask = primePoly.clearBit(0);
+    this.tapsMask = primePoly.shiftRight(1);
   }
 
   public LFSR(GaloisPoly primePoly, BigInteger start) {
@@ -132,9 +132,18 @@ public class LFSR implements Iterable<BigInteger> {
     //for (int bits = 3; bits <= 7; bits++) {
     //  test(bits);
     //}
+    // Maximal
+    testPoly(new FastPolynomial().valueOf(2, 1, 0));
+    testPoly(new FastPolynomial().valueOf(3, 2, 0));
+    // 85
     testPoly(new FastPolynomial().valueOf(8,7,3,1,0));
     testPoly(new FastPolynomial().valueOf(8,5,4,3,2,1,0));
     testPoly(new FastPolynomial().valueOf(8,7,6,5,4,3,0));
+    // Maximal
+    // x^8 + x^4 + x^3 + x^2 + 1
+    testPoly(new FastPolynomial().valueOf(8,4,3,2,0));
+    // x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
+    testPoly(new FastPolynomial().valueOf(8,7,6,5,4,2,0));
   }
 
   private static void test(int bits) {

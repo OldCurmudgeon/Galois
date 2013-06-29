@@ -19,6 +19,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
+ * Also see: http://www.commsys.isy.liu.se/en/staff/mikael/polynomials/primpoly
+ * 
  * @author OldCurmudgeon
  */
 public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T> {
@@ -561,9 +563,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
 
   public static void main(String[] args) {
     // x^2 + 1
-    FastPolynomial p = new FastPolynomial().valueOf(2, 0);
+    Polynomial p = new Polynomial().valueOf(2, 0);
     // x + 1
-    FastPolynomial q = new FastPolynomial().valueOf(1, 0);
+    Polynomial q = new Polynomial().valueOf(1, 0);
     // (x^2 + 1) + (x + 1) = x^2 + x
     Log.Tests.log("(", p, ") + (", q, ") = ", p.plus(q));
     // (x^2 + 1) - (x + 1) = x^2 + x
@@ -579,7 +581,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     // (x^2 + 1) %^ (2,x + 1) =
     Log.Tests.log("(" + p + ") %^ (2," + q + ") = " + p.modPow(TWO, q), "");
     // Test a specific poly.
-    //testPoly(new FastPolynomial().valueOf(10, 4, 0));
+    //testPoly(new Polynomial().valueOf(10, 4, 0));
     // Test a whole degree.
     //testDegree(6);
     // Should be (* -> Primitive, = -> Prime)
@@ -633,7 +635,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //generatePrimitivePolys(256, 1, false);
   }
 
-  private static void testPoly(FastPolynomial p) {
+  private static void testPoly(Polynomial p) {
     Log.Tests.log("Poly: ", p, " Prime: ", p.isPrime(), " Primitive: ", p.isPrimitive());
   }
 
@@ -650,10 +652,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   private static void generatePrimitivePolys(int degree, int count, boolean minimal) {
     long twoPowDegreeMinus1 = Primes.twoToTheNMinus1(degree);
     int seen = 0;
-    FastPolynomial.PrimitivePolynomials primitivePolynomials = new FastPolynomial().new PrimitivePolynomials(degree, minimal ? false : true);
+    Polynomial.PrimitivePolynomials primitivePolynomials = new Polynomial().new PrimitivePolynomials(degree, minimal ? false : true);
     Log.Degrees.log("Degree: ", degree //, (minimal ? " minimal" : " maximal")
             , " Factors of ", twoPowDegreeMinus1, ": ", Primes.mersenneFactors(degree), " Dividends: ", primitivePolynomials.dividends);
-    for (FastPolynomial p : primitivePolynomials) {
+    for (Polynomial p : primitivePolynomials) {
       // Prime Polynomials!
       Log.Primitives.log("Primitive: ", p);
       if (Log.LFSR.get()) {

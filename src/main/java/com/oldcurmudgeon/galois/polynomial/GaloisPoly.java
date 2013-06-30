@@ -692,11 +692,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
                      " Totient: ", Primes.totient(twoPowDegreeMinus1) / degree);
       for (Long div : primitivePolynomials.dividends) {
         long totient = Primes.totient(div);
-        Log.Counts.log("Totient(", div, ")=", totient, "(", totient / degree, ")");
-      }
-      for (BigInteger div : new TreeSet<>(primitivePolynomials.divCounts.keySet())) {
-        Integer c = primitivePolynomials.divCounts.get(div);
-        Log.Counts.log("count(", div, ")=", c);
+        Integer c = primitivePolynomials.divCounts.get(BigInteger.valueOf(div));
+        Log.Counts.log("Totient(", div, ")=", totient,
+                       "(", totient / degree, ")",
+                       " count(", div, ")=", c == null ? "?": c);
       }
     }
   }

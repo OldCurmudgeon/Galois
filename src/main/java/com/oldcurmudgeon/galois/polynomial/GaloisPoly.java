@@ -19,7 +19,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Also see: http://www.commsys.isy.liu.se/en/staff/mikael/polynomials/primpoly
+ * Also see: 
+ * http://www.commsys.isy.liu.se/en/staff/mikael/polynomials/primpoly
+ * http://www.commsys.isy.liu.se/~mikael/polynomials/binary/primitive/one/BinaryPrimPolyList-0201-0300.txt
  * 
  * @author OldCurmudgeon
  */

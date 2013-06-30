@@ -463,6 +463,12 @@ LFSR x^6 + x^5 + x^4 + x^2 + 1
 000010
 Count 21
 Counts - Degree: 6 Primes: 9 Möbius: 9 Primitives: 6 Totient: 6
+Totient(3)=2(0)
+Totient(7)=6(1)
+Totient(9)=6(1)
+Totient(21)=12(2)
+count(9)=1
+count(21)=2
 Degree: 2 Factors of 3: [] Dividends: []
 Primitive: x^2 + x + 1
 Counts - Degree: 2 Primes: 1 Möbius: 3 Primitives: 1 Totient: 1
@@ -475,6 +481,9 @@ Primitive: x^4 + x + 1
 Primitive: x^4 + x^3 + 1
 Prime: x^4 + x^3 + x^2 + x + 1 divides x^5 + 1
 Counts - Degree: 4 Primes: 3 Möbius: 3 Primitives: 2 Totient: 2
+Totient(3)=2(0)
+Totient(5)=4(1)
+count(5)=1
 Degree: 5 Factors of 31: [] Dividends: []
 Primitive: x^5 + x^2 + 1
 Primitive: x^5 + x^3 + 1
@@ -494,6 +503,12 @@ Primitive: x^6 + x^5 + x^3 + x^2 + 1
 Primitive: x^6 + x^5 + x^4 + x + 1
 Prime: x^6 + x^5 + x^4 + x^2 + 1 divides x^21 + 1
 Counts - Degree: 6 Primes: 9 Möbius: 9 Primitives: 6 Totient: 6
+Totient(3)=2(0)
+Totient(7)=6(1)
+Totient(9)=6(1)
+Totient(21)=12(2)
+count(9)=1
+count(21)=2
 Degree: 7 Factors of 127: [] Dividends: []
 Primitive: x^7 + x + 1
 Primitive: x^7 + x^3 + 1
@@ -546,6 +561,15 @@ Prime: x^8 + x^7 + x^6 + x^5 + x^4 + x + 1 divides x^51 + 1
 Primitive: x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
 Prime: x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1 divides x^85 + 1
 Counts - Degree: 8 Primes: 30 Möbius: 31 Primitives: 16 Totient: 16
+Totient(3)=2(0)
+Totient(5)=4(0)
+Totient(15)=8(1)
+Totient(17)=16(2)
+Totient(51)=32(4)
+Totient(85)=64(8)
+count(17)=2
+count(51)=4
+count(85)=8
 Degree: 9 Factors of 511: [7, 73] Dividends: [7, 73]
 Prime: x^9 + x + 1 divides x^73 + 1
 Primitive: x^9 + x^4 + 1
@@ -604,6 +628,9 @@ Primitive: x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + 1
 Primitive: x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
 Primitive: x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1
 Counts - Degree: 9 Primes: 56 Möbius: 56 Primitives: 48 Totient: 48
+Totient(7)=6(0)
+Totient(73)=72(8)
+count(73)=8
 Degree: 10 Factors of 1023: [3, 11, 31] Dividends: [3, 11, 31, 33, 93, 341]
 Primitive: x^10 + x^3 + 1
 Primitive: x^10 + x^7 + 1
@@ -705,6 +732,16 @@ Primitive: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x + 1
 Primitive: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1
 Prime: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^11 + 1
 Counts - Degree: 10 Primes: 99 Möbius: 99 Primitives: 60 Totient: 60
+Totient(3)=2(0)
+Totient(11)=10(1)
+Totient(31)=30(3)
+Totient(33)=20(2)
+Totient(93)=60(6)
+Totient(341)=300(30)
+count(11)=1
+count(33)=2
+count(93)=6
+count(341)=30
 Degree: 11 Factors of 2047: [23, 89] Dividends: [23, 89]
 Primitive: x^11 + x^2 + 1
 Primitive: x^11 + x^9 + 1
@@ -893,6 +930,10 @@ Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + 1
 Prime: x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^89 + 1
 Prime: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^89 + 1
 Counts - Degree: 11 Primes: 186 Möbius: 186 Primitives: 176 Totient: 176
+Totient(23)=22(2)
+Totient(89)=88(8)
+count(23)=2
+count(89)=8
 Degree: 12 Factors of 4095: [3, 3, 5, 7, 13] Dividends: [3, 5, 7, 9, 13, 15, 21, 35, 39, 45, 63, 65, 91, 105, 117, 195, 273, 315, 455, 585, 819, 1365]
 Prime: x^12 + x^3 + 1 divides x^45 + 1
 Prime: x^12 + x^5 + 1 divides x^819 + 1
@@ -1230,20 +1271,41 @@ Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
 Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + 1 divides x^819 + 1
 Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^13 + 1
 Counts - Degree: 12 Primes: 335 Möbius: 340 Primitives: 144 Totient: 144
-Took: 01.734
-Degree: 95 Factors of 9223372036854775806: [2, 3, 715827883, 2147483647] Dividends: [2, 3, 6, 715827883, 1431655766, 2147483647, 2147483649, 4294967294, 4294967298, 6442450941, 12884901882, 1537228672809129301, 3074457345618258602, 4611686018427387903]
-Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
-	at java.util.Arrays.copyOfRange(Arrays.java:2622)
-	at java.math.BigInteger.trustedStripLeadingZeroInts(BigInteger.java:2826)
-	at java.math.BigInteger.<init>(BigInteger.java:215)
-	at java.math.BigInteger.valueOf(BigInteger.java:988)
-	at java.math.BigInteger.setBit(BigInteger.java:2305)
-	at com.oldcurmudgeon.galois.polynomial.FastPolynomial.valueOf(FastPolynomial.java:94)
-	at com.oldcurmudgeon.galois.polynomial.FastPolynomial.valueOf(FastPolynomial.java:27)
-	at com.oldcurmudgeon.galois.polynomial.GaloisPoly$Primitivity.check(GaloisPoly.java:191)
-	at com.oldcurmudgeon.galois.polynomial.GaloisPoly$Primitivity.test(GaloisPoly.java:178)
-	at com.oldcurmudgeon.galois.polynomial.GaloisPoly$Primitivity.access$100(GaloisPoly.java:170)
-	at com.oldcurmudgeon.galois.polynomial.GaloisPoly.isPrimitive(GaloisPoly.java:167)
-	at com.oldcurmudgeon.galois.polynomial.GaloisPoly$PrimitivePolynomials$PrimitiveIterator.hasNext(GaloisPoly.java:481)
-	at com.oldcurmudgeon.galois.polynomial.GaloisPoly.generatePrimitivePolys(GaloisPoly.java:656)
-	at com.oldcurmudgeon.galois.polynomial.GaloisPoly.main(GaloisPoly.java:626)
+Totient(3)=2(0)
+Totient(5)=4(0)
+Totient(7)=6(0)
+Totient(9)=6(0)
+Totient(13)=12(1)
+Totient(15)=8(0)
+Totient(21)=12(1)
+Totient(35)=24(2)
+Totient(39)=24(2)
+Totient(45)=24(2)
+Totient(63)=36(3)
+Totient(65)=48(4)
+Totient(91)=72(6)
+Totient(105)=48(4)
+Totient(117)=72(6)
+Totient(195)=96(8)
+Totient(273)=144(12)
+Totient(315)=144(12)
+Totient(455)=288(24)
+Totient(585)=288(24)
+Totient(819)=432(36)
+Totient(1365)=576(48)
+count(13)=1
+count(35)=2
+count(39)=2
+count(45)=2
+count(65)=4
+count(91)=6
+count(105)=4
+count(117)=6
+count(195)=8
+count(273)=12
+count(315)=12
+count(455)=24
+count(585)=24
+count(819)=36
+count(1365)=48
+Took: 20.172

@@ -12,17 +12,19 @@ import com.oldcurmudgeon.toolbox.walkers.BitPattern;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Also see: 
+ * Also see:
  * http://www.commsys.isy.liu.se/en/staff/mikael/polynomials/primpoly
  * http://www.commsys.isy.liu.se/~mikael/polynomials/binary/primitive/one/BinaryPrimPolyList-0201-0300.txt
- * 
+ *
  * @author OldCurmudgeon
  */
 public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T> {
@@ -164,22 +166,26 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
    * smallest integer e for which P(x) divides x^e+1 (Lidl and Niederreiter 1994).
    */
   public boolean isPrimitive() {
-    return isPrimitive(Primitivity.dividends(this.degree().intValue()));
+    return isPrimitive(new HashMap<BigInteger, Integer>());
   }
 
-  public boolean isPrimitive(Collection<Long> dividends) {
-    return Primitivity.test(this, dividends);
+  public boolean isPrimitive(Map<BigInteger, Integer> divCounts) {
+    return isPrimitive(Primitivity.dividends(this.degree().intValue()), divCounts);
+  }
+
+  public boolean isPrimitive(Collection<Long> dividends, Map<BigInteger, Integer> divCounts) {
+    return Primitivity.test(this, dividends, divCounts);
   }
 
   private static class Primitivity {
     // Tests primitivity of a GaloisPoly.
-    private static boolean test(GaloisPoly p, Collection<Long> dividends) {
+    private static boolean test(GaloisPoly p, Collection<Long> dividends, Map<BigInteger, Integer> divCounts) {
       // Get the totient to see if there might be factors.
       boolean failed = false;
       // Walk each dividend.
       for (Long d : dividends) {
         // Check it.
-        failed = check(p, BigInteger.valueOf(d));
+        failed = check(p, BigInteger.valueOf(d), divCounts);
         if (failed) {
           // Stop now if failed.
           break;
@@ -189,7 +195,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       return !failed;
     }
 
-    static boolean check(GaloisPoly it, BigInteger e) {
+    static boolean check(GaloisPoly it, BigInteger e, Map<BigInteger, Integer> divCounts) {
       boolean failed = false;
       // p = (x^e + 1)
       GaloisPoly p = it.valueOf(e, BigInteger.ZERO);
@@ -197,6 +203,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         failed = true;
         // Its only prime - not primitive.
         Log.Primes.log("Prime: ", it, " divides ", p);
+        increment(divCounts, e);
         if (Log.LFSR.get()) {
           LFSR.testPoly(it);
         }
@@ -226,6 +233,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
           addProducts(f * factors.get(j), factors, j + 1, dividends, limit);
         }
       }
+    }
+
+    private static void increment(Map<BigInteger, Integer> divCounts, BigInteger e) {
+      Integer count = divCounts.get(e);
+      divCounts.put(e, count == null ? 1 : count + 1);
     }
   }
 
@@ -441,6 +453,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     final Iterator<T> primes;
     // Hang on to the possible dividends.
     final Collection<Long> dividends;
+    // Count how many polys divide each dividend.
+    final Map<BigInteger, Integer> divCounts = new HashMap<>();
     // How many!
     int primeCount = 0;
     int primitiveCount = 0;
@@ -482,7 +496,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
             primitiveFutures.remove(p);
           } else {
             // Primitive too?
-            primitive = p.isPrimitive(dividends);
+            primitive = p.isPrimitive(dividends, divCounts);
             // Prime or primitive - record its reverse.
             if (primitive) {
               // Keep track of the reverse-pattern ones because they are prime/primitive too.
@@ -626,9 +640,9 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     Log.LFSR.set(false);
     generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
     Log.Times.log("Took: ", t);
-    t = new ProcessTimer();
-    generatePrimitivePolys(95, 1, true);
-    Log.Times.log("Took: ", t);
+    //t = new ProcessTimer();
+    //generatePrimitivePolys(95, 1, true);
+    //Log.Times.log("Took: ", t);
     //generatePrimitivePolysUpToDegree(13, Integer.MAX_VALUE, false);
     //generateMinimalPrimePolysUpToDegree(96);
     //generatePrimitivePolys(95, 1, false);
@@ -676,6 +690,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
                      " Möbius: ", Primes.möbius(degree),
                      " Primitives: ", primitivePolynomials.primitiveCount,
                      " Totient: ", Primes.totient(twoPowDegreeMinus1) / degree);
+      for (Long div : primitivePolynomials.dividends) {
+        long totient = Primes.totient(div);
+        Log.Counts.log("Totient(", div, ")=", totient, "(", totient / degree, ")");
+      }
+      for (BigInteger div : new TreeSet<>(primitivePolynomials.divCounts.keySet())) {
+        Integer c = primitivePolynomials.divCounts.get(div);
+        Log.Counts.log("count(", div, ")=", c);
+      }
     }
   }
 

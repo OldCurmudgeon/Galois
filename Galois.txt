@@ -5,7 +5,7 @@
 (x^2 + 1) / (x + 1) = x + 1
 (x^2 + 1) % (x + 1) = 
 (x^2 + 1) %^ (2,x + 1) = 
-Degree: 6 Factors of 63: [3, 3, 7] Dividends: [3, 7, 9, 21]
+Degree: 6 Factors of 63: [3, 3, 7] Dividends: [7]
 Primitive: x^6 + x + 1
 LFSR x^6 + x + 1
 000001
@@ -72,7 +72,7 @@ LFSR x^6 + x + 1
 000100
 000010
 Count 63
-Prime: x^6 + x^3 + 1 divides x^9 + 1
+Primitive: x^6 + x^3 + 1
 LFSR x^6 + x^3 + 1
 000001
 100100
@@ -150,7 +150,7 @@ LFSR x^6 + x^5 + 1
 000100
 000010
 Count 63
-Prime: x^6 + x^4 + x^2 + x + 1 divides x^21 + 1
+Primitive: x^6 + x^4 + x^2 + x + 1
 LFSR x^6 + x^4 + x^2 + x + 1
 000001
 101011
@@ -438,7 +438,7 @@ LFSR x^6 + x^5 + x^4 + x + 1
 000100
 000010
 Count 63
-Prime: x^6 + x^5 + x^4 + x^2 + 1 divides x^21 + 1
+Primitive: x^6 + x^5 + x^4 + x^2 + 1
 LFSR x^6 + x^5 + x^4 + x^2 + 1
 000001
 111010
@@ -462,11 +462,8 @@ LFSR x^6 + x^5 + x^4 + x^2 + 1
 000100
 000010
 Count 21
-Counts - Degree: 6 Primes: 9 Möbius: 9 Primitives: 6 Totient: 6
-Totient(3)=2(0) count(3)=?
+Counts - Degree: 6 Primes: 9 Möbius: 9 Primitives: 9 Totient: 6
 Totient(7)=6(1) count(7)=?
-Totient(9)=6(1) count(9)=1
-Totient(21)=12(2) count(21)=2
 Degree: 2 Factors of 3: [] Dividends: []
 Primitive: x^2 + x + 1
 Counts - Degree: 2 Primes: 1 Möbius: 3 Primitives: 1 Totient: 1
@@ -474,12 +471,11 @@ Degree: 3 Factors of 7: [] Dividends: []
 Primitive: x^3 + x + 1
 Primitive: x^3 + x^2 + 1
 Counts - Degree: 3 Primes: 2 Möbius: 3 Primitives: 2 Totient: 2
-Degree: 4 Factors of 15: [3, 5] Dividends: [3, 5]
+Degree: 4 Factors of 15: [3, 5] Dividends: [5]
 Primitive: x^4 + x + 1
 Primitive: x^4 + x^3 + 1
 Prime: x^4 + x^3 + x^2 + x + 1 divides x^5 + 1
 Counts - Degree: 4 Primes: 3 Möbius: 3 Primitives: 2 Totient: 2
-Totient(3)=2(0) count(3)=?
 Totient(5)=4(1) count(5)=1
 Degree: 5 Factors of 31: [] Dividends: []
 Primitive: x^5 + x^2 + 1
@@ -489,21 +485,18 @@ Primitive: x^5 + x^4 + x^2 + x + 1
 Primitive: x^5 + x^4 + x^3 + x + 1
 Primitive: x^5 + x^4 + x^3 + x^2 + 1
 Counts - Degree: 5 Primes: 6 Möbius: 6 Primitives: 6 Totient: 6
-Degree: 6 Factors of 63: [3, 3, 7] Dividends: [3, 7, 9, 21]
+Degree: 6 Factors of 63: [3, 3, 7] Dividends: [7]
 Primitive: x^6 + x + 1
-Prime: x^6 + x^3 + 1 divides x^9 + 1
+Primitive: x^6 + x^3 + 1
 Primitive: x^6 + x^5 + 1
-Prime: x^6 + x^4 + x^2 + x + 1 divides x^21 + 1
+Primitive: x^6 + x^4 + x^2 + x + 1
 Primitive: x^6 + x^4 + x^3 + x + 1
 Primitive: x^6 + x^5 + x^2 + x + 1
 Primitive: x^6 + x^5 + x^3 + x^2 + 1
 Primitive: x^6 + x^5 + x^4 + x + 1
-Prime: x^6 + x^5 + x^4 + x^2 + 1 divides x^21 + 1
-Counts - Degree: 6 Primes: 9 Möbius: 9 Primitives: 6 Totient: 6
-Totient(3)=2(0) count(3)=?
+Primitive: x^6 + x^5 + x^4 + x^2 + 1
+Counts - Degree: 6 Primes: 9 Möbius: 9 Primitives: 9 Totient: 6
 Totient(7)=6(1) count(7)=?
-Totient(9)=6(1) count(9)=1
-Totient(21)=12(2) count(21)=2
 Degree: 7 Factors of 127: [] Dividends: []
 Primitive: x^7 + x + 1
 Primitive: x^7 + x^3 + 1
@@ -524,8 +517,8 @@ Primitive: x^7 + x^6 + x^5 + x^3 + x^2 + x + 1
 Primitive: x^7 + x^6 + x^5 + x^4 + x^2 + x + 1
 Primitive: x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
 Counts - Degree: 7 Primes: 18 Möbius: 18 Primitives: 18 Totient: 18
-Degree: 8 Factors of 255: [3, 5, 17] Dividends: [3, 5, 15, 17, 51, 85]
-Prime: x^8 + x^4 + x^3 + x + 1 divides x^51 + 1
+Degree: 8 Factors of 255: [3, 5, 17] Dividends: [17]
+Primitive: x^8 + x^4 + x^3 + x + 1
 Primitive: x^8 + x^4 + x^3 + x^2 + 1
 Primitive: x^8 + x^5 + x^3 + x + 1
 Primitive: x^8 + x^5 + x^3 + x^2 + 1
@@ -536,33 +529,28 @@ Primitive: x^8 + x^6 + x^5 + x^2 + 1
 Primitive: x^8 + x^6 + x^5 + x^3 + 1
 Primitive: x^8 + x^6 + x^5 + x^4 + 1
 Primitive: x^8 + x^7 + x^2 + x + 1
-Prime: x^8 + x^7 + x^3 + x + 1 divides x^85 + 1
+Primitive: x^8 + x^7 + x^3 + x + 1
 Primitive: x^8 + x^7 + x^3 + x^2 + 1
-Prime: x^8 + x^7 + x^5 + x + 1 divides x^85 + 1
+Primitive: x^8 + x^7 + x^5 + x + 1
 Primitive: x^8 + x^7 + x^5 + x^3 + 1
-Prime: x^8 + x^7 + x^5 + x^4 + 1 divides x^51 + 1
+Primitive: x^8 + x^7 + x^5 + x^4 + 1
 Primitive: x^8 + x^7 + x^6 + x + 1
-Prime: x^8 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^85 + 1
+Primitive: x^8 + x^5 + x^4 + x^3 + x^2 + x + 1
 Primitive: x^8 + x^6 + x^4 + x^3 + x^2 + x + 1
-Prime: x^8 + x^6 + x^5 + x^4 + x^2 + x + 1 divides x^85 + 1
-Prime: x^8 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^85 + 1
-Prime: x^8 + x^7 + x^4 + x^3 + x^2 + x + 1 divides x^51 + 1
-Prime: x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 1 divides x^85 + 1
+Primitive: x^8 + x^6 + x^5 + x^4 + x^2 + x + 1
+Primitive: x^8 + x^6 + x^5 + x^4 + x^3 + x + 1
+Primitive: x^8 + x^7 + x^4 + x^3 + x^2 + x + 1
+Primitive: x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
 Primitive: x^8 + x^7 + x^6 + x^3 + x^2 + x + 1
 Prime: x^8 + x^7 + x^6 + x^4 + x^2 + x + 1 divides x^17 + 1
-Prime: x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + 1 divides x^85 + 1
+Primitive: x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + 1
 Primitive: x^8 + x^7 + x^6 + x^5 + x^2 + x + 1
-Prime: x^8 + x^7 + x^6 + x^5 + x^4 + x + 1 divides x^51 + 1
+Primitive: x^8 + x^7 + x^6 + x^5 + x^4 + x + 1
 Primitive: x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
-Prime: x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1 divides x^85 + 1
-Counts - Degree: 8 Primes: 30 Möbius: 31 Primitives: 16 Totient: 16
-Totient(3)=2(0) count(3)=?
-Totient(5)=4(0) count(5)=?
-Totient(15)=8(1) count(15)=?
+Primitive: x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1
+Counts - Degree: 8 Primes: 30 Möbius: 31 Primitives: 28 Totient: 16
 Totient(17)=16(2) count(17)=2
-Totient(51)=32(4) count(51)=4
-Totient(85)=64(8) count(85)=8
-Degree: 9 Factors of 511: [7, 73] Dividends: [7, 73]
+Degree: 9 Factors of 511: [7, 73] Dividends: [73]
 Prime: x^9 + x + 1 divides x^73 + 1
 Primitive: x^9 + x^4 + 1
 Primitive: x^9 + x^5 + 1
@@ -620,9 +608,8 @@ Primitive: x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + 1
 Primitive: x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
 Primitive: x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1
 Counts - Degree: 9 Primes: 56 Möbius: 56 Primitives: 48 Totient: 48
-Totient(7)=6(0) count(7)=?
 Totient(73)=72(8) count(73)=8
-Degree: 10 Factors of 1023: [3, 11, 31] Dividends: [3, 11, 31, 33, 93, 341]
+Degree: 10 Factors of 1023: [3, 11, 31] Dividends: [11, 31, 341]
 Primitive: x^10 + x^3 + 1
 Primitive: x^10 + x^7 + 1
 Prime: x^10 + x^3 + x^2 + x + 1 divides x^341 + 1
@@ -630,34 +617,34 @@ Primitive: x^10 + x^4 + x^3 + x + 1
 Prime: x^10 + x^4 + x^3 + x^2 + 1 divides x^341 + 1
 Primitive: x^10 + x^5 + x^2 + x + 1
 Primitive: x^10 + x^5 + x^3 + x^2 + 1
-Prime: x^10 + x^5 + x^4 + x^2 + 1 divides x^93 + 1
+Primitive: x^10 + x^5 + x^4 + x^2 + 1
 Prime: x^10 + x^6 + x^2 + x + 1 divides x^341 + 1
 Prime: x^10 + x^6 + x^4 + x + 1 divides x^341 + 1
 Prime: x^10 + x^6 + x^5 + x + 1 divides x^341 + 1
 Primitive: x^10 + x^6 + x^5 + x^2 + 1
 Primitive: x^10 + x^7 + x^3 + x + 1
 Prime: x^10 + x^7 + x^4 + x^3 + 1 divides x^341 + 1
-Prime: x^10 + x^7 + x^5 + x^3 + 1 divides x^33 + 1
+Primitive: x^10 + x^7 + x^5 + x^3 + 1
 Primitive: x^10 + x^7 + x^6 + x^2 + 1
 Prime: x^10 + x^7 + x^6 + x^3 + 1 divides x^341 + 1
-Prime: x^10 + x^8 + x^3 + x + 1 divides x^93 + 1
+Primitive: x^10 + x^8 + x^3 + x + 1
 Primitive: x^10 + x^8 + x^3 + x^2 + 1
 Primitive: x^10 + x^8 + x^4 + x^3 + 1
 Primitive: x^10 + x^8 + x^5 + x + 1
 Primitive: x^10 + x^8 + x^5 + x^4 + 1
 Primitive: x^10 + x^8 + x^6 + x + 1
-Prime: x^10 + x^8 + x^6 + x^5 + 1 divides x^93 + 1
+Primitive: x^10 + x^8 + x^6 + x^5 + 1
 Primitive: x^10 + x^8 + x^7 + x^2 + 1
 Primitive: x^10 + x^8 + x^7 + x^5 + 1
 Prime: x^10 + x^8 + x^7 + x^6 + 1 divides x^341 + 1
 Primitive: x^10 + x^9 + x^4 + x + 1
 Primitive: x^10 + x^9 + x^4 + x^2 + 1
-Prime: x^10 + x^9 + x^5 + x + 1 divides x^33 + 1
+Primitive: x^10 + x^9 + x^5 + x + 1
 Primitive: x^10 + x^9 + x^5 + x^2 + 1
 Prime: x^10 + x^9 + x^5 + x^4 + 1 divides x^341 + 1
 Primitive: x^10 + x^9 + x^6 + x + 1
 Prime: x^10 + x^9 + x^6 + x^4 + 1 divides x^341 + 1
-Prime: x^10 + x^9 + x^7 + x^2 + 1 divides x^93 + 1
+Primitive: x^10 + x^9 + x^7 + x^2 + 1
 Primitive: x^10 + x^9 + x^7 + x^3 + 1
 Primitive: x^10 + x^9 + x^7 + x^6 + 1
 Prime: x^10 + x^9 + x^8 + x^4 + 1 divides x^341 + 1
@@ -685,7 +672,7 @@ Primitive: x^10 + x^9 + x^5 + x^4 + x^2 + x + 1
 Primitive: x^10 + x^9 + x^6 + x^3 + x^2 + x + 1
 Primitive: x^10 + x^9 + x^6 + x^4 + x^3 + x + 1
 Primitive: x^10 + x^9 + x^6 + x^5 + x^4 + x^3 + 1
-Prime: x^10 + x^9 + x^7 + x^5 + x^2 + x + 1 divides x^93 + 1
+Primitive: x^10 + x^9 + x^7 + x^5 + x^2 + x + 1
 Prime: x^10 + x^9 + x^7 + x^5 + x^3 + x^2 + 1 divides x^341 + 1
 Primitive: x^10 + x^9 + x^7 + x^5 + x^4 + x^2 + 1
 Prime: x^10 + x^9 + x^7 + x^6 + x^3 + x^2 + 1 divides x^341 + 1
@@ -693,7 +680,7 @@ Primitive: x^10 + x^9 + x^7 + x^6 + x^4 + x + 1
 Prime: x^10 + x^9 + x^8 + x^3 + x^2 + x + 1 divides x^341 + 1
 Primitive: x^10 + x^9 + x^8 + x^4 + x^2 + x + 1
 Primitive: x^10 + x^9 + x^8 + x^4 + x^3 + x^2 + 1
-Prime: x^10 + x^9 + x^8 + x^5 + x^3 + x + 1 divides x^93 + 1
+Primitive: x^10 + x^9 + x^8 + x^5 + x^3 + x + 1
 Prime: x^10 + x^9 + x^8 + x^5 + x^4 + x^2 + 1 divides x^341 + 1
 Primitive: x^10 + x^9 + x^8 + x^5 + x^4 + x^3 + 1
 Primitive: x^10 + x^9 + x^8 + x^6 + x^2 + x + 1
@@ -722,560 +709,508 @@ Prime: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + x + 1 divides x^341 + 1
 Primitive: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x + 1
 Primitive: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1
 Prime: x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^11 + 1
-Counts - Degree: 10 Primes: 99 Möbius: 99 Primitives: 60 Totient: 60
-Totient(3)=2(0) count(3)=?
+Counts - Degree: 10 Primes: 99 Möbius: 99 Primitives: 68 Totient: 60
 Totient(11)=10(1) count(11)=1
 Totient(31)=30(3) count(31)=?
-Totient(33)=20(2) count(33)=2
-Totient(93)=60(6) count(93)=6
 Totient(341)=300(30) count(341)=30
-Degree: 11 Factors of 2047: [23, 89] Dividends: [23, 89]
-Primitive: x^11 + x^2 + 1
-Primitive: x^11 + x^9 + 1
-Primitive: x^11 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^5 + x^3 + x + 1
-Primitive: x^11 + x^5 + x^3 + x^2 + 1
-Primitive: x^11 + x^6 + x^2 + x + 1
-Primitive: x^11 + x^6 + x^5 + x + 1
-Primitive: x^11 + x^6 + x^5 + x^2 + 1
-Primitive: x^11 + x^6 + x^5 + x^4 + 1
-Primitive: x^11 + x^7 + x^3 + x^2 + 1
-Primitive: x^11 + x^7 + x^4 + x^2 + 1
-Primitive: x^11 + x^7 + x^5 + x^3 + 1
-Primitive: x^11 + x^7 + x^5 + x^4 + 1
-Prime: x^11 + x^7 + x^6 + x + 1 divides x^89 + 1
-Primitive: x^11 + x^7 + x^6 + x^4 + 1
-Primitive: x^11 + x^7 + x^6 + x^5 + 1
-Primitive: x^11 + x^8 + x^3 + x^2 + 1
-Primitive: x^11 + x^8 + x^4 + x + 1
-Primitive: x^11 + x^8 + x^5 + x^2 + 1
-Primitive: x^11 + x^8 + x^5 + x^3 + 1
-Primitive: x^11 + x^8 + x^6 + x^2 + 1
-Primitive: x^11 + x^8 + x^6 + x^3 + 1
-Primitive: x^11 + x^8 + x^6 + x^4 + 1
-Primitive: x^11 + x^8 + x^7 + x + 1
-Primitive: x^11 + x^9 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^4 + x + 1
-Primitive: x^11 + x^9 + x^4 + x^2 + 1
-Primitive: x^11 + x^9 + x^5 + x^3 + 1
-Primitive: x^11 + x^9 + x^6 + x^3 + 1
-Primitive: x^11 + x^9 + x^6 + x^5 + 1
-Primitive: x^11 + x^9 + x^7 + x^2 + 1
-Primitive: x^11 + x^9 + x^7 + x^4 + 1
-Primitive: x^11 + x^9 + x^8 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^3 + 1
-Primitive: x^11 + x^9 + x^8 + x^4 + 1
-Primitive: x^11 + x^9 + x^8 + x^6 + 1
-Primitive: x^11 + x^10 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^4 + x^3 + 1
-Prime: x^11 + x^10 + x^5 + x^4 + 1 divides x^89 + 1
-Primitive: x^11 + x^10 + x^6 + x^5 + 1
-Primitive: x^11 + x^10 + x^7 + x^2 + 1
-Primitive: x^11 + x^10 + x^7 + x^3 + 1
-Primitive: x^11 + x^10 + x^8 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^6 + 1
-Primitive: x^11 + x^10 + x^9 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^5 + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + 1
-Primitive: x^11 + x^6 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^7 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^7 + x^6 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^7 + x^6 + x^5 + x^2 + x + 1
-Primitive: x^11 + x^7 + x^6 + x^5 + x^3 + x + 1
-Primitive: x^11 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
-Prime: x^11 + x^8 + x^5 + x^4 + x^2 + x + 1 divides x^89 + 1
-Primitive: x^11 + x^8 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^8 + x^5 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^8 + x^6 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^8 + x^6 + x^5 + x^4 + x + 1
-Primitive: x^11 + x^8 + x^6 + x^5 + x^4 + x^2 + 1
-Primitive: x^11 + x^8 + x^7 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^8 + x^7 + x^5 + x^3 + x + 1
-Primitive: x^11 + x^8 + x^7 + x^5 + x^3 + x^2 + 1
-Primitive: x^11 + x^8 + x^7 + x^5 + x^4 + x^3 + 1
-Primitive: x^11 + x^8 + x^7 + x^6 + x^2 + x + 1
-Primitive: x^11 + x^8 + x^7 + x^6 + x^4 + x^3 + 1
-Primitive: x^11 + x^8 + x^7 + x^6 + x^5 + x^2 + 1
-Primitive: x^11 + x^9 + x^6 + x^5 + x^3 + x^2 + 1
-Primitive: x^11 + x^9 + x^6 + x^5 + x^4 + x^3 + 1
-Primitive: x^11 + x^9 + x^7 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^9 + x^7 + x^5 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^7 + x^5 + x^3 + x + 1
-Primitive: x^11 + x^9 + x^7 + x^5 + x^4 + x + 1
-Primitive: x^11 + x^9 + x^7 + x^5 + x^4 + x^2 + 1
-Primitive: x^11 + x^9 + x^7 + x^6 + x^4 + x^2 + 1
-Prime: x^11 + x^9 + x^7 + x^6 + x^5 + x + 1 divides x^23 + 1
-Primitive: x^11 + x^9 + x^7 + x^6 + x^5 + x^3 + 1
-Primitive: x^11 + x^9 + x^7 + x^6 + x^5 + x^4 + 1
-Primitive: x^11 + x^9 + x^8 + x^5 + x^4 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^6 + x^3 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^6 + x^4 + x^3 + 1
-Primitive: x^11 + x^9 + x^8 + x^6 + x^5 + x^2 + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^3 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^4 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^4 + x^2 + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^6 + x^3 + 1
-Primitive: x^11 + x^10 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^6 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^6 + x^5 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^6 + x^5 + x^4 + x + 1
-Prime: x^11 + x^10 + x^6 + x^5 + x^4 + x^2 + 1 divides x^23 + 1
-Primitive: x^11 + x^10 + x^7 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^7 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^7 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^7 + x^5 + x^4 + x + 1
-Primitive: x^11 + x^10 + x^7 + x^6 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^7 + x^6 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^7 + x^6 + x^4 + x + 1
-Primitive: x^11 + x^10 + x^7 + x^6 + x^4 + x^2 + 1
-Primitive: x^11 + x^10 + x^7 + x^6 + x^5 + x + 1
-Primitive: x^11 + x^10 + x^7 + x^6 + x^5 + x^3 + 1
-Primitive: x^11 + x^10 + x^8 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^8 + x^5 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^5 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^8 + x^6 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^6 + x^4 + x^2 + 1
-Primitive: x^11 + x^10 + x^8 + x^6 + x^4 + x^3 + 1
-Primitive: x^11 + x^10 + x^8 + x^6 + x^5 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^6 + x^5 + x^4 + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^4 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^5 + x^3 + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^6 + x^3 + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + 1
-Primitive: x^11 + x^10 + x^9 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^5 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^5 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^5 + x^4 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^5 + x^4 + x^3 + 1
-Primitive: x^11 + x^10 + x^9 + x^6 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^6 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^6 + x^4 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^6 + x^5 + x^4 + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + x^4 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + x^5 + x + 1
-Prime: x^11 + x^10 + x^9 + x^7 + x^6 + x^3 + 1 divides x^89 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^4 + x^3 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^5 + x^4 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + 1
-Primitive: x^11 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
-Prime: x^11 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + x + 1 divides x^89 + 1
-Primitive: x^11 + x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^7 + x^6 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^7 + x^6 + x^5 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^5 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^6 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^6 + x^5 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^5 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^6 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^6 + x^5 + x^2 + x + 1
-Primitive: x^11 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^7 + x^5 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^7 + x^6 + x^5 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^6 + x^5 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^6 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^6 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^6 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^6 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + x^6 + x^3 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + x^6 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + x^6 + x^5 + x^4 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^7 + x^6 + x^5 + x^4 + x^3 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^5 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^6 + x^4 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + x^2 + 1
-Prime: x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + 1 divides x^89 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + x^3 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^2 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^4 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^3 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^2 + 1
-Primitive: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + 1
-Prime: x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^89 + 1
-Prime: x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^89 + 1
-Counts - Degree: 11 Primes: 186 Möbius: 186 Primitives: 176 Totient: 176
-Totient(23)=22(2) count(23)=2
-Totient(89)=88(8) count(89)=8
-Degree: 12 Factors of 4095: [3, 3, 5, 7, 13] Dividends: [3, 5, 7, 9, 13, 15, 21, 35, 39, 45, 63, 65, 91, 105, 117, 195, 273, 315, 455, 585, 819, 1365]
-Prime: x^12 + x^3 + 1 divides x^45 + 1
-Prime: x^12 + x^5 + 1 divides x^819 + 1
-Prime: x^12 + x^7 + 1 divides x^819 + 1
-Prime: x^12 + x^9 + 1 divides x^45 + 1
-Prime: x^12 + x^4 + x^2 + x + 1 divides x^315 + 1
-Prime: x^12 + x^5 + x^4 + x + 1 divides x^819 + 1
-Prime: x^12 + x^5 + x^4 + x^2 + 1 divides x^195 + 1
-Prime: x^12 + x^6 + x^3 + x^2 + 1 divides x^819 + 1
-Primitive: x^12 + x^6 + x^4 + x + 1
-Primitive: x^12 + x^6 + x^5 + x^3 + 1
-Prime: x^12 + x^7 + x^3 + x + 1 divides x^455 + 1
-Primitive: x^12 + x^7 + x^4 + x^3 + 1
-Prime: x^12 + x^7 + x^5 + x + 1 divides x^819 + 1
-Prime: x^12 + x^7 + x^5 + x^2 + 1 divides x^585 + 1
-Primitive: x^12 + x^7 + x^6 + x^4 + 1
-Primitive: x^12 + x^8 + x^2 + x + 1
-Primitive: x^12 + x^8 + x^5 + x + 1
-Prime: x^12 + x^8 + x^5 + x^4 + 1 divides x^273 + 1
-Primitive: x^12 + x^8 + x^6 + x^5 + 1
-Prime: x^12 + x^8 + x^7 + x + 1 divides x^455 + 1
-Primitive: x^12 + x^8 + x^7 + x^2 + 1
-Prime: x^12 + x^8 + x^7 + x^4 + 1 divides x^273 + 1
-Primitive: x^12 + x^9 + x^3 + x^2 + 1
-Prime: x^12 + x^9 + x^4 + x + 1 divides x^455 + 1
-Prime: x^12 + x^9 + x^4 + x^3 + 1 divides x^819 + 1
-Prime: x^12 + x^9 + x^5 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^9 + x^6 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^9 + x^6 + x^2 + 1 divides x^315 + 1
-Primitive: x^12 + x^9 + x^7 + x^6 + 1
-Prime: x^12 + x^9 + x^8 + x^3 + 1 divides x^819 + 1
-Primitive: x^12 + x^9 + x^8 + x^5 + 1
-Primitive: x^12 + x^10 + x^2 + x + 1
-Prime: x^12 + x^10 + x^4 + x + 1 divides x^455 + 1
-Primitive: x^12 + x^10 + x^5 + x^4 + 1
-Prime: x^12 + x^10 + x^6 + x^3 + 1 divides x^315 + 1
-Prime: x^12 + x^10 + x^7 + x^3 + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^7 + x^5 + 1 divides x^585 + 1
-Prime: x^12 + x^10 + x^8 + x^7 + 1 divides x^195 + 1
-Prime: x^12 + x^10 + x^9 + x + 1 divides x^91 + 1
-Primitive: x^12 + x^10 + x^9 + x^3 + 1
-Prime: x^12 + x^10 + x^9 + x^6 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^2 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^3 + x^2 + 1 divides x^91 + 1
-Prime: x^12 + x^11 + x^5 + x + 1 divides x^585 + 1
-Prime: x^12 + x^11 + x^5 + x^4 + 1 divides x^455 + 1
-Prime: x^12 + x^11 + x^6 + x^3 + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^7 + x + 1 divides x^585 + 1
-Primitive: x^12 + x^11 + x^7 + x^4 + 1
-Prime: x^12 + x^11 + x^7 + x^5 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^8 + x^2 + 1 divides x^455 + 1
-Prime: x^12 + x^11 + x^8 + x^3 + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^8 + x^6 + 1
-Prime: x^12 + x^11 + x^8 + x^7 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^9 + x^5 + 1 divides x^455 + 1
-Prime: x^12 + x^11 + x^10 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^10 + x^2 + 1
-Primitive: x^12 + x^11 + x^10 + x^4 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + 1 divides x^315 + 1
-Prime: x^12 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^6 + x^5 + x^4 + x^2 + x + 1 divides x^195 + 1
-Primitive: x^12 + x^6 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^12 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
-Prime: x^12 + x^7 + x^6 + x^3 + x^2 + x + 1 divides x^273 + 1
-Primitive: x^12 + x^7 + x^6 + x^5 + x^3 + x + 1
-Prime: x^12 + x^7 + x^6 + x^5 + x^3 + x^2 + 1 divides x^1365 + 1
-Primitive: x^12 + x^8 + x^4 + x^3 + x^2 + x + 1
-Prime: x^12 + x^8 + x^5 + x^4 + x^2 + x + 1 divides x^819 + 1
-Primitive: x^12 + x^8 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^12 + x^8 + x^6 + x^3 + x^2 + x + 1
-Primitive: x^12 + x^8 + x^6 + x^4 + x^2 + x + 1
-Primitive: x^12 + x^8 + x^6 + x^5 + x^3 + x + 1
-Prime: x^12 + x^8 + x^6 + x^5 + x^3 + x^2 + 1 divides x^105 + 1
-Prime: x^12 + x^8 + x^6 + x^5 + x^4 + x^3 + 1 divides x^91 + 1
-Prime: x^12 + x^8 + x^7 + x^5 + x^3 + x + 1 divides x^819 + 1
-Primitive: x^12 + x^8 + x^7 + x^5 + x^4 + x + 1
-Primitive: x^12 + x^8 + x^7 + x^6 + x^4 + x^3 + 1
-Prime: x^12 + x^8 + x^7 + x^6 + x^5 + x + 1 divides x^273 + 1
-Prime: x^12 + x^8 + x^7 + x^6 + x^5 + x^4 + 1 divides x^65 + 1
-Primitive: x^12 + x^9 + x^5 + x^4 + x^2 + x + 1
-Prime: x^12 + x^9 + x^5 + x^4 + x^3 + x + 1 divides x^105 + 1
-Primitive: x^12 + x^9 + x^5 + x^4 + x^3 + x^2 + 1
-Primitive: x^12 + x^9 + x^6 + x^5 + x^2 + x + 1
-Prime: x^12 + x^9 + x^6 + x^5 + x^3 + x^2 + 1 divides x^1365 + 1
-Primitive: x^12 + x^9 + x^6 + x^5 + x^4 + x + 1
-Prime: x^12 + x^9 + x^7 + x^5 + x^4 + x^2 + 1 divides x^819 + 1
-Primitive: x^12 + x^9 + x^7 + x^5 + x^4 + x^3 + 1
-Primitive: x^12 + x^9 + x^7 + x^6 + x^3 + x + 1
-Primitive: x^12 + x^9 + x^8 + x^3 + x^2 + x + 1
-Prime: x^12 + x^9 + x^8 + x^4 + x^3 + x + 1 divides x^585 + 1
-Primitive: x^12 + x^9 + x^8 + x^4 + x^3 + x^2 + 1
-Prime: x^12 + x^9 + x^8 + x^5 + x^4 + x + 1 divides x^819 + 1
-Primitive: x^12 + x^9 + x^8 + x^5 + x^4 + x^3 + 1
-Primitive: x^12 + x^9 + x^8 + x^6 + x^3 + x^2 + 1
-Prime: x^12 + x^9 + x^8 + x^6 + x^5 + x^2 + 1 divides x^1365 + 1
-Primitive: x^12 + x^9 + x^8 + x^6 + x^5 + x^4 + 1
-Primitive: x^12 + x^9 + x^8 + x^7 + x^4 + x^3 + 1
-Primitive: x^12 + x^9 + x^8 + x^7 + x^5 + x + 1
-Primitive: x^12 + x^9 + x^8 + x^7 + x^5 + x^3 + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^6 + x + 1 divides x^455 + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^6 + x^4 + 1 divides x^91 + 1
-Primitive: x^12 + x^10 + x^5 + x^4 + x^2 + x + 1
-Primitive: x^12 + x^10 + x^6 + x^3 + x^2 + x + 1
-Prime: x^12 + x^10 + x^6 + x^4 + x^3 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^10 + x^6 + x^4 + x^3 + x^2 + 1
-Primitive: x^12 + x^10 + x^6 + x^5 + x^2 + x + 1
-Prime: x^12 + x^10 + x^6 + x^5 + x^3 + x + 1 divides x^585 + 1
-Primitive: x^12 + x^10 + x^6 + x^5 + x^4 + x^2 + 1
-Primitive: x^12 + x^10 + x^7 + x^5 + x^2 + x + 1
-Primitive: x^12 + x^10 + x^7 + x^5 + x^3 + x^2 + 1
-Prime: x^12 + x^10 + x^7 + x^5 + x^4 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^7 + x^6 + x^3 + x^2 + 1 divides x^585 + 1
-Primitive: x^12 + x^10 + x^7 + x^6 + x^4 + x + 1
-Prime: x^12 + x^10 + x^7 + x^6 + x^4 + x^3 + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^7 + x^6 + x^5 + x^2 + 1 divides x^65 + 1
-Primitive: x^12 + x^10 + x^8 + x^3 + x^2 + x + 1
-Primitive: x^12 + x^10 + x^8 + x^4 + x^3 + x^2 + 1
-Prime: x^12 + x^10 + x^8 + x^6 + x^3 + x + 1 divides x^315 + 1
-Primitive: x^12 + x^10 + x^8 + x^6 + x^3 + x^2 + 1
-Primitive: x^12 + x^10 + x^8 + x^7 + x^4 + x + 1
-Prime: x^12 + x^10 + x^8 + x^7 + x^5 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^8 + x^7 + x^5 + x^3 + 1 divides x^819 + 1
-Primitive: x^12 + x^10 + x^8 + x^7 + x^6 + x^2 + 1
-Prime: x^12 + x^10 + x^9 + x^4 + x^3 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^10 + x^9 + x^6 + x^2 + x + 1
-Prime: x^12 + x^10 + x^9 + x^6 + x^3 + x + 1 divides x^585 + 1
-Primitive: x^12 + x^10 + x^9 + x^6 + x^4 + x^2 + 1
-Primitive: x^12 + x^10 + x^9 + x^6 + x^4 + x^3 + 1
-Prime: x^12 + x^10 + x^9 + x^6 + x^5 + x + 1 divides x^585 + 1
-Prime: x^12 + x^10 + x^9 + x^6 + x^5 + x^2 + 1 divides x^585 + 1
-Prime: x^12 + x^10 + x^9 + x^7 + x^4 + x + 1 divides x^819 + 1
-Primitive: x^12 + x^10 + x^9 + x^7 + x^5 + x^2 + 1
-Prime: x^12 + x^10 + x^9 + x^7 + x^6 + x + 1 divides x^819 + 1
-Prime: x^12 + x^10 + x^9 + x^7 + x^6 + x^3 + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^9 + x^7 + x^6 + x^4 + 1 divides x^105 + 1
-Prime: x^12 + x^10 + x^9 + x^7 + x^6 + x^5 + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^3 + x + 1 divides x^117 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^4 + x^2 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^4 + x^3 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^6 + x + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^6 + x^2 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^7 + x^3 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^7 + x^6 + 1
-Prime: x^12 + x^11 + x^4 + x^3 + x^2 + x + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^5 + x^4 + x^2 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^6 + x^4 + x^2 + x + 1
-Primitive: x^12 + x^11 + x^6 + x^4 + x^3 + x^2 + 1
-Prime: x^12 + x^11 + x^6 + x^5 + x^3 + x^2 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^6 + x^5 + x^4 + x^3 + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^7 + x^4 + x^2 + x + 1
-Primitive: x^12 + x^11 + x^7 + x^5 + x^4 + x^3 + 1
-Prime: x^12 + x^11 + x^7 + x^6 + x^3 + x + 1 divides x^455 + 1
-Prime: x^12 + x^11 + x^7 + x^6 + x^3 + x^2 + 1 divides x^585 + 1
-Prime: x^12 + x^11 + x^7 + x^6 + x^5 + x^4 + 1 divides x^273 + 1
-Primitive: x^12 + x^11 + x^8 + x^4 + x^3 + x + 1
-Prime: x^12 + x^11 + x^8 + x^5 + x^3 + x^2 + 1 divides x^819 + 1
-Primitive: x^12 + x^11 + x^8 + x^5 + x^4 + x^2 + 1
-Prime: x^12 + x^11 + x^8 + x^6 + x^3 + x + 1 divides x^819 + 1
-Primitive: x^12 + x^11 + x^8 + x^6 + x^5 + x^2 + 1
-Primitive: x^12 + x^11 + x^8 + x^7 + x^3 + x + 1
-Prime: x^12 + x^11 + x^8 + x^7 + x^4 + x^3 + 1 divides x^819 + 1
-Primitive: x^12 + x^11 + x^8 + x^7 + x^5 + x^4 + 1
-Primitive: x^12 + x^11 + x^8 + x^7 + x^6 + x^3 + 1
-Primitive: x^12 + x^11 + x^9 + x^4 + x^3 + x + 1
-Prime: x^12 + x^11 + x^9 + x^4 + x^3 + x^2 + 1 divides x^117 + 1
-Primitive: x^12 + x^11 + x^9 + x^5 + x^3 + x + 1
-Primitive: x^12 + x^11 + x^9 + x^5 + x^4 + x + 1
-Prime: x^12 + x^11 + x^9 + x^6 + x^3 + x^2 + 1 divides x^585 + 1
-Prime: x^12 + x^11 + x^9 + x^6 + x^4 + x + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^9 + x^6 + x^4 + x^2 + 1 divides x^315 + 1
-Prime: x^12 + x^11 + x^9 + x^6 + x^5 + x + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^9 + x^6 + x^5 + x^3 + 1
-Primitive: x^12 + x^11 + x^9 + x^7 + x^3 + x + 1
-Prime: x^12 + x^11 + x^9 + x^7 + x^5 + x^4 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^9 + x^7 + x^6 + x^2 + 1 divides x^585 + 1
-Primitive: x^12 + x^11 + x^9 + x^7 + x^6 + x^4 + 1
-Primitive: x^12 + x^11 + x^9 + x^7 + x^6 + x^5 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^3 + x + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^3 + x^2 + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^4 + x + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^4 + x^3 + 1 divides x^585 + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^6 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^7 + x^3 + 1 divides x^105 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^7 + x^4 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^7 + x^6 + 1
-Prime: x^12 + x^11 + x^10 + x^3 + x^2 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^10 + x^4 + x^2 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^5 + x^2 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^6 + x^3 + x^2 + 1
-Primitive: x^12 + x^11 + x^10 + x^7 + x^2 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^7 + x^5 + x^2 + 1
-Primitive: x^12 + x^11 + x^10 + x^7 + x^6 + x^2 + 1
-Primitive: x^12 + x^11 + x^10 + x^7 + x^6 + x^3 + 1
-Primitive: x^12 + x^11 + x^10 + x^8 + x^2 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^8 + x^5 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^8 + x^6 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^8 + x^6 + x^4 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^7 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^10 + x^8 + x^7 + x^2 + 1
-Primitive: x^12 + x^11 + x^10 + x^8 + x^7 + x^3 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^7 + x^4 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^7 + x^6 + 1 divides x^195 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^2 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^4 + x^2 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^4 + x^3 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^6 + x^2 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^6 + x^4 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^6 + x^5 + 1 divides x^273 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x + 1 divides x^819 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^4 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + 1 divides x^1365 + 1
-Prime: x^12 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^117 + 1
-Primitive: x^12 + x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + x + 1
-Prime: x^12 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^9 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
-Primitive: x^12 + x^9 + x^8 + x^5 + x^4 + x^3 + x^2 + x + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^4 + x^3 + x^2 + x + 1 divides x^585 + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^5 + x^3 + x^2 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x + 1 divides x^819 + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^6 + x^4 + x^2 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1 divides x^455 + 1
-Prime: x^12 + x^10 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^819 + 1
-Prime: x^12 + x^10 + x^7 + x^6 + x^4 + x^3 + x^2 + x + 1 divides x^455 + 1
-Prime: x^12 + x^10 + x^8 + x^7 + x^5 + x^4 + x^3 + x + 1 divides x^585 + 1
-Primitive: x^12 + x^10 + x^8 + x^7 + x^6 + x^4 + x^2 + x + 1
-Primitive: x^12 + x^10 + x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + 1
-Primitive: x^12 + x^10 + x^8 + x^7 + x^6 + x^5 + x^3 + x + 1
-Prime: x^12 + x^10 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1 divides x^455 + 1
-Prime: x^12 + x^10 + x^9 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^273 + 1
-Prime: x^12 + x^10 + x^9 + x^6 + x^5 + x^3 + x^2 + x + 1 divides x^585 + 1
-Primitive: x^12 + x^10 + x^9 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
-Prime: x^12 + x^10 + x^9 + x^7 + x^6 + x^5 + x^2 + x + 1 divides x^819 + 1
-Prime: x^12 + x^10 + x^9 + x^7 + x^6 + x^5 + x^4 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^5 + x^4 + x^3 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^6 + x^3 + x^2 + x + 1 divides x^455 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^6 + x^4 + x^2 + x + 1 divides x^819 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^6 + x^4 + x^3 + x^2 + 1 divides x^65 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + x + 1 divides x^585 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + x^2 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^7 + x^3 + x^2 + x + 1 divides x^39 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^7 + x^4 + x^2 + x + 1 divides x^35 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^7 + x^4 + x^3 + x^2 + 1 divides x^1365 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^7 + x^5 + x^3 + x^2 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^7 + x^5 + x^4 + x + 1
-Prime: x^12 + x^11 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^585 + 1
-Primitive: x^12 + x^11 + x^7 + x^6 + x^5 + x^3 + x^2 + x + 1
-Prime: x^12 + x^11 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^315 + 1
-Prime: x^12 + x^11 + x^8 + x^6 + x^4 + x^3 + x^2 + x + 1 divides x^273 + 1
-Prime: x^12 + x^11 + x^8 + x^6 + x^5 + x^3 + x^2 + x + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^8 + x^6 + x^5 + x^4 + x^3 + x + 1
-Prime: x^12 + x^11 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
-Primitive: x^12 + x^11 + x^8 + x^7 + x^6 + x^3 + x^2 + x + 1
-Prime: x^12 + x^11 + x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + 1 divides x^585 + 1
-Primitive: x^12 + x^11 + x^8 + x^7 + x^6 + x^5 + x^2 + x + 1
-Prime: x^12 + x^11 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^9 + x^6 + x^4 + x^3 + x^2 + x + 1 divides x^315 + 1
-Prime: x^12 + x^11 + x^9 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^91 + 1
-Prime: x^12 + x^11 + x^9 + x^7 + x^6 + x^5 + x^2 + x + 1 divides x^195 + 1
-Prime: x^12 + x^11 + x^9 + x^7 + x^6 + x^5 + x^3 + x + 1 divides x^65 + 1
-Primitive: x^12 + x^11 + x^9 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^4 + x^3 + x^2 + x + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^5 + x^3 + x^2 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^6 + x^4 + x^2 + x + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^7 + x^3 + x^2 + x + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^7 + x^5 + x^2 + x + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^7 + x^5 + x^4 + x^2 + 1 divides x^585 + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^7 + x^6 + x^3 + x + 1 divides x^91 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^7 + x^6 + x^5 + x + 1 divides x^315 + 1
-Prime: x^12 + x^11 + x^10 + x^6 + x^4 + x^3 + x^2 + x + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^10 + x^7 + x^4 + x^3 + x^2 + x + 1
-Prime: x^12 + x^11 + x^10 + x^7 + x^5 + x^4 + x^2 + x + 1 divides x^273 + 1
-Primitive: x^12 + x^11 + x^10 + x^7 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^7 + x^6 + x^3 + x^2 + x + 1
-Prime: x^12 + x^11 + x^10 + x^7 + x^6 + x^4 + x^2 + x + 1 divides x^315 + 1
-Prime: x^12 + x^11 + x^10 + x^7 + x^6 + x^5 + x^3 + x + 1 divides x^195 + 1
-Prime: x^12 + x^11 + x^10 + x^7 + x^6 + x^5 + x^3 + x^2 + 1 divides x^819 + 1
-Primitive: x^12 + x^11 + x^10 + x^7 + x^6 + x^5 + x^4 + x + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^5 + x^3 + x^2 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^5 + x^4 + x^3 + x^2 + 1 divides x^35 + 1
-Primitive: x^12 + x^11 + x^10 + x^8 + x^6 + x^4 + x^3 + x + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^6 + x^4 + x^3 + x^2 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^6 + x^5 + x^2 + x + 1 divides x^315 + 1
-Primitive: x^12 + x^11 + x^10 + x^8 + x^6 + x^5 + x^4 + x^2 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^6 + x^5 + x^4 + x^3 + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^7 + x^5 + x^2 + x + 1 divides x^273 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^5 + x^3 + x^2 + x + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^5 + x^4 + x^3 + x + 1 divides x^455 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^5 + x^4 + x^3 + x^2 + 1 divides x^39 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^6 + x^4 + x^3 + x^2 + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^6 + x^5 + x^2 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^6 + x^5 + x^4 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^7 + x^3 + x^2 + x + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^7 + x^4 + x^2 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^7 + x^4 + x^3 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^7 + x^5 + x^4 + x^3 + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^7 + x^6 + x^3 + x^2 + 1 divides x^585 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^7 + x^6 + x^4 + x + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^7 + x^6 + x^5 + x + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^7 + x^6 + x^5 + x^4 + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^4 + x^3 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^2 + x + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^4 + x^3 + 1 divides x^585 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^6 + x^2 + x + 1 divides x^455 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^6 + x^3 + x + 1 divides x^315 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^6 + x^4 + x + 1 divides x^273 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^2 + 1 divides x^455 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^3 + x^2 + 1 divides x^273 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + x^3 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x + 1 divides x^585 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^2 + 1 divides x^819 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^3 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 1 divides x^117 + 1
-Prime: x^12 + x^10 + x^9 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^819 + 1
-Primitive: x^12 + x^10 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + x + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + x + 1 divides x^1365 + 1
-Prime: x^12 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 1 divides x^1365 + 1
-Primitive: x^12 + x^11 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + x + 1
-Prime: x^12 + x^11 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + x + 1 divides x^117 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^7 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^195 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^7 + x^6 + x^5 + x^4 + x^2 + x + 1 divides x^117 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + 1 divides x^1365 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^3 + x^2 + x + 1 divides x^195 + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x + 1
-Primitive: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + 1 divides x^819 + 1
-Prime: x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 divides x^13 + 1
-Counts - Degree: 12 Primes: 335 Möbius: 340 Primitives: 144 Totient: 144
-Totient(3)=2(0) count(3)=?
-Totient(5)=4(0) count(5)=?
-Totient(7)=6(0) count(7)=?
-Totient(9)=6(0) count(9)=?
-Totient(13)=12(1) count(13)=1
-Totient(15)=8(0) count(15)=?
-Totient(21)=12(1) count(21)=?
-Totient(35)=24(2) count(35)=2
-Totient(39)=24(2) count(39)=2
-Totient(45)=24(2) count(45)=2
-Totient(63)=36(3) count(63)=?
-Totient(65)=48(4) count(65)=4
-Totient(91)=72(6) count(91)=6
-Totient(105)=48(4) count(105)=4
-Totient(117)=72(6) count(117)=6
-Totient(195)=96(8) count(195)=8
-Totient(273)=144(12) count(273)=12
-Totient(315)=144(12) count(315)=12
-Totient(455)=288(24) count(455)=24
-Totient(585)=288(24) count(585)=24
-Totient(819)=432(36) count(819)=36
-Totient(1365)=576(48) count(1365)=48
-Took: 21.813
+Took: 01.266
+Investigating polynomials of degree 13
+ Factors of 8191: []
+ Dividends: []
+Investigating polynomials of degree 14
+ Factors of 16383: [3, 43, 127]
+ Dividends: [43, 127, 5461]
+ Totient(43)=3
+ Totient(127)=9
+ Totient(5461)=378
+Investigating polynomials of degree 15
+ Factors of 32767: [7, 31, 151]
+ Dividends: [31, 151, 4681]
+ Totient(31)=2
+ Totient(151)=10
+ Totient(4681)=300
+Investigating polynomials of degree 16
+ Factors of 65535: [3, 5, 17, 257]
+ Dividends: [17, 257, 4369]
+ Totient(17)=1
+ Totient(257)=16
+ Totient(4369)=256
+Investigating polynomials of degree 17
+ Factors of 131071: []
+ Dividends: []
+Investigating polynomials of degree 18
+ Factors of 262143: [3, 3, 3, 7, 19, 73]
+ Dividends: [19, 73, 1387]
+ Totient(19)=1
+ Totient(73)=4
+ Totient(1387)=72
+Investigating polynomials of degree 19
+ Factors of 524287: []
+ Dividends: []
+Investigating polynomials of degree 20
+ Factors of 1048575: [3, 5, 5, 11, 31, 41]
+ Dividends: [31, 41, 1271]
+ Totient(31)=1
+ Totient(41)=2
+ Totient(1271)=60
+Investigating polynomials of degree 21
+ Factors of 2097151: [7, 7, 127, 337]
+ Dividends: [127, 337, 42799]
+ Totient(127)=6
+ Totient(337)=16
+ Totient(42799)=2016
+Investigating polynomials of degree 22
+ Factors of 4194303: [3, 23, 89, 683]
+ Dividends: [23, 89, 683, 2047, 15709, 60787, 1398101]
+ Totient(23)=1
+ Totient(89)=4
+ Totient(683)=31
+ Totient(2047)=88
+ Totient(15709)=682
+ Totient(60787)=2728
+ Totient(1398101)=60016
+Investigating polynomials of degree 23
+ Factors of 8388607: [47, 178481]
+ Dividends: [47, 178481]
+ Totient(47)=2
+ Totient(178481)=7760
+Investigating polynomials of degree 24
+ Factors of 16777215: [3, 3, 5, 7, 13, 17, 241]
+ Dividends: [241]
+ Totient(241)=10
+Investigating polynomials of degree 25
+ Factors of 33554431: [31, 601, 1801]
+ Dividends: [31, 601, 1801, 18631, 55831, 1082401]
+ Totient(31)=1
+ Totient(601)=24
+ Totient(1801)=72
+ Totient(18631)=720
+ Totient(55831)=2160
+ Totient(1082401)=43200
+Investigating polynomials of degree 26
+ Factors of 67108863: [3, 2731, 8191]
+ Dividends: [2731, 8191, 22369621]
+ Totient(2731)=105
+ Totient(8191)=315
+ Totient(22369621)=859950
+Investigating polynomials of degree 27
+ Factors of 134217727: [7, 73, 262657]
+ Dividends: [73, 262657, 19173961]
+ Totient(73)=2
+ Totient(262657)=9728
+ Totient(19173961)=700416
+Investigating polynomials of degree 28
+ Factors of 268435455: [3, 5, 29, 43, 113, 127]
+ Dividends: [29, 43, 113, 127, 1247, 3277, 3683, 4859, 5461, 14351, 140911, 158369, 416179, 617093, 17895697]
+ Totient(29)=1
+ Totient(43)=1
+ Totient(113)=4
+ Totient(127)=4
+ Totient(1247)=42
+ Totient(3277)=112
+ Totient(3683)=126
+ Totient(4859)=168
+ Totient(5461)=189
+ Totient(14351)=504
+ Totient(140911)=4704
+ Totient(158369)=5292
+ Totient(416179)=14112
+ Totient(617093)=21168
+ Totient(17895697)=592704
+Investigating polynomials of degree 29
+ Factors of 536870911: [233, 1103, 2089]
+ Dividends: [233, 1103, 2089, 256999, 486737, 2304167]
+ Totient(233)=8
+ Totient(1103)=38
+ Totient(2089)=72
+ Totient(256999)=8816
+ Totient(486737)=16704
+ Totient(2304167)=79344
+Investigating polynomials of degree 30
+ Factors of 1073741823: [3, 3, 7, 11, 31, 151, 331]
+ Dividends: [31, 151, 331, 4681, 10261, 49981, 1549411]
+ Totient(31)=1
+ Totient(151)=5
+ Totient(331)=11
+ Totient(4681)=150
+ Totient(10261)=330
+ Totient(49981)=1650
+ Totient(1549411)=49500
+Investigating polynomials of degree 31
+ Factors of 2147483647: []
+ Dividends: []
+Investigating polynomials of degree 32
+ Factors of 4294967295: [3, 5, 17, 257, 65537]
+ Dividends: [257, 65537, 16843009]
+ Totient(257)=8
+ Totient(65537)=2048
+ Totient(16843009)=524288
+Investigating polynomials of degree 33
+ Factors of 8589934591: [7, 23, 89, 599479]
+ Dividends: [89, 599479, 53353631]
+ Totient(89)=2
+ Totient(599479)=18166
+ Totient(53353631)=1598608
+Investigating polynomials of degree 34
+ Factors of 17179869183: [3, 43691, 131071]
+ Dividends: [43691, 131071, 5726623061]
+ Totient(43691)=1285
+ Totient(131071)=3855
+ Totient(5726623061)=168424950
+Investigating polynomials of degree 35
+ Factors of 34359738367: [31, 71, 127, 122921]
+ Dividends: [71, 127, 9017, 122921, 8727391, 15610967, 1108378657]
+ Totient(71)=2
+ Totient(127)=3
+ Totient(9017)=252
+ Totient(122921)=3512
+ Totient(8727391)=245840
+ Totient(15610967)=442512
+ Totient(1108378657)=30975840
+Investigating polynomials of degree 36
+ Factors of 68719476735: [3, 3, 3, 5, 7, 13, 19, 37, 73, 109]
+ Dividends: [37, 73, 109, 2701, 4033, 7957, 294409]
+ Totient(37)=1
+ Totient(73)=2
+ Totient(109)=3
+ Totient(2701)=72
+ Totient(4033)=108
+ Totient(7957)=216
+ Totient(294409)=7776
+Investigating polynomials of degree 37
+ Factors of 137438953471: [223, 616318177]
+ Dividends: [223, 616318177]
+ Totient(223)=6
+ Totient(616318177)=16657248
+Investigating polynomials of degree 38
+ Factors of 274877906943: [3, 174763, 524287]
+ Dividends: [174763, 524287, 91625968981]
+ Totient(174763)=4599
+ Totient(524287)=13797
+ Totient(91625968981)=2411191314
+Investigating polynomials of degree 39
+ Factors of 549755813887: [7, 79, 8191, 121369]
+ Dividends: [79, 8191, 121369, 647089, 9588151, 994133479, 78536544841]
+ Totient(79)=2
+ Totient(8191)=210
+ Totient(121369)=3112
+ Totient(647089)=16380
+ Totient(9588151)=242736
+ Totient(994133479)=25487280
+ Totient(78536544841)=1988007840
+Investigating polynomials of degree 40
+ Factors of 1099511627775: [3, 5, 5, 11, 17, 31, 41, 61681]
+ Dividends: [41, 61681, 2528921]
+ Totient(41)=1
+ Totient(61681)=1542
+ Totient(2528921)=61680
+Investigating polynomials of degree 41
+ Factors of 2199023255551: [13367, 164511353]
+ Dividends: [13367, 164511353]
+ Totient(13367)=326
+ Totient(164511353)=4012472
+Investigating polynomials of degree 42
+ Factors of 4398046511103: [3, 3, 7, 7, 43, 127, 337, 5419]
+ Dividends: [43, 127, 337, 5419, 5461, 14491, 42799, 233017, 688213, 1826203, 1840357, 29593159, 78526729, 231927781, 9972894583]
+ Totient(43)=1
+ Totient(127)=3
+ Totient(337)=8
+ Totient(5419)=129
+ Totient(5461)=126
+ Totient(14491)=336
+ Totient(42799)=1008
+ Totient(233017)=5418
+ Totient(688213)=16254
+ Totient(1826203)=43344
+ Totient(1840357)=42336
+ Totient(29593159)=682668
+ Totient(78526729)=1820448
+ Totient(231927781)=5461344
+ Totient(9972894583)=229376448
+Investigating polynomials of degree 43
+ Factors of 8796093022207: [431, 9719, 2099863]
+ Dividends: [431, 9719, 2099863, 4188889, 905040953, 20408568497]
+ Totient(431)=10
+ Totient(9719)=226
+ Totient(2099863)=48834
+ Totient(4188889)=97180
+ Totient(905040953)=20998620
+ Totient(20408568497)=474568812
+Investigating polynomials of degree 44
+ Factors of 17592186044415: [3, 5, 23, 89, 397, 683, 2113]
+ Dividends: [89, 397, 683, 2113, 35333, 60787, 188057, 271151, 838861, 1443179, 24132439, 74658629, 128442931, 572942063, 50991843607]
+ Totient(89)=2
+ Totient(397)=9
+ Totient(683)=15
+ Totient(2113)=48
+ Totient(35333)=792
+ Totient(60787)=1364
+ Totient(188057)=4224
+ Totient(271151)=6138
+ Totient(838861)=19008
+ Totient(1443179)=32736
+ Totient(24132439)=540144
+ Totient(74658629)=1672704
+ Totient(128442931)=2880768
+ Totient(572942063)=12963456
+ Totient(50991843607)=1140784128
+Investigating polynomials of degree 45
+ Factors of 35184372088831: [7, 31, 73, 151, 631, 23311]
+ Dividends: [73, 151, 631, 11023, 23311, 46063, 95281, 1701703, 3519961, 6955513, 14709241, 256957153, 1073774593, 2221095391, 162139963543]
+ Totient(73)=1
+ Totient(151)=3
+ Totient(631)=14
+ Totient(11023)=240
+ Totient(23311)=518
+ Totient(46063)=1008
+ Totient(95281)=2100
+ Totient(1701703)=37296
+ Totient(3519961)=77700
+ Totient(6955513)=151200
+ Totient(14709241)=326340
+ Totient(256957153)=5594400
+ Totient(1073774593)=23496480
+ Totient(2221095391)=48951000
+ Totient(162139963543)=3524472000
+Investigating polynomials of degree 46
+ Factors of 70368744177663: [3, 47, 178481, 2796203]
+ Dividends: [47, 178481, 2796203, 8388607, 131421541, 499069107643, 23456248059221]
+ Totient(47)=1
+ Totient(178481)=3880
+ Totient(2796203)=60787
+ Totient(8388607)=178480
+ Totient(131421541)=2796202
+ Totient(499069107643)=10849263760
+ Totient(23456248059221)=68822503814
+Investigating polynomials of degree 47
+ Factors of 140737488355327: [2351, 4513, 13264529]
+ Dividends: [2351, 4513, 10610063, 13264529, 31184907679, 59862819377]
+ Totient(2351)=50
+ Totient(4513)=96
+ Totient(10610063)=225600
+ Totient(13264529)=282224
+ Totient(31184907679)=663226400
+ Totient(59862819377)=1273394688
+Investigating polynomials of degree 48
+ Factors of 281474976710655: [3, 3, 5, 7, 13, 17, 97, 241, 257, 673]
+ Dividends: [97, 241, 257, 673, 23377, 24929, 61937, 65281, 162193, 172961, 6007889, 15732721, 16777217, 41683601, 4043309297]
+ Totient(97)=2
+ Totient(241)=5
+ Totient(257)=5
+ Totient(673)=14
+ Totient(23377)=480
+ Totient(24929)=512
+ Totient(61937)=1280
+ Totient(65281)=1344
+ Totient(162193)=3360
+ Totient(172961)=3584
+ Totient(6007889)=122880
+ Totient(15732721)=322560
+ Totient(16777217)=344064
+ Totient(41683601)=860160
+ Totient(4043309297)=82575360
+Investigating polynomials of degree 49
+ Factors of 562949953421311: [127, 4432676798593]
+ Dividends: [127, 4432676798593]
+ Totient(127)=2
+ Totient(4432676798593)=1674
+Investigating polynomials of degree 50
+ Factors of 1125899906842623: [3, 11, 31, 251, 601, 1801, 4051]
+ Dividends: [251, 601, 1801, 4051, 150851, 452051, 1016801, 1082401, 2434651, 7295851, 271682651, 611097401, 1831258601, 4384806451, 1100586419201]
+ Totient(251)=5
+ Totient(601)=12
+ Totient(1801)=36
+ Totient(4051)=81
+ Totient(150851)=3000
+ Totient(452051)=9000
+ Totient(1016801)=20250
+ Totient(1082401)=21600
+ Totient(2434651)=48600
+ Totient(7295851)=145800
+ Totient(271682651)=5400000
+ Totient(611097401)=12150000
+ Totient(1831258601)=36450000
+ Totient(4384806451)=87480000
+ Totient(1100586419201)=21870000000
+Investigating polynomials of degree 51
+ Factors of 2251799813685247: [7, 103, 2143, 11119, 131071]
+ Dividends: [103, 2143, 11119, 131071, 220729, 1145257, 13500313, 23828017, 280885153, 1457378449, 2454285751, 28931170759, 150109980247, 3123162016207, 321685687669321]
+ Totient(103)=2
+ Totient(2143)=42
+ Totient(11119)=218
+ Totient(131071)=2570
+ Totient(220729)=4284
+ Totient(1145257)=22236
+ Totient(13500313)=262140
+ Totient(23828017)=466956
+ Totient(280885153)=5504940
+ Totient(1457378449)=28573260
+ Totient(2454285751)=47629512
+ Totient(28931170759)=561503880
+ Totient(150109980247)=2914472520
+ Totient(3123162016207)=61203922920
+ Totient(321685687669321)=723640839591
+Investigating polynomials of degree 52
+ Factors of 4503599627370495: [3, 5, 53, 157, 1613, 2731, 8191]
+ Dividends: [53, 157, 1613, 2731, 8191, 8321, 85489, 144743, 253241, 428767, 434123, 1285987, 4405103, 13212083, 13421773, 22369621, 22724651, 68157311, 233470459, 691601171, 700240399, 1185589913, 2074297031, 3512030497, 36082198673, 36654862063, 109937742643, 186137616341, 1912356529669, 5664905191661, 300239975158033]
+ Totient(53)=1
+ Totient(157)=3
+ Totient(1613)=31
+ Totient(2731)=52
+ Totient(8191)=157
+ Totient(8321)=156
+ Totient(85489)=1612
+ Totient(144743)=2730
+ Totient(253241)=4836
+ Totient(428767)=8190
+ Totient(434123)=8190
+ Totient(1285987)=24570
+ Totient(4405103)=84630
+ Totient(13212083)=253890
+ Totient(13421773)=251472
+ Totient(22369621)=429975
+ Totient(22724651)=425880
+ Totient(68157311)=1277640
+ Totient(233470459)=4400760
+ Totient(691601171)=13202280
+ Totient(700240399)=13202280
+ Totient(1185589913)=22358700
+ Totient(2074297031)=39606840
+ Totient(3512030497)=67076100
+ Totient(36082198673)=693119700
+ Totient(36654862063)=686518560
+ Totient(109937742643)=2059555680
+ Totient(186137616341)=3487957200
+ Totient(1912356529669)=36042224400
+ Totient(5664905191661)=108126673200
+ Totient(300239975158033)=5622587006400
+Investigating polynomials of degree 53
+ Factors of 9007199254740991: [6361, 69431, 20394401]
+ Dividends: [6361, 69431, 20394401, 441650591, 129728784761, 1416003655831]
+ Totient(6361)=120
+ Totient(69431)=1310
+ Totient(20394401)=384800
+ Totient(441650591)=8331600
+ Totient(129728784761)=2447328000
+ Totient(1416003655831)=-7415426957
+Investigating polynomials of degree 54
+ Factors of 18014398509481983: [3, 3, 3, 3, 7, 19, 73, 87211, 262657]
+ Dividends: [73, 87211, 262657, 6366403, 19173961, 22906579627, 1672180312771]
+ Totient(73)=1
+ Totient(87211)=1615
+ Totient(262657)=4864
+ Totient(6366403)=116280
+ Totient(19173961)=350208
+ Totient(22906579627)=424189440
+ Totient(1672180312771)=30541639680
+Investigating polynomials of degree 55
+ Factors of 36028797018963967: [23, 31, 89, 881, 3191, 201961]
+ Dividends: [89, 881, 3191, 78409, 201961, 283999, 2811271, 17974529, 177927641, 250203119, 644457551, 15835560049, 57356722039, 567767102431, 50531272116359]
+ Totient(89)=1
+ Totient(881)=16
+ Totient(3191)=58
+ Totient(78409)=1408
+ Totient(201961)=3672
+ Totient(283999)=5104
+ Totient(2811271)=51040
+ Totient(17974529)=323136
+ Totient(177927641)=3231360
+ Totient(250203119)=4491520
+ Totient(644457551)=11713680
+ Totient(15835560049)=284359680
+ Totient(57356722039)=1030803840
+ Totient(567767102431)=10308038400
+ Totient(50531272116359)=-753586253702
+Investigating polynomials of degree 56
+ Factors of 72057594037927935: [3, 5, 17, 29, 43, 113, 127, 15790321]
+ Dividends: [113, 127, 14351, 15790321, 1784306273, 2005370767, 226606896671]
+ Totient(113)=2
+ Totient(127)=2
+ Totient(14351)=252
+ Totient(15790321)=281970
+ Totient(1784306273)=31580640
+ Totient(2005370767)=35528220
+ Totient(226606896671)=3979160640
+Investigating polynomials of degree 57
+ Factors of 144115188075855871: [7, 32377, 524287, 1212847]
+ Dividends: [32377, 524287, 1212847, 16974840199, 39268347319, 635879915089, 20587884010836553]
+ Totient(32377)=568
+ Totient(524287)=9198
+ Totient(1212847)=21278
+ Totient(16974840199)=297794448
+ Totient(39268347319)=688896528
+ Totient(635879915089)=11155757508
+ Totient(20587884010836553)=104150192607
+Investigating polynomials of degree 58
+ Factors of 288230376151711743: [3, 59, 233, 1103, 2089, 3033169]
+ Dividends: [59, 233, 1103, 2089, 13747, 65077, 123251, 256999, 486737, 2304167, 3033169, 15162941, 28717483, 135945853, 178956971, 536870911, 706728377, 3345585407, 6336290041, 31675383749, 41696974243, 197389539013, 373841112419, 779521399831, 1476355579553, 6988927915223, 45991762590029, 87104979193627, 412346746998157, 1628420204246959, 96076792050570581]
+ Totient(59)=1
+ Totient(233)=4
+ Totient(1103)=19
+ Totient(2089)=36
+ Totient(13747)=232
+ Totient(65077)=1102
+ Totient(123251)=2088
+ Totient(256999)=4408
+ Totient(486737)=8352
+ Totient(2304167)=39672
+ Totient(3033169)=52296
+ Totient(15162941)=255664
+ Totient(28717483)=484416
+ Totient(135945853)=2300976
+ Totient(178956971)=3033168
+ Totient(536870911)=9203904
+ Totient(706728377)=12132672
+ Totient(3345585407)=57630192
+ Totient(6336290041)=109194048
+ Totient(31675383749)=533826432
+ Totient(41696974243)=703694976
+ Totient(197389539013)=3342551136
+ Totient(373841112419)=6333254784
+ Totient(779521399831)=13370204544
+ Totient(1476355579553)=25333019136
+ Totient(6988927915223)=15475398140
+ Totient(45991762590029)=41476764264
+ Totient(87104979193627)=1324911313
+ Totient(412346746998157)=-46134892637
+ Totient(1628420204246959)=25173314959
+ Totient(96076792050570581)=47694404216
+Investigating polynomials of degree 59
+ Factors of 576460752303423487: [179951, 3203431780337]
+ Dividends: [179951, 3203431780337]
+ Totient(179951)=3050
+ Totient(3203431780337)=-20619
+Investigating polynomials of degree 60
+ Factors of 1152921504606846975: [3, 3, 5, 5, 7, 11, 13, 31, 41, 61, 151, 331, 1321]
+ Dividends: [61, 151, 331, 1321, 9211, 20191, 49981, 80581, 199471, 437251, 3048841, 12167731, 26672311, 66024901, 4027518961]
+ Totient(61)=1
+ Totient(151)=2
+ Totient(331)=5
+ Totient(1321)=22
+ Totient(9211)=150
+ Totient(20191)=330
+ Totient(49981)=825
+ Totient(80581)=1320
+ Totient(199471)=3300
+ Totient(437251)=7260
+ Totient(3048841)=49500
+ Totient(12167731)=198000
+ Totient(26672311)=435600
+ Totient(66024901)=1089000
+ Totient(4027518961)=65340000
+Investigating polynomials of degree 61
+ Factors of 2305843009213693951: []
+------------------------------------------------------------------------
+BUILD FAILURE
+------------------------------------------------------------------------
+Total time: 1:03.860s
+Finished at: Mon Jul 01 01:00:47 BST 2013
+Final Memory: 8M/19M
+------------------------------------------------------------------------
+Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.2.1:exec (default-cli) on project Galois: Command execution failed. Process exited with an error: 1 (Exit value: 1) -> [Help 1]
+
+To see the full stack trace of the errors, re-run Maven with the -e switch.
+Re-run Maven using the -X switch to enable full debug logging.
+
+For more information about the errors and possible solutions, please read the following articles:
+[Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

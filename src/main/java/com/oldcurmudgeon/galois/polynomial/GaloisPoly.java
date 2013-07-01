@@ -218,8 +218,12 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       List<Long> factors = Primes.primeFactors(twoToTheNMinus1);
       Set<Long> dividends = new TreeSet<>();
       for (int i = 0; i < factors.size(); i++) {
-        // Add that factor and all products of that factor with all other factors.
-        addProducts(factors.get(i), factors, i + 1, dividends, twoToTheNMinus1);
+        Long degree = factors.get(i);
+        // Only ad if the factor is gretater than the degree of the poly.
+        if ( degree > d ) {
+          // Add that factor and all products of that factor with all other factors.
+          addProducts(factors.get(i), factors, i + 1, dividends, twoToTheNMinus1);
+        } 
       }
       return dividends;
     }
@@ -638,8 +642,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     testDegree(6);
     ProcessTimer t = new ProcessTimer();
     Log.LFSR.set(false);
-    generatePrimitivePolysUpToDegree(12, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);
     Log.Times.log("Took: ", t);
+    for (int i = 13; i < 96; i++) {
+      investigatePolys(i);
+    }
     //t = new ProcessTimer();
     //generatePrimitivePolys(95, 1, true);
     //Log.Times.log("Took: ", t);
@@ -695,8 +702,19 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         Integer c = primitivePolynomials.divCounts.get(BigInteger.valueOf(div));
         Log.Counts.log("Totient(", div, ")=", totient,
                        "(", totient / degree, ")",
-                       " count(", div, ")=", c == null ? "?": c);
+                       " count(", div, ")=", c == null ? "?" : c);
       }
+    }
+  }
+
+  private static void investigatePolys(int d) {
+    Log.Investigate.log("Investigating polynomials of degree ", d);
+    long twoPowDegreeMinus1 = Primes.twoToTheNMinus1(d);
+    Log.Investigate.log(" Factors of ", twoPowDegreeMinus1, ": ", Primes.mersenneFactors(d));
+    Collection<Long> dividends = Primitivity.dividends(d);
+    Log.Investigate.log(" Dividends: ", dividends);
+    for (Long div : dividends) {
+      Log.Investigate.log(" Totient(", div + ")=", Primes.totient(div) / d);
     }
   }
 
@@ -711,6 +729,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     LFSR,//(false),
     Counts,
     Totients,
+    Investigate,
     Times;
     // Should we log this level.
     private boolean log;

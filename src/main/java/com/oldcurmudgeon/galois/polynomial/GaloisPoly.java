@@ -34,12 +34,12 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   protected static final long Q = 2L;
   // A BigInteger version of it.
   protected static final BigInteger BQ = BigInteger.valueOf(Q);
+  // Big 2
+  public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
   // A BigInteger -1.
   protected static final BigInteger MINUS1 = BigInteger.valueOf(-1);
   // Big Max Int
   protected static final BigInteger MAX = BigInteger.valueOf(Integer.MAX_VALUE);
-  // Big 2
-  public static final BigInteger TWO = BigInteger.ONE.add(BigInteger.ONE);
 
   @Override
   public abstract T xor(T o);

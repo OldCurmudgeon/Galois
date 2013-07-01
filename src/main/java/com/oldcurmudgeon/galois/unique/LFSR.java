@@ -17,7 +17,6 @@ package com.oldcurmudgeon.galois.unique;
 
 import com.oldcurmudgeon.galois.polynomial.FastPolynomial;
 import com.oldcurmudgeon.galois.polynomial.GaloisPoly;
-import com.oldcurmudgeon.galois.polynomial.Polynomial;
 import com.oldcurmudgeon.toolbox.twiddlers.Strings;
 import java.math.BigInteger;
 import java.util.Iterator;

@@ -108,6 +108,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     public int compare(BigInteger o1, BigInteger o2) {
       return -1 * o1.compareTo(o2);
     }
+
   }
 
   // In a Galois field plus and minus are xor.
@@ -218,12 +219,16 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       List<Long> factors = Primes.primeFactors(twoToTheNMinus1);
       Set<Long> dividends = new TreeSet<>();
       for (int i = 0; i < factors.size(); i++) {
-        Long degree = factors.get(i);
-        // Only ad if the factor is gretater than the degree of the poly.
-        if ( degree > d ) {
-          // Add that factor and all products of that factor with all other factors.
-          addProducts(factors.get(i), factors, i + 1, dividends, twoToTheNMinus1);
-        } 
+        // Add that factor and all products of that factor with all other factors.
+        addProducts(factors.get(i), factors, i + 1, dividends, twoToTheNMinus1);
+      }
+      // Remove all that are less than the degree.
+      for ( Iterator<Long> i = dividends.iterator(); i.hasNext(); ) {
+        if ( i.next() < d ) {
+          i.remove();
+        } else {
+          break;
+        }
       }
       return dividends;
     }
@@ -243,6 +248,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       Integer count = divCounts.get(e);
       divCounts.put(e, count == null ? 1 : count + 1);
     }
+
   }
 
   /**
@@ -359,6 +365,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     public void remove() {
       throw new UnsupportedOperationException("Not supported.");
     }
+
   }
 
   // Iterate over prime polynomials.
@@ -440,12 +447,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public String toString() {
         return next != null ? next.toString() : "";
       }
+
     }
 
     @Override
     public Iterator<T> iterator() {
       return new PrimeIterator();
     }
+
   }
 
   // Iterate over prime polynomials.
@@ -546,12 +555,14 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       public String toString() {
         return next != null ? next.toString() : "";
       }
+
     }
 
     @Override
     public Iterator<T> iterator() {
       return new PrimitiveIterator();
     }
+
   }
 
   /**
@@ -642,10 +653,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     testDegree(6);
     ProcessTimer t = new ProcessTimer();
     Log.LFSR.set(false);
-    generatePrimitivePolysUpToDegree(10, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
     Log.Times.log("Took: ", t);
-    for (int i = 13; i < 96; i++) {
-      investigatePolys(i);
+    for (int i = 13; i < 61; i++) {
+      investigatePoly(i);
     }
     //t = new ProcessTimer();
     //generatePrimitivePolys(95, 1, true);
@@ -707,7 +718,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     }
   }
 
-  private static void investigatePolys(int d) {
+  private static void investigatePoly(int d) {
     Log.Investigate.log("Investigating polynomials of degree ", d);
     long twoPowDegreeMinus1 = Primes.twoToTheNMinus1(d);
     Log.Investigate.log(" Factors of ", twoPowDegreeMinus1, ": ", Primes.mersenneFactors(d));
@@ -759,5 +770,6 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         System.out.println(s.toString());
       }
     }
+
   }
 }

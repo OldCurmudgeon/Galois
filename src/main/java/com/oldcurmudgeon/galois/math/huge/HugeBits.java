@@ -15,14 +15,11 @@
  */
 package com.oldcurmudgeon.galois.math.huge;
 
-import com.oldcurmudgeon.galois.math.sparse.Sparse;
 import com.oldcurmudgeon.galois.math.sparse.SparseIterator;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -147,9 +144,18 @@ public class HugeBits extends Bits<Big> {
       next = it.hasNext() ? it.next() : null;
     }
 
+    @Override
     public String toString() {
       return "[" + (next == null ? "" : next.toString()) + "]";
     }
+
+  }
+  public static void main(String[] args) {
+    HugeBits i = new HugeBits(
+            new Big(BigInteger.ZERO, new BigInteger(new byte[]{1, 0, 1, 1, 0, 0, 0, 1})));
+    HugeBits j = new HugeBits(
+            new Big(BigInteger.ZERO, new BigInteger(new byte[]{1, 0, 0, 1, 0, 0, 1, 1})));
+    System.out.println("i(" + i + ") xor j(" + j + ") = " + Bits.apply(i, j, Op.xor));
 
   }
 }

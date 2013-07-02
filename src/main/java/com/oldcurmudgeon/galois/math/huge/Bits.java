@@ -257,7 +257,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
   }
 
   // Applies the op to the bits.
-  private static Bits apply(Bits<Big> a, Bits<Big> b, Op op) {
+  public static Bits apply(Bits<Big> a, Bits<Big> b, Op op) {
     HugeBits applied = new HugeBits();
     SparseIterator<Big, BigInteger> ia = a.iterator();
     SparseIterator<Big, BigInteger> ib = b.iterator();

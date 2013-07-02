@@ -78,14 +78,40 @@ public class HugeBits extends Bits<Big> {
         bytes.put(bi, itsBytes[i]);
       }
     }
-    // Unroll back out into a sequence of BigIntegers.
-    bits.clear();
-    // Start from the end.
-    Map.Entry<BigInteger, Byte> lastEntry = bytes.lastEntry();
-    BigInteger index = lastEntry.getKey();
-    // Walk it backwards.
-    for (Map.Entry<BigInteger, Byte> entry : bytes.descendingMap().entrySet()) {
-      System.out.println("Entry "+entry.getKey()+" = "+entry.getValue());
+    // Do nothing if empty.
+    if (!bytes.isEmpty()) {
+      // Unroll back out into a sequence of BigIntegers.
+      bits.clear();
+      // Start from the end.
+      Map.Entry<BigInteger, Byte> lastEntry = bytes.lastEntry();
+      BigInteger index = lastEntry.getKey();
+      ArrayList<Byte> next = new ArrayList<>();
+      // Walk it backwards.
+      for (Map.Entry<BigInteger, Byte> entry : bytes.descendingMap().entrySet()) {
+        //System.out.println("Entry " + entry.getKey() + " = " + entry.getValue());
+        if (entry.getKey().equals(index)) {
+          // Just append.
+          next.add(entry.getValue());
+          index.add(BigInteger.ONE);
+        } else {
+          add(index, next);
+          next.clear();
+        }
+      }
+      // And what's left.
+      add(index, next);
+    }
+  }
+
+  private void add(BigInteger index, ArrayList<Byte> next) {
+    if (next.size() > 0) {
+      // Make a new BigInteger.
+      byte[] newBytes = new byte[next.size()];
+      for (int i = 0; i < next.size(); i++) {
+        newBytes[i] = next.get(i);
+      }
+      bits.put(index, new Big(index, new BigInteger(newBytes)));
+
     }
   }
 

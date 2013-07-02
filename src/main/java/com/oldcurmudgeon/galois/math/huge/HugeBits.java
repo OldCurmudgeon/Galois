@@ -71,7 +71,7 @@ public class HugeBits extends Bits<Big> {
       BigInteger value = it.getValue().value;
       byte[] itsBytes = value.toByteArray();
       for (int i = 0; i < itsBytes.length; i++) {
-        BigInteger bi = BigInteger.valueOf(i);
+        BigInteger bi = index.add(BigInteger.valueOf(itsBytes.length-1-i));
         bytes.put(bi, itsBytes[i]);
       }
     }
@@ -86,12 +86,13 @@ public class HugeBits extends Bits<Big> {
       // Walk it backwards.
       for (Map.Entry<BigInteger, Byte> entry : bytes.descendingMap().entrySet()) {
         //System.out.println("Entry " + entry.getKey() + " = " + entry.getValue());
-        if (entry.getKey().equals(index)) {
+        if (entry.getKey().equals(index) && entry.getValue() != 0) {
           // Just append.
           next.add(entry.getValue());
-          index.add(BigInteger.ONE);
+          index = index.subtract(BigInteger.ONE);
         } else {
-          add(index, next);
+          // Index has jumped or a zero byte.
+          index = add(index, next);
           next.clear();
         }
       }
@@ -100,7 +101,7 @@ public class HugeBits extends Bits<Big> {
     }
   }
 
-  private void add(BigInteger index, ArrayList<Byte> next) {
+  private BigInteger add(BigInteger index, ArrayList<Byte> next) {
     if (next.size() > 0) {
       // Make a new BigInteger.
       byte[] newBytes = new byte[next.size()];
@@ -108,8 +109,9 @@ public class HugeBits extends Bits<Big> {
         newBytes[i] = next.get(i);
       }
       bits.put(index, new Big(index, new BigInteger(newBytes)));
-
+      return index.subtract(BigInteger.valueOf(next.size()));
     }
+    return index;
   }
 
   @Override

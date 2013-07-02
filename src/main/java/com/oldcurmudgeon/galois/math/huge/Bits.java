@@ -97,12 +97,12 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
 
   @Override
   public String toString() {
-    return Separator.separate("{", ",", "}", iterator()) + "=" + toString(2);
+    return Separator.separate("{", ",", "}", iterator()) + "=" + toString(16);
   }
 
   public String toString(int base) {
     StringBuilder sb = new StringBuilder();
-    // NB - This is the index of the top bit.
+    // NB - This is the bit index of the top bit.
     BigInteger index = length();
     for (SparseIterator<T, BigInteger> i = reverseIterator(); i.hasNext();) {
       T next = i.next();
@@ -118,11 +118,24 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
   }
 
   private BigInteger padZeros(StringBuilder sb, int base, BigInteger index, BigInteger itsIndex) {
-    while (index.compareTo(itsIndex) > 0) {
-      sb.append(BigInteger.ZERO.toString(base));
-      index = index.subtract(EIGHT);
+    BigInteger zeroBits = index.subtract(itsIndex);
+    if ( !zeroBits.equals(BigInteger.ZERO) ) {
+      BigInteger bitsPerZero = BigInteger.valueOf(bitCount(base - 1));
+      while (index.subtract(bitsPerZero).compareTo(BigInteger.ZERO) > 0) {
+        sb.append(BigInteger.ZERO.toString(base));
+        index = index.subtract(bitsPerZero);
+      }
     }
     return index;
+  }
+  
+  private int bitCount ( int v ) {
+    // Brian Kernighan's way
+    int c;
+    for ( c = 0; v != 0; c++ ) {
+      v &= v - 1;
+    }
+    return c;
   }
   
   // Actual Bits processes that do things.

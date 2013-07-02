@@ -256,10 +256,25 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     HugeBits d = new HugeBits(
             new Big(BigInteger.ZERO, BigInteger.ONE),
             new Big(BigInteger.ONE, BigInteger.ONE));
-    System.out.println("c = " + c);
+    System.out.println("d = " + d);
     System.out.println("a xor b = " + apply(a, b, Op.xor));
     System.out.println("a xor c = " + apply(a, c, Op.xor));
     System.out.println("b xor c = " + apply(b, c, Op.xor));
     System.out.println("d xor d = " + apply(d, d, Op.xor));
+    HugeBits e = new HugeBits(
+            new Big(BigInteger.ZERO, BigInteger.ONE),
+            new Big(BigInteger.TEN, BigInteger.ONE));
+    HugeBits f = new HugeBits(
+            new Big(BigInteger.ZERO, BigInteger.ONE),
+            new Big(BigInteger.valueOf(100), BigInteger.ONE));
+    System.out.println("e("+e+") xor f("+f+") = " + apply(e, f, Op.xor));
+    HugeBits g = new HugeBits(
+            new Big(BigInteger.ZERO, new BigInteger(new byte[] {0,0,1,0,0,0,1,0,0,1,0,0})));
+    System.out.println("g = " + g);
+    HugeBits h = new HugeBits(
+            new Big(BigInteger.ZERO, new BigInteger(new byte[] {0,0,1,0,0,0,0,0,0,1,0,0})),
+            new Big(BigInteger.ZERO, new BigInteger(new byte[] {0,0,1,0,0,0,0,0,0,1,0,0})));
+    System.out.println("g("+g+") xor h("+h+") = " + apply(g, h, Op.xor));
+    
   }
 }

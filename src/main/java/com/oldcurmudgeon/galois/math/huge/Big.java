@@ -75,6 +75,9 @@ public class Big implements Sparse<BigInteger, BigInteger> {
   @Override
   public boolean equals(Object o) {
     if (o instanceof Big) {
+      Big it = (Big)o;
+      return it.index == index
+              && it.value == value;
     }
     return false;
   }

@@ -45,6 +45,7 @@ public class BigBits extends Bits<Big> {
 
     @Override
     protected void getNext() {
+      // Return just the one Big.
       next = it;
       it = null;
     }

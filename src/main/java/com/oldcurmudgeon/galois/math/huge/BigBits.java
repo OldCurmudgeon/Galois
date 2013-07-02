@@ -36,6 +36,16 @@ public class BigBits extends Bits<Big> {
     return new BigBitsIterator(bits);
   }
 
+  @Override
+  public SparseIterator<Big, BigInteger> reverseIterator() {
+    return iterator();
+  }
+
+  @Override
+  public BigInteger length() {
+    return bits.length();
+  }
+
   class BigBitsIterator extends Bits.BitsIterator {
     private Big it;
 

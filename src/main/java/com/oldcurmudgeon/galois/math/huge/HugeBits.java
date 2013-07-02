@@ -31,7 +31,6 @@ import java.util.TreeMap;
 public class HugeBits extends Bits<Big> {
   // The actual bits.
   private final TreeMap<BigInteger, Big> bits = new TreeMap<>();
-  private static final BigInteger EIGHT = BigInteger.valueOf(8);
 
   public HugeBits(Big... bigs) {
     for (Big i : bigs) {
@@ -155,6 +154,21 @@ public class HugeBits extends Bits<Big> {
     return new HugeBitsIterator(bits.values().iterator());
   }
 
+  @Override
+  public SparseIterator<Big, BigInteger> reverseIterator() {
+    return new HugeBitsIterator(bits.descendingMap().values().iterator());
+  }
+
+  @Override
+  public BigInteger length() {
+    Map.Entry<BigInteger, Big> lastEntry = bits.lastEntry();
+    if ( lastEntry == null ) {
+      return BigInteger.ZERO;
+    }
+    Big last = lastEntry.getValue();
+    return last.index.add(last.length());
+  }
+
   class HugeBitsIterator extends Bits.BitsIterator {
     private Iterator<Big> it;
 
@@ -167,5 +181,8 @@ public class HugeBits extends Bits<Big> {
       next = it.hasNext() ? it.next() : null;
     }
 
+    public String toString () {
+      return "[" + (next == null ? "": next.toString()) + "]";
+    }
   }
 }

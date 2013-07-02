@@ -39,8 +39,15 @@ import java.math.BigInteger;
  * @author OldCurmudgeon
  */
 public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements SparseIterable<T, BigInteger> {
+  public static final BigInteger EIGHT = BigInteger.valueOf(8);
+
   @Override
   public abstract SparseIterator<T, BigInteger> iterator();
+
+  public abstract SparseIterator<T, BigInteger> reverseIterator();
+  // Length in bits.
+
+  public abstract BigInteger length();
 
   protected abstract class BitsIterator implements SparseIterator<T, BigInteger> {
     // The next to return - populate in getNext please.
@@ -85,15 +92,42 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     public BigInteger length() {
       return hasNext() ? next.length() : null;
     }
+
   }
 
   @Override
   public String toString() {
-    return Separator.separate("{", ",", "}", iterator());
+    return Separator.separate("{", ",", "}", iterator()) + "=" + toString(2);
   }
 
+  public String toString(int base) {
+    StringBuilder sb = new StringBuilder();
+    // NB - This is the index of the top bit.
+    BigInteger index = length();
+    for (SparseIterator<T, BigInteger> i = reverseIterator(); i.hasNext();) {
+      T next = i.next();
+      BigInteger itsLength = next.length();
+      BigInteger itsIndex = next.index().add(itsLength);
+      index = padZeros(sb, base, index, itsIndex);
+      BigInteger v = next.value();
+      sb.append(v.toString(base));
+      index = index.subtract(itsLength);
+    }
+    padZeros(sb, base, index, BigInteger.ZERO);
+    return sb.toString();
+  }
+
+  private BigInteger padZeros(StringBuilder sb, int base, BigInteger index, BigInteger itsIndex) {
+    while (index.compareTo(itsIndex) > 0) {
+      sb.append(BigInteger.ZERO.toString(base));
+      index = index.subtract(EIGHT);
+    }
+    return index;
+  }
+  
   // Actual Bits processes that do things.
   // ToDo: Use ForkJoinPools for some of thois stuff.
+
   public static Bits xor(Bits a, Bits b) {
     // Ultimately use a lambda but for now I will use a loop and ops.
     return apply(a, b, Op.xor);
@@ -106,22 +140,26 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.xor(b);
       }
+
     },
     and {
       @Override
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.and(b);
       }
+
     },
     or {
       @Override
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.or(b);
       }
+
     };
     // Perform the op.
 
     abstract BigInteger op(BigInteger a, BigInteger b);
+
   }
 
   // Where to pull next from - a or b.
@@ -146,6 +184,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       Next other() {
         return Next.B;
       }
+
     },
     B {
       @Override
@@ -167,6 +206,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       Next other() {
         return Next.A;
       }
+
     };
 
     // The index of the next value.
@@ -200,6 +240,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       // Neither null - return lowest index with priority A.
       return a.index().compareTo(b.index()) <= 0 ? A : B;
     }
+
   }
 
   // Applies the op to the bits.
@@ -228,7 +269,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
 
   private static boolean overlaps(BigInteger aIndex, BigInteger aLength, BigInteger bIndex, BigInteger bLength) {
     // Any missing?
-    if ( aIndex == null || aLength == null || bIndex == null || bLength == null ) {
+    if (aIndex == null || aLength == null || bIndex == null || bLength == null) {
       return false;
     }
     // Wholly below?
@@ -250,6 +291,8 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     // 2^10 * 2^6 = 2^16
     Big y = new Big(BigInteger.TEN, BigInteger.valueOf(64));
     System.out.println("y = " + y);
+    HugeBits z = new HugeBits(new Big(BigInteger.ONE), x);
+    System.out.println("z = " + z);
     HugeBits a = new HugeBits(new Big(BigInteger.ZERO, BigInteger.valueOf(0xFEDCBA987654321L)));
     System.out.println("a = " + a);
     HugeBits b = new HugeBits(new Big(BigInteger.ZERO, BigInteger.valueOf(0x123456789ABCDEFL)));
@@ -270,14 +313,20 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     HugeBits f = new HugeBits(
             new Big(BigInteger.ZERO, BigInteger.ONE),
             new Big(BigInteger.valueOf(100), BigInteger.ONE));
-    System.out.println("e("+e+") xor f("+f+") = " + apply(e, f, Op.xor));
+    System.out.println("e(" + e + ") xor f(" + f + ") = " + apply(e, f, Op.xor));
     HugeBits g = new HugeBits(
-            new Big(BigInteger.ZERO, new BigInteger(new byte[] {0,0,1,0,0,0,1,0,0,1,0,0})));
+            new Big(BigInteger.ZERO, new BigInteger(new byte[]{0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0})));
     System.out.println("g = " + g);
     HugeBits h = new HugeBits(
-            new Big(BigInteger.ZERO, new BigInteger(new byte[] {0,0,1,0,0,0,0,0,0,1,0,0})),
-            new Big(BigInteger.ZERO, new BigInteger(new byte[] {0,0,1,0,0,0,0,0,0,1,0,0})));
-    System.out.println("g("+g+") xor h("+h+") = " + apply(g, h, Op.xor));
-    
+            new Big(BigInteger.ZERO, new BigInteger(new byte[]{0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0})),
+            new Big(BigInteger.ZERO, new BigInteger(new byte[]{0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0})));
+    System.out.println("g(" + g + ") xor h(" + h + ") = " + apply(g, h, Op.xor));
+    HugeBits i = new HugeBits(
+            new Big(BigInteger.ZERO, new BigInteger(new byte[]{1, 0, 1, 1, 0, 0, 0, 1})));
+    HugeBits j = new HugeBits(
+            new Big(BigInteger.ZERO, new BigInteger(new byte[]{1, 0, 0, 1, 0, 0, 1, 1})));
+    System.out.println("i(" + i + ") xor j(" + j + ") = " + apply(i, j, Op.xor));
+
   }
+
 }

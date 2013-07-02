@@ -40,6 +40,7 @@ public class Big implements Sparse<BigInteger, BigInteger> {
     // Shift to get the lowest bit at 0.
     BigInteger shift = index.add(BigInteger.valueOf(value.getLowestSetBit()));
     // Record index and value.
+    // Make index a multiple of 8.
     this.index = shift.divide(BG).multiply(BG);
     this.value = value.shiftLeft(index.subtract(this.index).intValue());
   }

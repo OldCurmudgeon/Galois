@@ -15,12 +15,14 @@
  */
 package com.oldcurmudgeon.galois.math.huge;
 
+import com.oldcurmudgeon.galois.math.sparse.Sparse;
 import com.oldcurmudgeon.galois.math.sparse.SparseIterator;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -61,6 +63,28 @@ public class HugeBits extends Bits<Big> {
     normalise();
   }
 
+  /*
+   * ToDo: Consider dismantling and rebuilding.
+   *TreeMap<BigInteger, Byte> bytes = new TreeMap<>();
+    // Roll the whole lot out into bytes.
+    for (Iterator<Map.Entry<BigInteger, Big>> big = bits.entrySet().iterator(); big.hasNext();) {
+      Map.Entry<BigInteger, Big> it = big.next();
+      BigInteger index = it.getKey();
+      BigInteger value = it.getValue().value;
+      byte[] itsBytes = value.toByteArray();
+      for ( int i = 0; i < itsBytes.length; i++ ) {
+        BigInteger bi = BigInteger.valueOf(i);
+        bytes.put(bi, itsBytes[i]);
+      }
+    }
+    // Unroll back out into a sequence of BigIntegers.
+    bits.clear();
+    BigInteger index = new BigInteger
+    for (Map.Entry<BigInteger, Byte> entry : bytes.entrySet() ) {
+      
+    }
+
+   */
   private void normalise() {
     boolean repeat;
     do {
@@ -103,7 +127,7 @@ public class HugeBits extends Bits<Big> {
             chopped = false;
             int f;
             int l = 0;
-            for (f = 1; f < bytes.length - 1 && l == 0; ) {
+            for (f = 1; f < bytes.length - 1 && l == 0;) {
               if (bytes[f] == 0) {
                 // Find the end of the range.
                 for (l = 1; l < bytes.length - f - 1 && bytes[f + l] == 0;) {
@@ -162,7 +186,7 @@ public class HugeBits extends Bits<Big> {
   @Override
   public BigInteger length() {
     Map.Entry<BigInteger, Big> lastEntry = bits.lastEntry();
-    if ( lastEntry == null ) {
+    if (lastEntry == null) {
       return BigInteger.ZERO;
     }
     Big last = lastEntry.getValue();
@@ -181,8 +205,9 @@ public class HugeBits extends Bits<Big> {
       next = it.hasNext() ? it.next() : null;
     }
 
-    public String toString () {
-      return "[" + (next == null ? "": next.toString()) + "]";
+    public String toString() {
+      return "[" + (next == null ? "" : next.toString()) + "]";
     }
+
   }
 }

@@ -64,113 +64,29 @@ public class HugeBits extends Bits<Big> {
   }
 
   /*
-   * ToDo: Consider dismantling and rebuilding.
-   *TreeMap<BigInteger, Byte> bytes = new TreeMap<>();
+   */
+  private void normalise() {
+    TreeMap<BigInteger, Byte> bytes = new TreeMap<>();
     // Roll the whole lot out into bytes.
     for (Iterator<Map.Entry<BigInteger, Big>> big = bits.entrySet().iterator(); big.hasNext();) {
       Map.Entry<BigInteger, Big> it = big.next();
       BigInteger index = it.getKey();
       BigInteger value = it.getValue().value;
       byte[] itsBytes = value.toByteArray();
-      for ( int i = 0; i < itsBytes.length; i++ ) {
+      for (int i = 0; i < itsBytes.length; i++) {
         BigInteger bi = BigInteger.valueOf(i);
         bytes.put(bi, itsBytes[i]);
       }
     }
     // Unroll back out into a sequence of BigIntegers.
     bits.clear();
-    BigInteger index = new BigInteger
-    for (Map.Entry<BigInteger, Byte> entry : bytes.entrySet() ) {
-      
+    // Start from the end.
+    Map.Entry<BigInteger, Byte> lastEntry = bytes.lastEntry();
+    BigInteger index = lastEntry.getKey();
+    // Walk it backwards.
+    for (Map.Entry<BigInteger, Byte> entry : bytes.descendingMap().entrySet()) {
+      System.out.println("Entry "+entry.getKey()+" = "+entry.getValue());
     }
-
-   */
-  private void normalise() {
-    boolean repeat;
-    do {
-      repeat = false;
-      // List of new ones to add.
-      ArrayList<Big> add = new ArrayList<>();
-      for (Iterator<Map.Entry<BigInteger, Big>> big = bits.entrySet().iterator(); big.hasNext();) {
-        Map.Entry<BigInteger, Big> it = big.next();
-        BigInteger index = it.getKey();
-        BigInteger value = it.getValue().value;
-        boolean remove = false;
-        // Discard all zeros.
-        if (!value.equals(BigInteger.ZERO)) {
-          // Further remove head and trailing zero bytes.
-          // Inspect the bytes.
-          byte[] bytes = value.toByteArray();
-          // Trim off the end.
-          int trim;
-          for (trim = 0; trim < bytes.length && bytes[trim] == 0;) {
-            // Trim off the start.
-            trim += 1;
-          }
-          // Slice off the end.
-          int slice;
-          for (slice = 0; slice < bytes.length - trim && bytes[bytes.length - slice - 1] == 0;) {
-            // Slice off the end.
-            slice += 1;
-          }
-          if (slice != 0) {
-            // Step up the index.
-            index = index.add(BigInteger.valueOf(slice));
-          }
-          if (trim != 0 || slice != 0) {
-            // Cut it up.
-            bytes = Arrays.copyOfRange(bytes, trim, trim + bytes.length - slice);
-          }
-          // Cut out runs of zeros inside.
-          boolean chopped;
-          do {
-            chopped = false;
-            int f;
-            int l = 0;
-            for (f = 1; f < bytes.length - 1 && l == 0;) {
-              if (bytes[f] == 0) {
-                // Find the end of the range.
-                for (l = 1; l < bytes.length - f - 1 && bytes[f + l] == 0;) {
-                  // Work out the length.
-                  l += 1;
-                }
-              } else {
-                f += 1;
-              }
-            }
-            if (l > 0) {
-              // Make a new one.
-              add.add(new Big(index.add(BigInteger.valueOf(bytes.length - f).multiply(EIGHT)), new BigInteger(Arrays.copyOfRange(bytes, 0, f))));
-              // Remove it from the old.
-              bytes = Arrays.copyOfRange(bytes, f + l, bytes.length);
-              // Done some chopping.
-              chopped = true;
-            }
-          } while (chopped);
-          // Did we play around with the bytes?
-          if (trim != 0 || slice != 0 || !add.isEmpty()) {
-            // We hacked it around!
-            remove = true;
-            add.add(new Big(index, new BigInteger(bytes)));
-          }
-        } else {
-          // Remove a zero.
-          remove = true;
-        }
-        if (remove) {
-          // Remove it.
-          big.remove();
-        }
-      }
-      if (!add.isEmpty()) {
-        // Add my new ones.
-        for (Big a : add) {
-          addWithoutNormalise(a);
-        }
-        // Must repeat if we've added stuff.
-        repeat = true;
-      }
-    } while (repeat);
   }
 
   @Override

@@ -102,16 +102,19 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
   // Possible operations to perform on the bits.
   enum Op {
     xor {
+      @Override
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.xor(b);
       }
     },
     and {
+      @Override
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.and(b);
       }
     },
     or {
+      @Override
       public BigInteger op(BigInteger a, BigInteger b) {
         return a.or(b);
       }

@@ -18,6 +18,7 @@ package com.oldcurmudgeon.galois.math.huge;
 import com.oldcurmudgeon.galois.math.sparse.SparseIterator;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -60,9 +61,81 @@ public class HugeBits extends Bits<Big> {
     normalise();
   }
 
-  /*
-   */
   private void normalise() {
+    boolean repeat;
+    do {
+      // Keep doing it until nothing changes.
+      repeat = false;
+      // List of new ones to add.
+      ArrayList<Big> add = new ArrayList<>();
+      for (Iterator<Map.Entry<BigInteger, Big>> big = bits.entrySet().iterator(); big.hasNext();) {
+        Map.Entry<BigInteger, Big> it = big.next();
+        BigInteger value = it.getValue().value;
+        boolean remove = false;
+        // Discard all zeros.
+        if (!value.equals(BigInteger.ZERO)) {
+          // The index of the lowest byte.
+          BigInteger index = it.getKey();
+          // Inspect the bytes.
+          byte[] bytes = value.toByteArray();
+          // Cut out runs of zeros inside.
+          boolean chopped;
+          do {
+            chopped = false;
+            int f;
+            int l = 0;
+            for (f = 1; f < bytes.length - 1 && l == 0;) {
+              if (bytes[f] == 0) {
+                // Find the end of the range.
+                for (l = 1; l < bytes.length - f - 1 && bytes[f + l] == 0;) {
+                  // Work out the length.
+                  l += 1;
+                }
+              } else {
+                f += 1;
+              }
+            }
+            if (l > 0) {
+              // Make a new one.
+              add.add(new Big(index.add(BigInteger.valueOf(bytes.length - f).multiply(EIGHT)), new BigInteger(Arrays.copyOfRange(bytes, 0, f))));
+              // Remove it from the old.
+              bytes = Arrays.copyOfRange(bytes, f + l, bytes.length);
+              // Done some chopping.
+              chopped = true;
+            } else {
+              // ToDo
+            }
+          } while (chopped);
+          // Did we play around with the bytes?
+          if (!add.isEmpty()) {
+            // We hacked it around!
+            remove = true;
+            add.add(new Big(index, new BigInteger(bytes)));
+          }
+        } else {
+          // Remove a zero.
+          remove = true;
+        }
+        if (remove) {
+          // Remove it.
+          big.remove();
+        }
+      }
+      if (!add.isEmpty()) {
+        // Add my new ones.
+        for (Big a : add) {
+          addWithoutNormalise(a);
+        }
+        // Must repeat if we've added stuff.
+        repeat = true;
+      }
+    } while (repeat);
+  }
+
+  /*
+   * A normalise that always rebuilds.
+   */
+  private void rebuild() {
     TreeMap<BigInteger, Byte> bytes = new TreeMap<>();
     // Roll the whole lot out into bytes.
     for (Iterator<Map.Entry<BigInteger, Big>> big = bits.entrySet().iterator(); big.hasNext();) {
@@ -71,7 +144,7 @@ public class HugeBits extends Bits<Big> {
       BigInteger value = it.getValue().value;
       byte[] itsBytes = value.toByteArray();
       for (int i = 0; i < itsBytes.length; i++) {
-        BigInteger bi = index.add(BigInteger.valueOf(itsBytes.length-1-i));
+        BigInteger bi = index.add(BigInteger.valueOf(itsBytes.length - 1 - i));
         bytes.put(bi, itsBytes[i]);
       }
     }
@@ -152,6 +225,7 @@ public class HugeBits extends Bits<Big> {
     }
 
   }
+
   public static void main(String[] args) {
     HugeBits i = new HugeBits(
             new Big(BigInteger.ZERO, new BigInteger(new byte[]{1, 0, 1, 1, 0, 0, 0, 1})));
@@ -160,4 +234,5 @@ public class HugeBits extends Bits<Big> {
     System.out.println("i(" + i + ") xor j(" + j + ") = " + Bits.apply(i, j, Op.xor));
 
   }
+
 }

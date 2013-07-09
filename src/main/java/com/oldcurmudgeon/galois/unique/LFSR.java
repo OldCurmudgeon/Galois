@@ -156,7 +156,7 @@ public class LFSR implements Iterable<BigInteger> {
     LFSR lfsr = new LFSR(p);
     int count = 0;
     for (BigInteger i : lfsr) {
-      GaloisPoly.Log.LFSR.log(Strings.pad(i.toString(2), Strings.zeros(bits)));
+      GaloisPoly.Log.LFSRValues.log(Strings.pad(i.toString(2), Strings.zeros(bits)));
       count += 1;
     }
     GaloisPoly.Log.LFSR.log("Count ", count);

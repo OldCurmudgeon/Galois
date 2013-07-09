@@ -657,6 +657,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     //Primitivity.findAllFactors = true;
     //generatePrimitivePolys(4, Integer.MAX_VALUE, true);
     testDegree(6);
+    testDegree(7);
+    testDegree(8);
     ProcessTimer t = new ProcessTimer();
     Log.LFSR.set(false);
     generatePrimitivePolysUpToDegree(8, Integer.MAX_VALUE, true);
@@ -749,6 +751,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     Primes,//(false),
     Primitives,//(false),
     LFSR,//(false),
+    LFSRValues(false),
     Counts,
     Divisors(false),
     Totients,

@@ -186,8 +186,8 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       // Walk each dividend.
       for (Long d : dividends) {
         // Check it.
-        failed = check(p, BigInteger.valueOf(d), divCounts);
-        if (failed) {
+        failed |= check(p, BigInteger.valueOf(d), divCounts);
+        if (!Log.Divisors.get() && failed) {
           // Stop now if failed.
           break;
         }
@@ -200,15 +200,21 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
       boolean failed = false;
       // p = (x^e + 1)
       GaloisPoly p = it.valueOf(e, BigInteger.ZERO);
-      if (p.mod(it).isEmpty()) {
+      GaloisPoly mod = p.mod(it);
+      if (mod.isEmpty()) {
         failed = true;
         // Its only prime - not primitive.
-        Log.Primes.log("Prime: ", it, " divides ", p);
+        Log.Primes.log("Prime: (", p , ")/(", p.divide(it), ") = (", it, ")");
         increment(divCounts, e);
         if (Log.LFSR.get()) {
           LFSR.testPoly(it);
         }
 
+      } else {
+        //  x7+1
+        // -------- =  x, Remainder: x2+x+1
+        // x6+x+1
+        Log.Divisors.log("(", p, ")/(",it,") = (", p.divide(it),") remainder (",mod, ")");
       }
       return failed;
     }
@@ -653,11 +659,13 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     testDegree(6);
     ProcessTimer t = new ProcessTimer();
     Log.LFSR.set(false);
-    generatePrimitivePolysUpToDegree(14, Integer.MAX_VALUE, true);
+    generatePrimitivePolysUpToDegree(8, Integer.MAX_VALUE, true);
     Log.Times.log("Took: ", t);
+    /*
     for (int i = 13; i < 61; i++) {
       investigatePoly(i);
     }
+    */
     //t = new ProcessTimer();
     //generatePrimitivePolys(95, 1, true);
     //Log.Times.log("Took: ", t);
@@ -674,7 +682,10 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
   }
 
   private static void testDegree(int d) {
+    boolean divisors = Log.Divisors.get();
+    Log.Divisors.set(true);
     generatePrimitivePolys(d, Integer.MAX_VALUE, true);
+    Log.Divisors.set(divisors);
   }
 
   private static void generatePrimitivePolysUpToDegree(int d, int max, boolean minimal) {
@@ -739,6 +750,7 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
     Primitives,//(false),
     LFSR,//(false),
     Counts,
+    Divisors(false),
     Totients,
     Investigate,
     Times;

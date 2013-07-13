@@ -16,7 +16,16 @@
 package com.oldcurmudgeon.galois.math.sparse;
 
 /**
- * Something that has an index.
+ * Something that has an index, a length and a value.
+ * 
+ * We can then string these together leaving gaps between
+ * them to allow for sparse functions to perform.
+ * 
+ * Big implements Sparse<BigInteger,BigInteger> i.e. it is
+ * a BigInteger with BigInteger offset and length.
+ * 
+ * Length will rarely get bigger than int. I use I here because
+ * that makes the maths much easier at little cost.
  * 
  * @author OldCurmudgeon.
  */

@@ -31,10 +31,10 @@ public class Big implements Sparse<BigInteger, BigInteger> {
   private static final int G = 8;
   private static final BigInteger BG = BigInteger.valueOf(G);
   // A zero for me.
-  static final Big ZERO = new Big(BigInteger.ZERO);
+  public static final Big ZERO = new Big(BigInteger.ZERO);
   // My sparse value.
-  final BigInteger index;
-  final BigInteger value;
+  private final BigInteger index;
+  private final BigInteger value;
 
   public Big(BigInteger index, BigInteger value) {
     // Shift to get the lowest bit at 0.

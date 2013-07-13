@@ -43,13 +43,13 @@ public class HugeBits extends Bits<Big> {
   // Does this interfere with the iterator?
   private void addWithoutNormalise(Big big) {
     // What do we do if two intersect?
-    Big old = bits.get(big.index);
+    Big old = bits.get(big.index());
     if (old != null) {
       // Add them together - todo - is this correct?
-      bits.put(big.index, new Big(big.index, big.value.add(old.value)));
+      bits.put(big.index(), new Big(big.index(), big.value().add(old.value())));
     } else {
       // Just stick it in.
-      bits.put(big.index, big);
+      bits.put(big.index(), big);
     }
   }
 
@@ -70,7 +70,7 @@ public class HugeBits extends Bits<Big> {
       ArrayList<Big> add = new ArrayList<>();
       for (Iterator<Map.Entry<BigInteger, Big>> big = bits.entrySet().iterator(); big.hasNext();) {
         Map.Entry<BigInteger, Big> it = big.next();
-        BigInteger value = it.getValue().value;
+        BigInteger value = it.getValue().value();
         boolean remove = false;
         // Discard all zeros.
         if (!value.equals(BigInteger.ZERO)) {
@@ -141,7 +141,7 @@ public class HugeBits extends Bits<Big> {
     for (Iterator<Map.Entry<BigInteger, Big>> big = bits.entrySet().iterator(); big.hasNext();) {
       Map.Entry<BigInteger, Big> it = big.next();
       BigInteger index = it.getKey();
-      BigInteger value = it.getValue().value;
+      BigInteger value = it.getValue().value();
       byte[] itsBytes = value.toByteArray();
       for (int i = 0; i < itsBytes.length; i++) {
         BigInteger bi = index.add(BigInteger.valueOf(itsBytes.length - 1 - i));
@@ -204,7 +204,7 @@ public class HugeBits extends Bits<Big> {
       return BigInteger.ZERO;
     }
     Big last = lastEntry.getValue();
-    return last.index.add(last.length());
+    return last.index().add(last.length());
   }
 
   class HugeBitsIterator extends Bits.BitsIterator {

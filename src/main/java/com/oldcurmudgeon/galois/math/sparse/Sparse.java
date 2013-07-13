@@ -27,6 +27,9 @@ package com.oldcurmudgeon.galois.math.sparse;
  * Length will rarely get bigger than int. I use I here because
  * that makes the maths much easier at little cost.
  * 
+ * We can also create a SparseIterable and a SparseIterator for
+ * anything implementing Sparse.
+ * 
  * @author OldCurmudgeon.
  */
 public interface Sparse<T, I extends Number> {

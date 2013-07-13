@@ -294,10 +294,13 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       if (overlaps(index, length, other.index(ia, ib), other.length(ia, ib))) {
         // Work out the shift.
         //ToDo: What do we do if there is overlap between the values?
+        // Case 1: ia == ib - do the op up to the lowest length and move on.
+        // Case 2: ia > ib - consume a up to the start of b and handle like case 1.
+        // Case 3: ib > ia - consume ...
         // Perform the op.
         applied.add(new Big(index, op.op(value, other.value(ia, ib))));
       } else {
-        // No counterparSt - add it directly.
+        // No counterpart - add it directly.
         applied.add(new Big(index, value));
       }
     }

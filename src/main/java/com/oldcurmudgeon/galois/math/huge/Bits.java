@@ -36,9 +36,12 @@ import java.math.BigInteger;
  * T is the type of each chunk.
  * I is the type of the index.
  *
+ * Currently only using BigInteger - later even more generic perhaps.
+ * 
  * @author OldCurmudgeon
  */
 public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements SparseIterable<T, BigInteger> {
+  // Bits in a byte.
   public static final BigInteger EIGHT = BigInteger.valueOf(8);
 
   @Override
@@ -53,6 +56,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     // The next to return - populate in getNext please.
     T next = null;
 
+    // hasNext is idempotent - we can call it as often as we like.
     @Override
     public boolean hasNext() {
       if (next == null) {
@@ -84,12 +88,14 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     // Return the current index.
     @Override
     public BigInteger index() {
+      // Note use of next.index - not next().index.
       return hasNext() ? next.index() : null;
     }
 
     // Return its length.
     @Override
     public BigInteger length() {
+      // Note use of next.index - not next().index.
       return hasNext() ? next.length() : null;
     }
 
@@ -104,28 +110,41 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     StringBuilder sb = new StringBuilder();
     // NB - This is the bit index of the top bit.
     BigInteger index = length();
+    // Start from the end and work backwards.
     for (SparseIterator<T, BigInteger> i = reverseIterator(); i.hasNext();) {
+      // The value.
       T next = i.next();
+      // How long is it?
       BigInteger itsLength = next.length();
+      // Where is its top bit?
       BigInteger itsIndex = next.index().add(itsLength);
+      // Roll out zeros to get us to that bit.
       index = padZeros(sb, base, index, itsIndex);
-      BigInteger v = next.value();
-      sb.append(v.toString(base));
+      // Emit the value.
+      sb.append(next.value().toString(base));
+      // Step down that many bits.
       index = index.subtract(itsLength);
     }
     padZeros(sb, base, index, BigInteger.ZERO);
     return sb.toString();
   }
 
+  // Generate the right number of zeros depending on the base.
   private BigInteger padZeros(StringBuilder sb, int base, BigInteger index, BigInteger itsIndex) {
+    // That may bits.
     BigInteger zeroBits = index.subtract(itsIndex);
     if ( !zeroBits.equals(BigInteger.ZERO) ) {
+      // How many bits does a zero in this base represent?
       BigInteger bitsPerZero = BigInteger.valueOf(bitCount(base - 1));
+      // Do the right number.
       while (index.subtract(bitsPerZero).compareTo(BigInteger.ZERO) > 0) {
+        // Right number of zeros in that base.
         sb.append(BigInteger.ZERO.toString(base));
+        // Step that far.
         index = index.subtract(bitsPerZero);
       }
     }
+    // Tell them where we finished.
     return index;
   }
   
@@ -175,7 +194,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
 
   }
 
-  // Where to pull next from - a or b.
+  // Where to pull index, length, value and next from - a or b.
   private enum Next {
     A {
       @Override
@@ -231,6 +250,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
 
     abstract <T extends Sparse<BigInteger, BigInteger>> BigInteger value(SparseIterator<T, BigInteger> a, SparseIterator<T, BigInteger> b);
 
+    // The other one.
     abstract Next other();
 
     // Determine next.
@@ -258,22 +278,26 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
 
   // Applies the op to the bits.
   public static Bits apply(Bits<Big> a, Bits<Big> b, Op op) {
+    // Accumulator.
     HugeBits applied = new HugeBits();
+    // Start both iterators.
     SparseIterator<Big, BigInteger> ia = a.iterator();
     SparseIterator<Big, BigInteger> ib = b.iterator();
-    // Which one is next.
+    // Which one is next - using the enum above to work itout.
     for (Next next = Next.next(ia, ib); next != null; next = Next.next(ia, ib)) {
+      // Grab the index, length and value.
       BigInteger index = next.index(ia, ib);
       BigInteger length = next.length(ia, ib);
       BigInteger value = next.value(ia, ib);
       Next other = next.other();
+      // Handle overlaps
       if (overlaps(index, length, other.index(ia, ib), other.length(ia, ib))) {
         // Work out the shift.
-        //xxx
+        //ToDo: What do we do if there is overlap between the values?
         // Perform the op.
         applied.add(new Big(index, op.op(value, other.value(ia, ib))));
       } else {
-        // No counterpart - add it directly.
+        // No counterparSt - add it directly.
         applied.add(new Big(index, value));
       }
     }

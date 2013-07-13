@@ -40,6 +40,7 @@ public class Big implements Sparse<BigInteger, BigInteger> {
   private final BigInteger value;
 
   public Big(BigInteger index, BigInteger value) {
+    // Ensure equals works.
     // Shift to get the lowest bit at 0.
     BigInteger shift = index.add(BigInteger.valueOf(value.getLowestSetBit()));
     // Record index and value.
@@ -73,13 +74,18 @@ public class Big implements Sparse<BigInteger, BigInteger> {
 
   @Override
   public String toString() {
-    return ("[" + index.toString() + "]:" + value.toString(2));
+    return toString(2);
+  }
+
+  public String toString(int base) {
+    return ("[" + index.toString() + "]:" + value.toString(base));
   }
 
   @Override
   public boolean equals(Object o) {
     if (o instanceof Big) {
       Big it = (Big) o;
+      // All Bigs are forced to have the bottom byte non-zero.
       return it.index == index
               && it.value == value;
     }

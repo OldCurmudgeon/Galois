@@ -23,6 +23,9 @@ import java.util.Objects;
  * A packet to define a section of bits that fit into a BigInteger.
  *
  * Both the object and the index are big.
+ * 
+ * Implements Sparse but remember that the index (and length) 
+ * are in bits.
  *
  * @author OldCurmudgeon.
  */
@@ -76,7 +79,7 @@ public class Big implements Sparse<BigInteger, BigInteger> {
   @Override
   public boolean equals(Object o) {
     if (o instanceof Big) {
-      Big it = (Big)o;
+      Big it = (Big) o;
       return it.index == index
               && it.value == value;
     }
@@ -91,4 +94,12 @@ public class Big implements Sparse<BigInteger, BigInteger> {
     return hash;
   }
 
+  public static void main(String[] args) {
+    BigInteger bigA = new BigInteger(new byte[]{1, 0, 1, 1, 0, 0, 0, 1});
+    Big a = new Big(BigInteger.ZERO, bigA);
+    System.out.println("bigA = "+bigA.toString(2)+" a = " + a);
+    BigInteger bigB = new BigInteger(new byte[]{1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0 });
+    Big b = new Big(BigInteger.valueOf(64), bigB);
+    System.out.println("bigB = "+bigB.toString(2)+" b = " + b);
+  }
 }

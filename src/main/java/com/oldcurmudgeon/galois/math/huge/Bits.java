@@ -290,13 +290,24 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
       BigInteger length = next.length(ia, ib);
       BigInteger value = next.value(ia, ib);
       Next other = next.other();
+      BigInteger otherIndex = other.index(ia, ib);
+      BigInteger otherLength = other.length(ia, ib);
       // Handle overlaps
-      if (overlaps(index, length, other.index(ia, ib), other.length(ia, ib))) {
+      if (overlaps(index, length, otherIndex, otherLength)) {
         // Work out the shift.
-        //ToDo: What do we do if there is overlap between the values?
+        // What do we do if there is overlap between the values?
         // Case 1: ia == ib - do the op up to the lowest length and move on.
         // Case 2: ia > ib - consume a up to the start of b and handle like case 1.
         // Case 3: ib > ia - consume ...
+        switch ( sign(index.compareTo(otherIndex))) {
+          case -1:
+            break;
+          case 0:
+            break;
+          case 1:
+            break;
+          
+        }
         // Perform the op.
         applied.add(new Big(index, op.op(value, other.value(ia, ib))));
       } else {
@@ -307,6 +318,10 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     return applied;
   }
 
+  private static int sign (int n) {
+    return n == 0 ? 0 : n < 0 ? -1 : 1;
+  }
+  
   private static boolean overlaps(BigInteger aIndex, BigInteger aLength, BigInteger bIndex, BigInteger bLength) {
     // Any missing?
     if (aIndex == null || aLength == null || bIndex == null || bLength == null) {

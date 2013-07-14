@@ -299,7 +299,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
         // Case 1: ia == ib - do the op up to the lowest length and move on.
         // Case 2: ia > ib - consume a up to the start of b and handle like case 1.
         // Case 3: ib > ia - consume ...
-        switch ( sign(index.compareTo(otherIndex))) {
+        switch ( (int)Math.signum(index.compareTo(otherIndex))) {
           case -1:
             break;
           case 0:
@@ -318,10 +318,7 @@ public abstract class Bits<T extends Sparse<BigInteger, BigInteger>> implements 
     return applied;
   }
 
-  private static int sign (int n) {
-    return n == 0 ? 0 : n < 0 ? -1 : 1;
-  }
-  
+ 
   private static boolean overlaps(BigInteger aIndex, BigInteger aLength, BigInteger bIndex, BigInteger bLength) {
     // Any missing?
     if (aIndex == null || aLength == null || bIndex == null || bLength == null) {

@@ -19,7 +19,9 @@ import com.oldcurmudgeon.galois.polynomial.FastPolynomial;
 import com.oldcurmudgeon.galois.polynomial.GaloisPoly;
 import com.oldcurmudgeon.toolbox.twiddlers.Strings;
 import java.math.BigInteger;
+import java.util.TreeMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Linear feedback shift register
@@ -35,7 +37,6 @@ import java.util.Iterator;
  * @author OldCurmudgeon
  */
 public class LFSR implements Iterable<BigInteger> {
-
   // Bit pattern for taps.
   private final BigInteger tapsMask;
   // Where to start (and end).
@@ -122,10 +123,11 @@ public class LFSR implements Iterable<BigInteger> {
     public void remove() {
       throw new UnsupportedOperationException("Not supported.");
     }
-
   }
 
   public static void main(String args[]) {
+    GaloisPoly.Log.LFSRValues.set(true);
+
     //test(12);
     //test(10);
     //for (int bits = 3; bits <= 7; bits++) {
@@ -135,30 +137,72 @@ public class LFSR implements Iterable<BigInteger> {
     testPoly(new FastPolynomial().valueOf(2, 1, 0));
     testPoly(new FastPolynomial().valueOf(3, 2, 0));
     // 85
-    testPoly(new FastPolynomial().valueOf(8,7,3,1,0));
-    testPoly(new FastPolynomial().valueOf(8,5,4,3,2,1,0));
-    testPoly(new FastPolynomial().valueOf(8,7,6,5,4,3,0));
+    testPoly(new FastPolynomial().valueOf(8, 7, 3, 1, 0));
+    testPoly(new FastPolynomial().valueOf(8, 5, 4, 3, 2, 1, 0));
+    testPoly(new FastPolynomial().valueOf(8, 7, 6, 5, 4, 3, 0));
     // Maximal
     // x^8 + x^4 + x^3 + x^2 + 1
-    testPoly(new FastPolynomial().valueOf(8,4,3,2,0));
+    testPoly(new FastPolynomial().valueOf(8, 4, 3, 2, 0));
     // x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
-    testPoly(new FastPolynomial().valueOf(8,7,6,5,4,2,0));
+    testPoly(new FastPolynomial().valueOf(8, 7, 6, 5, 4, 2, 0));
+    // x^12 + x^10 + x^8 + x^7 + x^6 + x^5 + x^3 + x + 1
+    testPoly(new FastPolynomial().valueOf(12, 10, 8, 7, 6, 5, 3, 1, 0));
+    // x^14 + x^5 + x^3 + x + 1
+    testPoly(new FastPolynomial().valueOf(14, 5, 3, 1, 0));
   }
 
   private static void test(int bits) {
     System.out.println("==== Bits " + bits + " ====");
-    testPoly(new FastPolynomial().new PrimePolynomials(bits,true).iterator().next());
+    testPoly(new FastPolynomial().new PrimePolynomials(bits, true).iterator().next());
+  }
+
+  private static class Stats {
+    Map<Integer, Integer> stats = new TreeMap<>();
+    Map<Integer, Integer> last = new TreeMap<>();
+    int count = 0;
+
+    private void put(int key, int value) {
+      stats.put(key, value);
+    }
+
+    private void inc(int which, int bitCount) {
+      Integer soFar = stats.get(bitCount);
+      if (soFar == null) {
+        soFar = new Integer(0);
+      }
+      soFar = soFar + 1;
+      stats.put(bitCount, soFar);
+      //One more.
+      count += 1;
+      // How far away are we from the last?
+      Integer l = last.get(bitCount);
+      if ( l == null ) {
+        l = new Integer(0);
+      }
+    }
+
+    private void log() {
+      for (Integer n : stats.keySet()) {
+        GaloisPoly.Log.LFSR.log("Count(", n, ")=", stats.get(n));
+      }
+    }
   }
 
   public static void testPoly(GaloisPoly p) {
+    Stats stats = new Stats();
+    // For perfection.
+    stats.put(0, 1);
     int bits = p.degree().intValue();
     GaloisPoly.Log.LFSR.log("LFSR ", p);
     LFSR lfsr = new LFSR(p);
     int count = 0;
     for (BigInteger i : lfsr) {
-      GaloisPoly.Log.LFSRValues.log(Strings.pad(i.toString(2), Strings.zeros(bits)));
+      GaloisPoly.Log.LFSRValues.log(Strings.pad(i.toString(2), Strings.zeros(bits))
+              + "\t" + i.bitCount());
       count += 1;
+      stats.inc(count, i.bitCount());
     }
-    GaloisPoly.Log.LFSR.log("Count ", count);
+    stats.log();
+    GaloisPoly.Log.LFSR.log("Total ", count);
   }
 }

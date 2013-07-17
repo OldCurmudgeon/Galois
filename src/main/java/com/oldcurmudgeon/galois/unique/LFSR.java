@@ -15,6 +15,7 @@
  */
 package com.oldcurmudgeon.galois.unique;
 
+import com.oldcurmudgeon.galois.math.huge.Bits;
 import com.oldcurmudgeon.galois.polynomial.FastPolynomial;
 import com.oldcurmudgeon.galois.polynomial.GaloisPoly;
 import com.oldcurmudgeon.toolbox.twiddlers.Strings;
@@ -22,6 +23,7 @@ import java.math.BigInteger;
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Linear feedback shift register
@@ -49,41 +51,41 @@ public class LFSR implements Iterable<BigInteger> {
     // Knock off the 2^0 coefficient of the polynomial for the TAP.
     this.tapsMask = primePoly.shiftRight(1);
   }
-
+  
   public LFSR(GaloisPoly primePoly, BigInteger start) {
     this(primePoly.asBigInteger(), start);
   }
-
+  
   public LFSR(GaloisPoly primePoly) {
     // Default to start at 1.
     this(primePoly.asBigInteger(), BigInteger.ONE);
   }
-
+  
   public LFSR(int bits) {
     // Default to first found prime poly.
     this(new FastPolynomial().new PrimePolynomials(bits, true).iterator().next());
   }
-
+  
   public LFSR(int bits, BigInteger start) {
     // Default to first prime poly.
     this(new FastPolynomial().new PrimePolynomials(bits, true).iterator().next(), start);
   }
-
+  
   @Override
   public Iterator<BigInteger> iterator() {
     return new LFSRIterator(start);
   }
-
+  
   private class LFSRIterator implements Iterator<BigInteger> {
     // The last one we returned.
     private BigInteger last = null;
     // The next one to return.
     private BigInteger next = null;
-
+    
     public LFSRIterator(BigInteger start) {
       next = start;
     }
-
+    
     @Override
     public boolean hasNext() {
       if (next == null) {
@@ -109,7 +111,7 @@ public class LFSR implements Iterable<BigInteger> {
       }
       return next != null;
     }
-
+    
     @Override
     public BigInteger next() {
       // Remember this one.
@@ -118,13 +120,13 @@ public class LFSR implements Iterable<BigInteger> {
       next = null;
       return last;
     }
-
+    
     @Override
     public void remove() {
       throw new UnsupportedOperationException("Not supported.");
     }
   }
-
+  
   public static void main(String args[]) {
     GaloisPoly.Log.LFSRValues.set(true);
 
@@ -150,21 +152,21 @@ public class LFSR implements Iterable<BigInteger> {
     // x^14 + x^5 + x^3 + x + 1
     testPoly(new FastPolynomial().valueOf(14, 5, 3, 1, 0));
   }
-
+  
   private static void test(int bits) {
     System.out.println("==== Bits " + bits + " ====");
     testPoly(new FastPolynomial().new PrimePolynomials(bits, true).iterator().next());
   }
-
+  
   private static class Stats {
     Map<Integer, Integer> stats = new TreeMap<>();
     Map<Integer, Integer> last = new TreeMap<>();
     int count = 0;
-
+    
     private void put(int key, int value) {
       stats.put(key, value);
     }
-
+    
     private void inc(int which, int bitCount) {
       Integer soFar = stats.get(bitCount);
       if (soFar == null) {
@@ -176,33 +178,42 @@ public class LFSR implements Iterable<BigInteger> {
       count += 1;
       // How far away are we from the last?
       Integer l = last.get(bitCount);
-      if ( l == null ) {
+      if (l == null) {
         l = new Integer(0);
       }
     }
-
+    
     private void log() {
       for (Integer n : stats.keySet()) {
         GaloisPoly.Log.LFSR.log("Count(", n, ")=", stats.get(n));
       }
     }
   }
-
+  static AtomicBoolean testing = new AtomicBoolean(false);
+  
   public static void testPoly(GaloisPoly p) {
-    Stats stats = new Stats();
-    // For perfection.
-    stats.put(0, 1);
-    int bits = p.degree().intValue();
-    GaloisPoly.Log.LFSR.log("LFSR ", p);
-    LFSR lfsr = new LFSR(p);
-    int count = 0;
-    for (BigInteger i : lfsr) {
-      GaloisPoly.Log.LFSRValues.log(Strings.pad(i.toString(2), Strings.zeros(bits))
-              + "\t" + i.bitCount());
-      count += 1;
-      stats.inc(count, i.bitCount());
+    if (!testing.getAndSet(true)) {
+      try {
+        Stats stats = new Stats();
+        // For perfection.
+        stats.put(0, 1);
+        int bits = p.degree().intValue();
+        GaloisPoly.Log.LFSR.log("LFSR ", p, bits <= 8 ? p.isPrime() ? p.isPrimitive() ? " Primitive" : " Prime" : " Boring" : " Huge");
+        LFSR lfsr = new LFSR(p);
+        int count = 0;
+        for (BigInteger i : lfsr) {
+          GaloisPoly.Log.LFSRValues.log(Strings.pad(i.toString(2), Strings.zeros(bits))
+                  + "\t" + i.bitCount());
+          count += 1;
+          stats.inc(count, i.bitCount());
+        }
+        stats.log();
+        GaloisPoly.Log.LFSR.log("Total ", count);
+        
+      } finally {
+        testing.set(false);
+      }
+      
     }
-    stats.log();
-    GaloisPoly.Log.LFSR.log("Total ", count);
   }
 }

@@ -139,9 +139,9 @@ public class LFSR implements Iterable<BigInteger> {
     testPoly(new FastPolynomial().valueOf(2, 1, 0));
     testPoly(new FastPolynomial().valueOf(3, 2, 0));
     // 85
-    testPoly(new FastPolynomial().valueOf(8, 7, 3, 1, 0));
-    testPoly(new FastPolynomial().valueOf(8, 5, 4, 3, 2, 1, 0));
-    testPoly(new FastPolynomial().valueOf(8, 7, 6, 5, 4, 3, 0));
+    //testPoly(new FastPolynomial().valueOf(8, 7, 3, 1, 0));
+    //testPoly(new FastPolynomial().valueOf(8, 5, 4, 3, 2, 1, 0));
+    //testPoly(new FastPolynomial().valueOf(8, 7, 6, 5, 4, 3, 0));
     // Maximal
     // x^8 + x^4 + x^3 + x^2 + 1
     testPoly(new FastPolynomial().valueOf(8, 4, 3, 2, 0));
@@ -160,33 +160,38 @@ public class LFSR implements Iterable<BigInteger> {
   
   private static class Stats {
     Map<Integer, Integer> stats = new TreeMap<>();
-    Map<Integer, Integer> last = new TreeMap<>();
+    Map<Integer, Integer> odds = new TreeMap<>();
     int count = 0;
     
     private void put(int key, int value) {
       stats.put(key, value);
     }
     
-    private void inc(int which, int bitCount) {
-      Integer soFar = stats.get(bitCount);
-      if (soFar == null) {
-        soFar = new Integer(0);
-      }
-      soFar = soFar + 1;
-      stats.put(bitCount, soFar);
+    private void inc(BigInteger i) {
+      int bitCount = i.bitCount();
+      inc(stats, bitCount);
       //One more.
       count += 1;
-      // How far away are we from the last?
-      Integer l = last.get(bitCount);
-      if (l == null) {
-        l = new Integer(0);
+      if ( i.testBit(0)) {
+        // Odd!
+        inc(odds, bitCount);
       }
     }
     
     private void log() {
       for (Integer n : stats.keySet()) {
-        GaloisPoly.Log.LFSR.log("Count(", n, ")=", stats.get(n));
+        Integer o = odds.get(n);
+        GaloisPoly.Log.LFSR.log("Count(", n, ")=", stats.get(n), o == null ? "": "("+o+")");
       }
+    }
+
+    private void inc(Map<Integer, Integer> stats, int n) {
+      Integer soFar = stats.get(n);
+      if (soFar == null) {
+        soFar = new Integer(0);
+      }
+      soFar = soFar + 1;
+      stats.put(n, soFar);
     }
   }
   static AtomicBoolean testing = new AtomicBoolean(false);
@@ -205,7 +210,7 @@ public class LFSR implements Iterable<BigInteger> {
           GaloisPoly.Log.LFSRValues.log(Strings.pad(i.toString(2), Strings.zeros(bits))
                   + "\t" + i.bitCount());
           count += 1;
-          stats.inc(count, i.bitCount());
+          stats.inc(i);
         }
         stats.log();
         GaloisPoly.Log.LFSR.log("Total ", count);

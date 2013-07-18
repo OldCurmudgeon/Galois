@@ -196,7 +196,7 @@ public class LFSR implements Iterable<BigInteger> {
         GaloisPoly.Log.LFSR.log("Count(", n, ")=", stats.get(n), o == null ? "" : "(" + o + ")");
         List<Integer> spots = oddSpots.get(n);
         if (spots != null) {
-          GaloisPoly.Log.LFSR.log("Spots(", n, ")=", spots);
+          //GaloisPoly.Log.LFSR.log("OddSpots(", n, ")=", spots);
           if ( spots.size() > 1) {
             ArrayList<Integer> gaps = new ArrayList<>(spots.size() - 1);
             double total = 0;
@@ -205,8 +205,8 @@ public class LFSR implements Iterable<BigInteger> {
               gaps.add(gap);
               total += gap;
             }
-            GaloisPoly.Log.LFSR.log("Gaps(", n, ")=", gaps);
-            GaloisPoly.Log.LFSR.log("Avg(", n, ")=", total / gaps.size());
+            //GaloisPoly.Log.LFSR.log("OddGaps(", n, ")=", gaps);
+            GaloisPoly.Log.LFSR.log("OddAvg(", n, ")=", total / gaps.size());
           }
         }
       }

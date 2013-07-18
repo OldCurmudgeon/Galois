@@ -154,7 +154,8 @@ public class LFSR implements Iterable<BigInteger> {
     // x^14 + x^5 + x^3 + x + 1
     testPoly(new FastPolynomial().valueOf(14, 5, 3, 1, 0));
     //17,16,14,13,12,11,10,9,7,5,3,1,0
-    testPoly(new FastPolynomial().valueOf(17,16,14,13,12,11,10,9,7,5,3,1,0));
+    GaloisPoly.Log.LFSRValues.set(false);
+    testPoly(new FastPolynomial().valueOf(17, 16, 14, 13, 12, 11, 10, 9, 7, 5, 3, 1, 0));
   }
 
   private static void test(int bits) {
@@ -166,7 +167,12 @@ public class LFSR implements Iterable<BigInteger> {
     Map<Integer, Integer> stats = new TreeMap<>();
     Map<Integer, Integer> odds = new TreeMap<>();
     Map<Integer, List<Integer>> oddSpots = new TreeMap<>();
+    final int bits;
     int count = 0;
+
+    public Stats(int bits) {
+      this.bits = bits;
+    }
 
     private void put(int key, int value) {
       stats.put(key, value);
@@ -196,16 +202,20 @@ public class LFSR implements Iterable<BigInteger> {
         GaloisPoly.Log.LFSR.log("Count(", n, ")=", stats.get(n), o == null ? "" : "(" + o + ")");
         List<Integer> spots = oddSpots.get(n);
         if (spots != null) {
-          //GaloisPoly.Log.LFSR.log("OddSpots(", n, ")=", spots);
-          if ( spots.size() > 1) {
+          if (bits < 10) {
+            GaloisPoly.Log.LFSR.log("OddSpots(", n, ")=", spots);
+          }
+          if (spots.size() > 1) {
             ArrayList<Integer> gaps = new ArrayList<>(spots.size() - 1);
             double total = 0;
-            for ( int i = 1; i < spots.size(); i++ ) {
-              Integer gap = spots.get(i) - spots.get(i-1);
+            for (int i = 1; i < spots.size(); i++) {
+              Integer gap = spots.get(i) - spots.get(i - 1);
               gaps.add(gap);
               total += gap;
             }
-            //GaloisPoly.Log.LFSR.log("OddGaps(", n, ")=", gaps);
+            if (bits < 10) {
+              GaloisPoly.Log.LFSR.log("OddGaps(", n, ")=", gaps);
+            }
             GaloisPoly.Log.LFSR.log("OddAvg(", n, ")=", total / gaps.size());
           }
         }
@@ -226,10 +236,10 @@ public class LFSR implements Iterable<BigInteger> {
   public static void testPoly(GaloisPoly p) {
     if (!testing.getAndSet(true)) {
       try {
-        Stats stats = new Stats();
+        int bits = p.degree().intValue();
+        Stats stats = new Stats(bits);
         // For perfection.
         stats.put(0, 1);
-        int bits = p.degree().intValue();
         GaloisPoly.Log.LFSR.log("LFSR ", p, bits <= 8 ? p.isPrime() ? p.isPrimitive() ? " Primitive" : " Prime" : " Boring" : " Huge");
         LFSR lfsr = new LFSR(p);
         int count = 0;

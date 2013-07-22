@@ -15,10 +15,10 @@
  */
 package com.oldcurmudgeon.galois.unique;
 
-import com.oldcurmudgeon.galois.math.huge.Bits;
 import com.oldcurmudgeon.galois.polynomial.FastPolynomial;
 import com.oldcurmudgeon.galois.polynomial.GaloisPoly;
 import com.oldcurmudgeon.toolbox.twiddlers.Strings;
+import com.oldcurmudgeon.toolbox.walkers.Separator;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -152,10 +152,17 @@ public class LFSR implements Iterable<BigInteger> {
     // x^12 + x^10 + x^8 + x^7 + x^6 + x^5 + x^3 + x + 1
     //testPoly(new FastPolynomial().valueOf(12, 10, 8, 7, 6, 5, 3, 1, 0));
     // x^14 + x^5 + x^3 + x + 1
-    testPoly(new FastPolynomial().valueOf(14, 5, 3, 1, 0));
+    testPoly(new FastPolynomial().valueOf(14, 5, 3, 1));
     //17,16,14,13,12,11,10,9,7,5,3,1,0
     GaloisPoly.Log.LFSRValues.set(false);
-    testPoly(new FastPolynomial().valueOf(17, 16, 14, 13, 12, 11, 10, 9, 7, 5, 3, 1, 0));
+    testPoly(new FastPolynomial().valueOf(17, 16, 14, 13, 12, 11, 10, 9, 7, 5, 3, 1));
+    testPoly(new FastPolynomial().valueOf(23,5));
+    testPoly(new FastPolynomial().valueOf(25,3));
+    testPoly(new FastPolynomial().valueOf(26,11));
+    //testPoly(new FastPolynomial().valueOf(63,1));
+    //testPoly(new FastPolynomial().valueOf(95,77));
+    //testPoly(new FastPolynomial().valueOf(399,271));
+    
   }
 
   private static void test(int bits) {
@@ -199,11 +206,15 @@ public class LFSR implements Iterable<BigInteger> {
     private void log() {
       for (Integer n : stats.keySet()) {
         Integer o = odds.get(n);
-        GaloisPoly.Log.LFSR.log("Count(", n, ")=", stats.get(n), o == null ? "" : "(" + o + ")");
+        StringBuilder s = new StringBuilder();
+        Separator tab = new Separator("\t");
+        s.append(tab.sep()).append(n);
+        s.append(tab.sep()).append(stats.get(n));
+        s.append(tab.sep()).append(o != null ? o:"");
         List<Integer> spots = oddSpots.get(n);
         if (spots != null) {
           if (bits < 10) {
-            GaloisPoly.Log.LFSR.log("OddSpots(", n, ")=", spots);
+            s.append(tab.sep()).append(spots);
           }
           if (spots.size() > 1) {
             ArrayList<Integer> gaps = new ArrayList<>(spots.size() - 1);
@@ -214,11 +225,12 @@ public class LFSR implements Iterable<BigInteger> {
               total += gap;
             }
             if (bits < 10) {
-              GaloisPoly.Log.LFSR.log("OddGaps(", n, ")=", gaps);
+              s.append(tab.sep()).append(gaps);
             }
-            GaloisPoly.Log.LFSR.log("OddAvg(", n, ")=", total / gaps.size());
+            s.append(tab.sep()).append(total / gaps.size());
           }
         }
+        GaloisPoly.Log.LFSR.log(s);
       }
     }
 
@@ -248,6 +260,9 @@ public class LFSR implements Iterable<BigInteger> {
                   + "\t" + i.bitCount());
           stats.inc(i, count);
           count += 1;
+          if(count % 1000000 == 0) {
+            System.out.println("Count: "+count);
+          }
         }
         stats.log();
         GaloisPoly.Log.LFSR.log("Total ", count);

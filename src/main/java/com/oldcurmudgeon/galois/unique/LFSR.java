@@ -15,7 +15,6 @@
  */
 package com.oldcurmudgeon.galois.unique;
 
-import com.oldcurmudgeon.galois.math.huge.Bits;
 import com.oldcurmudgeon.galois.polynomial.FastPolynomial;
 import com.oldcurmudgeon.galois.polynomial.GaloisPoly;
 import com.oldcurmudgeon.toolbox.twiddlers.Strings;

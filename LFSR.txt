@@ -1,4 +1,5 @@
-cd C:\Documents and Settings\user\My Documents\NetBeansProjects\Galois; "JAVA_HOME=C:\\Program Files\\Java\\jdk1.7.0_10" "\"C:\\Program Files\\NetBeans 7.3\\java\\maven\\bin\\mvn.bat\"" "-Dexec.args=-classpath %classpath com.oldcurmudgeon.galois.unique.LFSR" "-Dexec.executable=C:\\Program Files\\Java\\jdk1.7.0_10\\bin\\java.exe" -Dexec.classpathScope=runtime process-classes org.codehaus.mojo:exec-maven-plugin:1.2.1:exec
+cd C:\Users\CaswellP.VINCENT\Documents\Dev\Galois; "JAVA_HOME=C:\\Program Files\\Java\\jdk1.7.0_21" "\"C:\\Program Files\\NetBeans 7.3.1\\java\\maven\\bin\\mvn.bat\"" "-Dexec.args=-classpath %classpath com.oldcurmudgeon.galois.unique.LFSR" "-Dexec.executable=C:\\Program Files\\Java\\jdk1.7.0_21\\bin\\java.exe" -Dexec.classpathScope=runtime --errors --errors --fail-at-end process-classes org.codehaus.mojo:exec-maven-plugin:1.2.1:exec
+Error stacktraces are turned on.
 Scanning for projects...
                                                                         
 ------------------------------------------------------------------------
@@ -11,7 +12,7 @@ Using 'UTF-8' encoding to copy filtered resources.
 Copying 1 resource
 
 [compiler:compile]
-Compiling 1 source file to C:\Documents and Settings\user\My Documents\NetBeansProjects\Galois\target\classes
+Compiling 6 source files to C:\Users\CaswellP.VINCENT\Documents\Dev\Galois\target\classes
 
 [exec:exec]
 LFSR x^2 + x + 1 Primitive
@@ -16778,7 +16779,7 @@ Total 131071
 ------------------------------------------------------------------------
 BUILD SUCCESS
 ------------------------------------------------------------------------
-Total time: 13.187s
-Finished at: Fri Jul 19 00:15:01 BST 2013
-Final Memory: 7M/18M
+Total time: 6.802s
+Finished at: Mon Jul 22 08:55:03 BST 2013
+Final Memory: 9M/183M
 ------------------------------------------------------------------------

@@ -83,6 +83,10 @@ public class FastPolynomial
     for (int i : powers) {
       big = big.setBit(i);
     }
+    // Fill in the rest down to 0 too.
+    for ( int i = powers[powers.length-1] - 1; i >= 0; i-- ) {
+      big = big.setBit(i);
+    }
     return new FastPolynomial(big);
   }
 

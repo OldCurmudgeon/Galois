@@ -27,6 +27,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>Toolbox</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javaparser</artifactId>
+                    <groupId>com.google.code.javaparser</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <properties>

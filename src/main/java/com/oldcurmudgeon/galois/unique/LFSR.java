@@ -204,6 +204,7 @@ public class LFSR implements Iterable<BigInteger> {
     }
 
     private void log() {
+      GaloisPoly.Log.LFSR.log("n\tcount(n)\to\tspots\tgaps\ttotal/nGaps");
       for (Integer n : stats.keySet()) {
         Integer o = odds.get(n);
         StringBuilder s = new StringBuilder();

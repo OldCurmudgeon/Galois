@@ -149,14 +149,16 @@ public class LFSR implements Iterable<BigInteger> {
     //testPoly(new FastPolynomial().valueOf(8, 4, 3, 2, 0));
     // x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
     testPoly(new FastPolynomial().valueOf(8, 7, 6, 5, 4, 2, 0));
+    // x^10 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
+    testPoly(new FastPolynomial().valueOf(10,7));
     // x^12 + x^10 + x^8 + x^7 + x^6 + x^5 + x^3 + x + 1
     //testPoly(new FastPolynomial().valueOf(12, 10, 8, 7, 6, 5, 3, 1, 0));
     // x^14 + x^5 + x^3 + x + 1
-    testPoly(new FastPolynomial().valueOf(14, 5, 3, 1));
     //17,16,14,13,12,11,10,9,7,5,3,1,0
     GaloisPoly.Log.LFSRValues.set(false);
-    testPoly(new FastPolynomial().valueOf(17, 16, 14, 13, 12, 11, 10, 9, 7, 5, 3, 1));
-    testPoly(new FastPolynomial().valueOf(23, 5));
+    testPoly(new FastPolynomial().valueOf(14, 5, 3, 1));
+    //testPoly(new FastPolynomial().valueOf(17, 16, 14, 13, 12, 11, 10, 9, 7, 5, 3, 1));
+    //testPoly(new FastPolynomial().valueOf(23, 5));
     testPoly(new FastPolynomial().valueOf(25, 3));
     testPoly(new FastPolynomial().valueOf(26, 11));
     //testPoly(new FastPolynomial().valueOf(63,1));
@@ -186,7 +188,7 @@ public class LFSR implements Iterable<BigInteger> {
     }
 
     // Too many bits to log spost.
-    private static final int TooManyBits = 10;
+    private static final int TooManyBits = 11;
     
     private void inc(BigInteger i, int which) {
       int bitCount = i.bitCount();

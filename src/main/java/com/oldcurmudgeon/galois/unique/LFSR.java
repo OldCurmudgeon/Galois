@@ -156,13 +156,13 @@ public class LFSR implements Iterable<BigInteger> {
     //17,16,14,13,12,11,10,9,7,5,3,1,0
     GaloisPoly.Log.LFSRValues.set(false);
     testPoly(new FastPolynomial().valueOf(17, 16, 14, 13, 12, 11, 10, 9, 7, 5, 3, 1));
-    testPoly(new FastPolynomial().valueOf(23,5));
-    testPoly(new FastPolynomial().valueOf(25,3));
-    testPoly(new FastPolynomial().valueOf(26,11));
+    testPoly(new FastPolynomial().valueOf(23, 5));
+    testPoly(new FastPolynomial().valueOf(25, 3));
+    testPoly(new FastPolynomial().valueOf(26, 11));
     //testPoly(new FastPolynomial().valueOf(63,1));
     //testPoly(new FastPolynomial().valueOf(95,77));
     //testPoly(new FastPolynomial().valueOf(399,271));
-    
+
   }
 
   private static void test(int bits) {
@@ -185,6 +185,9 @@ public class LFSR implements Iterable<BigInteger> {
       stats.put(key, value);
     }
 
+    // Too many bits to log spost.
+    private static final int TooManyBits = 10;
+    
     private void inc(BigInteger i, int which) {
       int bitCount = i.bitCount();
       inc(stats, bitCount);
@@ -193,42 +196,48 @@ public class LFSR implements Iterable<BigInteger> {
       if (i.testBit(0)) {
         // Odd!
         inc(odds, bitCount);
-        // Record it's spots.
-        List<Integer> odd = oddSpots.get(bitCount);
-        if (odd == null) {
-          odd = new ArrayList<>();
-          oddSpots.put(bitCount, odd);
+        // Only analyse odds if not too many bitts.
+        if ( bitCount < TooManyBits ) {
+          // Record it's spots.
+          List<Integer> odd = oddSpots.get(bitCount);
+          if (odd == null) {
+            odd = new ArrayList<>();
+            oddSpots.put(bitCount, odd);
+          }
+          odd.add(which);
         }
-        odd.add(which);
       }
     }
 
     private void log() {
       GaloisPoly.Log.LFSR.log("n\tcount(n)\to\tspots\tgaps\ttotal/nGaps");
       for (Integer n : stats.keySet()) {
-        Integer o = odds.get(n);
         StringBuilder s = new StringBuilder();
         Separator tab = new Separator("\t");
         s.append(tab.sep()).append(n);
+        // How many times a number of that many bits occurred.
         s.append(tab.sep()).append(stats.get(n));
-        s.append(tab.sep()).append(o != null ? o:"");
-        List<Integer> spots = oddSpots.get(n);
-        if (spots != null) {
-          if (bits < 10) {
+        // How many times it was odd.
+        Integer o = odds.get(n);
+        s.append(tab.sep()).append(o != null ? o : "");
+        // Only analyse odds if not too many bits.
+        if (bits < TooManyBits) {
+          // Where in the list the odds occurred.
+          List<Integer> spots = oddSpots.get(n);
+          if (spots != null) {
             s.append(tab.sep()).append(spots);
-          }
-          if (spots.size() > 1) {
-            ArrayList<Integer> gaps = new ArrayList<>(spots.size() - 1);
-            double total = 0;
-            for (int i = 1; i < spots.size(); i++) {
-              Integer gap = spots.get(i) - spots.get(i - 1);
-              gaps.add(gap);
-              total += gap;
-            }
-            if (bits < 10) {
+            if (spots.size() > 1) {
+              // Work out the gaps between the spots - the run lengths.
+              ArrayList<Integer> gaps = new ArrayList<>(spots.size() - 1);
+              double total = 0;
+              for (int i = 1; i < spots.size(); i++) {
+                Integer gap = spots.get(i) - spots.get(i - 1);
+                gaps.add(gap);
+                total += gap;
+              }
               s.append(tab.sep()).append(gaps);
+              s.append(tab.sep()).append(total / gaps.size());
             }
-            s.append(tab.sep()).append(total / gaps.size());
           }
         }
         GaloisPoly.Log.LFSR.log(s);
@@ -261,8 +270,8 @@ public class LFSR implements Iterable<BigInteger> {
                   + "\t" + i.bitCount());
           stats.inc(i, count);
           count += 1;
-          if(count % 1000000 == 0) {
-            System.out.println("Count: "+count);
+          if (count % 1000000 == 0) {
+            System.out.println("Count: " + count);
           }
         }
         stats.log();

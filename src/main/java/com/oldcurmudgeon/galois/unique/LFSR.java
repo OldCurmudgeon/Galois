@@ -211,7 +211,7 @@ public class LFSR implements Iterable<BigInteger> {
       }
     }
 
-    private void log() {
+    private void log(int counted) {
       GaloisPoly.Log.LFSR.log("n\tcount(n)\to\tspots\tgaps\ttotal/nGaps");
       for (Integer n : stats.keySet()) {
         StringBuilder s = new StringBuilder();
@@ -230,15 +230,17 @@ public class LFSR implements Iterable<BigInteger> {
             s.append(tab.sep()).append(spots);
             if (spots.size() > 1) {
               // Work out the gaps between the spots - the run lengths.
-              ArrayList<Integer> gaps = new ArrayList<>(spots.size() - 1);
-              double total = 0;
+              ArrayList<Integer> gaps = new ArrayList<>(spots.size() + 1);
+              // First gap.
+              gaps.add(spots.get(0));
               for (int i = 1; i < spots.size(); i++) {
                 Integer gap = spots.get(i) - spots.get(i - 1);
                 gaps.add(gap);
-                total += gap;
               }
+              // Last gap.
+              gaps.add(counted - spots.get(spots.size() - 1));
               s.append(tab.sep()).append(gaps);
-              s.append(tab.sep()).append(total / gaps.size());
+              s.append(tab.sep()).append(counted / gaps.size());
             }
           }
         }
@@ -276,7 +278,7 @@ public class LFSR implements Iterable<BigInteger> {
             System.out.println("Count: " + count);
           }
         }
-        stats.log();
+        stats.log(count);
         GaloisPoly.Log.LFSR.log("Total ", count);
 
       } finally {

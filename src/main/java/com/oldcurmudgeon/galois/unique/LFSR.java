@@ -129,6 +129,11 @@ public class LFSR implements Iterable<BigInteger> {
     }
   }
 
+  @Override
+  public String toString () {
+    return "("+taps.toString(32)+")-"+start.toString(32);
+  }
+  
   public static void main(String args[]) {
     GaloisPoly.Log.LFSRValues.set(true);
 

@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class LFSR implements Iterable<BigInteger> {
   // Bit pattern for taps.
-  private final BigInteger tapsMask;
+  private final BigInteger taps;
   // Where to start (and end).
   private final BigInteger start;
 
@@ -51,7 +51,7 @@ public class LFSR implements Iterable<BigInteger> {
     // Where to start from (and stop).
     this.start = start;
     // Knock off the 2^0 coefficient of the polynomial for the TAP.
-    this.tapsMask = primePoly.shiftRight(1);
+    this.taps = primePoly.shiftRight(1);
   }
 
   public LFSR(GaloisPoly primePoly, BigInteger start) {
@@ -103,7 +103,7 @@ public class LFSR implements Iterable<BigInteger> {
         next = last.shiftRight(1);
         if (shiftedOutA1) {
           // Tap!
-          next = next.xor(tapsMask);
+          next = next.xor(taps);
         }
         // Never give them `start` again.
         if (next.equals(start)) {

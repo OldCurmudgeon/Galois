@@ -169,23 +169,32 @@ public class Base32 {
         if (c < parseTable.length) {
           // Roll in each digit value into the correct bits.
           int n = parseTable[c];
-          // Must be mapped to something.
-          if (n == Invalid) {
-            throw new NumberFormatException("Invalid character '" + c + "' at position " + i);
-          }
-          // How far to shift it to line up with "bit"
-          int shift = (bitsPerByte - bitsPerDigit - (bit % bitsPerByte));
-          // Sorry about the name.
-          int bite = bit / bitsPerByte;
-          // +ve shift is left into this byte.
-          if (shift >= 0) {
-            // Slide left only.
-            parsed[bite] |= n << shift;
-          } else {
-            // Split across this byte and the next.
-            parsed[bite] |= n >>> -shift;
-            // Slide right.
-            parsed[bite + 1] |= n << (bitsPerByte + shift);
+          // Special cases.
+          switch (n) {
+            case 0:
+              // Nothing to do.
+              break;
+
+            default:
+              // How far to shift it to line up with "bit"
+              int shift = (bitsPerByte - bitsPerDigit - (bit % bitsPerByte));
+              // Sorry about the name.
+              int bite = bit / bitsPerByte;
+              // +ve shift is left into this byte.
+              if (shift >= 0) {
+                // Slide left only.
+                parsed[bite] |= n << shift;
+              } else {
+                // Split across this byte and the next.
+                parsed[bite] |= n >>> -shift;
+                // Slide right.
+                parsed[bite + 1] |= n << (bitsPerByte + shift);
+              }
+              break;
+
+            case Invalid:
+              // Must be mapped to something.
+              throw new NumberFormatException("Invalid character '" + c + "' at position " + i);
           }
         } else {
           // Failed.

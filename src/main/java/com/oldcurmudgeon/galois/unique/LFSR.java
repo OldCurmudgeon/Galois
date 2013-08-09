@@ -85,7 +85,8 @@ public class LFSR implements Iterable<BigInteger> {
     private BigInteger next = null;
 
     public LFSRIterator(BigInteger start) {
-      next = start;
+      // Do not return the seed.
+      last = start;
     }
 
     @Override

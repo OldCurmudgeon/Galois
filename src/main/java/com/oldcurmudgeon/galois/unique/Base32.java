@@ -27,9 +27,13 @@ import java.util.Random;
  */
 public class Base32 {
   // The character sets.
+  // Like Hex but up to V
   private static final String base32HexCharacterSet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+  // Common alternative.
   private static final String base32CharacterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  // Avoids vowels (and therefore real words)
   private static final String zBase32CharacterSet = "YBNDRFG8EJKMCPQXOT1UWISZA345H769";
+  // Avoids o/0 confusion.
   private static final String crockfordCharacterSet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
   // Known/published formats.
   public static final Base32 ordinary = new Base32();
@@ -145,7 +149,7 @@ public class Base32 {
     }
     return formatted;
   }
-
+  
   // Parse a string.
   public BigInteger parse(String s) {
     BigInteger big;
@@ -233,6 +237,41 @@ public class Base32 {
     return good;
   }
 
+  public Base32 uppercase () {
+    // ToDo: Do this differently - this can change the singletons.
+    return new Uppercase(this);
+  }
+  
+  // Uppercase version.
+  private static class Uppercase extends Base32 {
+    private final Base32 wrapped;
+    
+    public Uppercase(Base32 wrap) {
+      wrapped = wrap;
+    }
+    
+    @Override
+    public String format (BigInteger n) {
+      return wrapped.format(n).toUpperCase();
+    }
+    
+    @Override
+    public BigInteger parse ( String s ) {
+      return wrapped.parse(s);
+    }
+    
+    @Override
+    public boolean good ( String s ) {
+      return wrapped.good(s);
+    }
+    
+    @Override
+    public Base32 uppercase () {
+      // I am already uppercase.
+      return this;
+    }
+  }
+  
   public static void main(String args[]) {
     Test.main(args);
   }

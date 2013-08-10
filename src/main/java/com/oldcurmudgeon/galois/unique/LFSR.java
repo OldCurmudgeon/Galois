@@ -128,13 +128,18 @@ public class LFSR implements Iterable<BigInteger> {
     public void remove() {
       throw new UnsupportedOperationException("Not supported.");
     }
+
+    @Override
+    public String toString() {
+      return LFSR.this.toString() + "[" + last.toString(16) + "-" + next.toString(16) + "]";
+    }
   }
 
   @Override
-  public String toString () {
-    return "("+taps.toString(32)+")-"+start.toString(32);
+  public String toString() {
+    return "(" + taps.toString(32) + ")-" + start.toString(32);
   }
-  
+
   public static void main(String args[]) {
     GaloisPoly.Log.LFSRValues.set(true);
 
@@ -156,7 +161,7 @@ public class LFSR implements Iterable<BigInteger> {
     // x^8 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
     testPoly(new FastPolynomial().valueOf(8, 7, 6, 5, 4, 2, 0));
     // x^10 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
-    testPoly(new FastPolynomial().valueOf(10,7));
+    testPoly(new FastPolynomial().valueOf(10, 7));
     // x^12 + x^10 + x^8 + x^7 + x^6 + x^5 + x^3 + x + 1
     //testPoly(new FastPolynomial().valueOf(12, 10, 8, 7, 6, 5, 3, 1, 0));
     // x^14 + x^5 + x^3 + x + 1
@@ -192,10 +197,9 @@ public class LFSR implements Iterable<BigInteger> {
     private void put(int key, int value) {
       stats.put(key, value);
     }
-
     // Too many bits to log spost.
     private static final int TooManyBits = 11;
-    
+
     private void inc(BigInteger i, int which) {
       int bitCount = i.bitCount();
       inc(stats, bitCount);
@@ -205,7 +209,7 @@ public class LFSR implements Iterable<BigInteger> {
         // Odd!
         inc(odds, bitCount);
         // Only analyse odds if not too many bitts.
-        if ( bitCount < TooManyBits ) {
+        if (bitCount < TooManyBits) {
           // Record it's spots.
           List<Integer> odd = oddSpots.get(bitCount);
           if (odd == null) {

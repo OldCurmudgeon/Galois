@@ -131,7 +131,9 @@ public class LFSR implements Iterable<BigInteger> {
 
     @Override
     public String toString() {
-      return LFSR.this.toString() + "[" + last.toString(16) + "-" + next.toString(16) + "]";
+      return LFSR.this.toString() + 
+              "[" + (last != null ? last.toString(16):"") + 
+              "-" + (next != null ? next.toString(16):"") + "]";
     }
   }
 

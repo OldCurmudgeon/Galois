@@ -24,7 +24,7 @@ import java.util.Random;
  *
  * Some of this may apply to almost any format but there's much that won't
  * such as allowing both uppercase and lowercase forms of each digit.
- * 
+ *
  * See: http://en.wikipedia.org/wiki/Base32
  */
 public class Base32 {
@@ -140,8 +140,8 @@ public class Base32 {
 
   // Format a BigInteger.
   public String format(BigInteger n) {
-    // Get its raw Radix32 string.
-    String formatted = n.toString(radix);
+    // Get its raw Radix32 string - in uppercase.
+    String formatted = n.toString(radix).toUpperCase();
     // Further formatting through the format table?
     if (formatTable != null) {
       // Translate it.
@@ -156,7 +156,7 @@ public class Base32 {
     }
     return formatted;
   }
-  
+
   // Parse a string.
   public BigInteger parse(String s) {
     BigInteger big;
@@ -244,44 +244,10 @@ public class Base32 {
     return good;
   }
 
-  public Base32 uppercase () {
-    // ToDo: Do this differently - this can change the singletons.
-    return new Uppercase(this);
-  }
-  
-  // Uppercase version.
-  private static class Uppercase extends Base32 {
-    private final Base32 wrapped;
-    
-    public Uppercase(Base32 wrap) {
-      wrapped = wrap;
-    }
-    
-    @Override
-    public String format (BigInteger n) {
-      return wrapped.format(n).toUpperCase();
-    }
-    
-    @Override
-    public BigInteger parse ( String s ) {
-      return wrapped.parse(s);
-    }
-    
-    @Override
-    public boolean good ( String s ) {
-      return wrapped.good(s);
-    }
-    
-    @Override
-    public Base32 uppercase () {
-      // I am already uppercase.
-      return this;
-    }
-  }
-  
   public static void main(String args[]) {
     Test.main(args);
   }
+
 }
 
 class Test {
@@ -331,13 +297,15 @@ class Test {
   private static void test(BigInteger i, Base32 f, String formatted, String name) {
     BigInteger parsed = f.parse(formatted);
     boolean ok = parsed.equals(i) && f.good(formatted);
+    //if (!ok) {
+    // For debug - so we can trace the issue.
+    BigInteger reParsed = f.parse(formatted);
+    boolean good = f.good(formatted);
+    System.out.println(i + " = " + f.format(i) + " in " + name + (ok ? " Ok" : " BAD!"));
     if (!ok) {
-      // For debug - so we can trace the issue.
-      BigInteger reParsed = f.parse(formatted);
-      boolean good = f.good(formatted);
-      System.out.println(i + " = " + f.format(i) + " in " + name + (ok ? " Ok" : " BAD!"));
       System.out.println(reParsed + " != " + i);
     }
+    //}
   }
 
   private static void testCrockfords() {
@@ -357,4 +325,5 @@ class Test {
       test(b, Base32.crockfords, formatted, "Crockfords Test");
     }
   }
+
 }

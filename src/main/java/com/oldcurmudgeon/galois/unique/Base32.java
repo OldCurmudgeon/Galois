@@ -24,22 +24,29 @@ import java.util.Random;
  *
  * Some of this may apply to almost any format but there's much that won't
  * such as allowing both uppercase and lowercase forms of each digit.
+ * 
+ * See: http://en.wikipedia.org/wiki/Base32
  */
 public class Base32 {
   // The character sets.
   // Like Hex but up to V
   private static final String base32HexCharacterSet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
-  // Common alternative.
+  // Common alternative - avoids O/0, i/1 etc.
   private static final String base32CharacterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
   // Avoids vowels (and therefore real words)
   private static final String zBase32CharacterSet = "YBNDRFG8EJKMCPQXOT1UWISZA345H769";
   // Avoids o/0 confusion.
   private static final String crockfordCharacterSet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
   // Known/published formats.
+  // Uses the BigInteger formatter.
   public static final Base32 ordinary = new Base32();
-  public static final Base32 base32 = new Base32(base32CharacterSet);
+  // A lot like the BigInteger formatter - but using my mechanism.
   public static final Base32 base32Hex = new Base32(base32HexCharacterSet);
+  // The RFC 4648 Base32.
+  public static final Base32 base32 = new Base32(base32CharacterSet);
+  // Supposedly more natural than RFC 4648.
   public static final Base32 zBase32 = new Base32(zBase32CharacterSet);
+  // Much like normal but recodes some similar looking characters to the same character.
   public static final Base32 crockfords = new Base32(crockfordCharacterSet, "O0", "o0", "L1", "l1", "I1", "i1");
   // Invalid character.
   private static final int Invalid = -1;

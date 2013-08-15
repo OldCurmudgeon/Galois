@@ -49,7 +49,7 @@ public class LFSR implements Iterable<BigInteger> {
   // The poly must be prime to span the full sequence.
   public LFSR(BigInteger primePoly, BigInteger start) {
     // Where to start from (and stop).
-    this.start = start;
+    this.start = start.equals(BigInteger.ZERO) ? BigInteger.ONE : start;
     // Knock off the 2^0 coefficient of the polynomial for the TAP.
     this.taps = primePoly.shiftRight(1);
   }

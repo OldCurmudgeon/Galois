@@ -21,26 +21,32 @@ import com.oldcurmudgeon.toolbox.twiddlers.Strings;
 import com.oldcurmudgeon.toolbox.walkers.Separator;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Linear feedback shift register
  *
- * Taps can be found at:
- * See http://www.xilinx.com/support/documentation/application_notes/xapp052.pdf
- * See http://mathoverflow.net/questions/46961/how-are-taps-proven-to-work-for-lfsrs/46983#46983
- * See http://www.newwaveinstruments.com/resources/articles/m_sequence_linear_feedback_shift_register_lfsr.htm
- * See http://www.yikes.com/~ptolemy/lfsr_web/index.htm
- * See http://seanerikoconnor.freeservers.com/Mathematics/AbstractAlgebra/PrimitivePolynomials/overview.html
+ * Taps can be found at: See
+ * http://www.xilinx.com/support/documentation/application_notes/xapp052.pdf See
+ * http://mathoverflow.net/questions/46961/how-are-taps-proven-to-work-for-lfsrs/46983#46983
+ * See
+ * http://www.newwaveinstruments.com/resources/articles/m_sequence_linear_feedback_shift_register_lfsr.htm
+ * See http://www.yikes.com/~ptolemy/lfsr_web/index.htm See
+ * http://seanerikoconnor.freeservers.com/Mathematics/AbstractAlgebra/PrimitivePolynomials/overview.html
  * And on my flash.
  *
  * @author OldCurmudgeon
  */
 public class LFSR implements Iterable<BigInteger> {
+
   // Bit pattern for taps.
   private final BigInteger taps;
   // Where to start (and end).
@@ -80,6 +86,7 @@ public class LFSR implements Iterable<BigInteger> {
 
   private class LFSRIterator implements Iterator<BigInteger> {
     // The last one we returned.
+
     private BigInteger last = null;
     // The next one to return.
     private BigInteger next = null;
@@ -131,9 +138,9 @@ public class LFSR implements Iterable<BigInteger> {
 
     @Override
     public String toString() {
-      return LFSR.this.toString() + 
-              "[" + (last != null ? last.toString(16):"") + 
-              "-" + (next != null ? next.toString(16):"") + "]";
+      return LFSR.this.toString()
+              + "[" + (last != null ? last.toString(16) : "")
+              + "-" + (next != null ? next.toString(16) : "") + "]";
     }
   }
 
@@ -143,6 +150,106 @@ public class LFSR implements Iterable<BigInteger> {
   }
 
   public static void main(String args[]) {
+    //test1();
+    test8();
+  }
+
+  /*
+   * Irreducibles
+   * 7,1,0
+   * 7,3,0
+   * 7,3,2,1,0
+   * 7,4,0
+   * 7,4,3,2,0
+   * 7,5,2,1,0
+   * 7,5,3,1,0
+   * 7,5,4,3,0
+   * 7,5,4,3,2,1,0
+   * 7,6,0
+   * 7,6,3,1,0
+   * 7,6,4,1,0
+   * 7,6,4,2,0
+   * 7,6,5,2,0
+   * 7,6,5,3,2,1,0
+   * 7,6,5,4,0
+   * 7,6,5,4,2,1,0
+   * 7,6,5,4,3,2,0
+   * 
+   */
+  static final Set<BigInteger> irreducibles = new HashSet<>(Arrays.asList(
+          BigInteger.valueOf(0b10000011),
+          BigInteger.valueOf(0b10001001),
+          BigInteger.valueOf(0b10001111),
+          BigInteger.valueOf(0b10010001),
+          BigInteger.valueOf(0b10011101),
+          BigInteger.valueOf(0b10100111),
+          BigInteger.valueOf(0b10101011),
+          BigInteger.valueOf(0b10111001),
+          BigInteger.valueOf(0b10111111),
+          BigInteger.valueOf(0b11000001),
+          BigInteger.valueOf(0b11001011),
+          BigInteger.valueOf(0b11010011),
+          BigInteger.valueOf(0b11010101),
+          BigInteger.valueOf(0b11100101),
+          BigInteger.valueOf(0b11101111),
+          BigInteger.valueOf(0b11110001),
+          BigInteger.valueOf(0b11110111),
+          BigInteger.valueOf(0b11111101)));
+
+  private static void test8() {
+    // Iterate across all posible odd Polyss and investigate their function.
+    for (int poly = 128 + 1; poly < 256; poly += 2) {
+      allSeen.clear();
+      test8(poly);
+    }
+  }
+
+  private static void test8(int poly) {
+    // Iterate across all start points for that poly.
+    for (int start = 1; start < 128; start++) {
+      // Skip any we've already seen.
+      if (!allSeen.get(start)) {
+        test8(BigInteger.valueOf(poly), BigInteger.valueOf(start));
+      }
+    }
+  }
+
+  private static String eightBits(BigInteger n) {
+    String inBinary = n.toString(2);
+    return ("00000000" + inBinary).substring(inBinary.length());
+  }
+  // The allseen set.
+  static BitSet allSeen = new BitSet(256);
+
+  private static void test8(BigInteger poly, BigInteger start) {
+    // Test this poly with this start.
+    FastPolynomial polynomial = new FastPolynomial(poly);
+    // use the long cunstructor.
+    LFSR lfsr = new LFSR(polynomial, start);
+    BitSet seen = new BitSet(256);
+    seen.set(start.intValue());
+    boolean isPrime = polynomial.isPrime();
+    boolean isPrimitive = polynomial.isPrimitive();
+    String tag = isPrimitive ? "!" : (isPrime ? "*" : "");
+    StringBuilder summary = new StringBuilder(tag + "\t" + eightBits(poly) + "\t(" + polynomial + ")\t");
+    StringBuilder values = new StringBuilder();
+    Separator tab = new Separator("\t");
+    int count = 1;
+    for (BigInteger b : lfsr) {
+      values.append(tab.sep()).append(eightBits(b));
+      count += 1;
+      if (seen.get(b.intValue())) {
+        // Seen it! Stop here.
+        break;
+      }
+      seen.set(b.intValue());
+    }
+    summary.append(count).append("\t").append(eightBits(start));
+    System.out.println(summary.toString() + "\t" + values.toString());
+    allSeen.or(seen);
+  }
+
+  private static void test1() {
     GaloisPoly.Log.LFSRValues.set(true);
 
     //test(12);
@@ -186,6 +293,7 @@ public class LFSR implements Iterable<BigInteger> {
   }
 
   private static class Stats {
+
     Map<Integer, Integer> stats = new TreeMap<>();
     Map<Integer, Integer> odds = new TreeMap<>();
     Map<Integer, List<Integer>> oddSpots = new TreeMap<>();

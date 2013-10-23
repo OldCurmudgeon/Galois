@@ -785,5 +785,11 @@ public abstract class GaloisPoly<T extends GaloisPoly<T>> implements PolyMath<T>
         }
       }
     }
+    
+    public static void noLog() {
+      for ( Log l : Log.values() ) {
+        l.log = false;
+      }
+    }
   }
 }

@@ -150,8 +150,12 @@ public class LFSR implements Iterable<BigInteger> {
   }
 
   public static void main(String args[]) {
+    GaloisPoly.Log.noLog();
     //test1();
-    test8();
+    for (int i = 1; i < MaxBits; i++) {
+      testBits(i);
+    }
+    //test8();
   }
 
   /*
@@ -196,56 +200,65 @@ public class LFSR implements Iterable<BigInteger> {
           BigInteger.valueOf(0b11110111),
           BigInteger.valueOf(0b11111101)));
 
-  private static void test8() {
-    // Iterate across all posible odd Polyss and investigate their function.
-    for (int poly = 128 + 1; poly < 256; poly += 2) {
-      allSeen.clear();
-      test8(poly);
-    }
-  }
-
-  private static void test8(int poly) {
+  /*
+   private static void test8() {
+   // Iterate across all posible odd Polyss and investigate their function.
+   for (int poly = 128 + 1; poly < 256; poly += 2) {
+   allSeen.clear();
+   test8(poly);
+   }
+   }
+   */
+  private static void testBits(int bits, int poly) {
     // Iterate across all start points for that poly.
-    for (int start = 1; start < 128; start++) {
+    for (int start = 1; start < (1 << (bits - 1)); start++) {
       // Skip any we've already seen.
       if (!allSeen.get(start)) {
-        test8(BigInteger.valueOf(poly), BigInteger.valueOf(start));
+        testBits(bits, BigInteger.valueOf(poly), BigInteger.valueOf(start));
       }
     }
   }
+  private static final String Z = "0000000000";
 
-  private static String eightBits(BigInteger n) {
+  private static String nBits(int bits, BigInteger n) {
     String inBinary = n.toString(2);
-    return ("00000000" + inBinary).substring(inBinary.length());
+    return (Z + inBinary).substring(Z.length() + inBinary.length() - bits);
   }
   // The allseen set.
-  static BitSet allSeen = new BitSet(256);
+  static final int MaxBits = 10;
+  static BitSet allSeen = new BitSet(1 << MaxBits);
 
-  private static void test8(BigInteger poly, BigInteger start) {
+  private static void testBits(int bits, BigInteger poly, BigInteger start) {
     // Test this poly with this start.
     FastPolynomial polynomial = new FastPolynomial(poly);
     // use the long cunstructor.
     LFSR lfsr = new LFSR(polynomial, start);
-    BitSet seen = new BitSet(256);
+    BitSet seen = new BitSet(1 << bits);
     seen.set(start.intValue());
     boolean isPrime = polynomial.isPrime();
     boolean isPrimitive = polynomial.isPrimitive();
     String tag = isPrimitive ? "!" : (isPrime ? "*" : "");
-    StringBuilder summary = new StringBuilder(tag + "\t" + eightBits(poly) + "\t(" + polynomial + ")\t");
+    StringBuilder summary = new StringBuilder(tag + "\t" + nBits(bits, poly) + "\t(" + polynomial + ")\t");
     StringBuilder values = new StringBuilder();
     Separator tab = new Separator("\t");
     int count = 1;
+    boolean cycled = true;
     for (BigInteger b : lfsr) {
-      values.append(tab.sep()).append(eightBits(b));
+      values.append(tab.sep()).append(nBits(bits - 1, b));
       count += 1;
-      if (seen.get(b.intValue())) {
+      if (seen.get(b.intValue()) || allSeen.get(b.intValue())) {
         // Seen it! Stop here.
+        cycled = b.equals(start);
         break;
       }
       seen.set(b.intValue());
     }
-    summary.append(count).append("\t").append(eightBits(start));
-    System.out.println(summary.toString() + "\t" + values.toString());
+    summary.append(count);
+    summary.append("\t").append(cycled ? "C" : "");
+    summary.append("\t").append(start);
+    summary.append("\t").append(nBits(bits - 1, start));
+    summary.append("\t").append(values.toString());
+    System.out.println(summary.toString());
     allSeen.or(seen);
   }
 
@@ -287,9 +300,14 @@ public class LFSR implements Iterable<BigInteger> {
 
   }
 
-  private static void test(int bits) {
+  private static void testBits(int bits) {
     System.out.println("==== Bits " + bits + " ====");
-    testPoly(new FastPolynomial().new PrimePolynomials(bits, true).iterator().next());
+    // Iterate across all posible odd Polys and investigate their character.
+    for (int poly = (1 << (bits - 1)) + 1; poly < (1 << bits); poly += 2) {
+      allSeen.clear();
+      testBits(bits, poly);
+    }
+    //testPoly(new FastPolynomial().new PrimePolynomials(bits, true).iterator().next());
   }
 
   private static class Stats {

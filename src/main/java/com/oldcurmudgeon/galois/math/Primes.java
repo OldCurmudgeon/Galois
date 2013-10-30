@@ -33,6 +33,7 @@ import java.util.Set;
  * @author OldCurmudgeon
  */
 public class Primes {
+
   public static List<Long> primeFactors(long n) {
     List<Long> factors = new ArrayList<>();
     for (long i = 2; i <= n / i; i++) {
@@ -49,13 +50,13 @@ public class Primes {
   // No point in factoring these - note that these are the n of 2^n-1.
   static final Set<Integer> MersennePrimes = new HashSet<>(
           Arrays.asList(2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127,
-                        521, 607, 1279, 2203, 2281, 3217, 4253,
-                        4423, 9689, 9941, 11213, 19937, 21701,
-                        23209, 44497, 86243, 110503, 132049, 216091,
-                        756839, 859433, 1257787, 1398269, 2976221,
-                        3021377, 6972593, 13466917, 20996011,
-                        24036583, 25964951, 30402457, 32582657,
-                        37156667, 42643801, 43112609, 57885161));
+          521, 607, 1279, 2203, 2281, 3217, 4253,
+          4423, 9689, 9941, 11213, 19937, 21701,
+          23209, 44497, 86243, 110503, 132049, 216091,
+          756839, 859433, 1257787, 1398269, 2976221,
+          3021377, 6972593, 13466917, 20996011,
+          24036583, 25964951, 30402457, 32582657,
+          37156667, 42643801, 43112609, 57885161));
 
   // Returns factors of 2^n-1
   public static List<Long> mersenneFactors(int n) {
@@ -99,13 +100,13 @@ public class Primes {
   public static List<Integer> primes(int from, int to) {
     int whereFrom = whereNextPrime(from, true);
     int whereTo = whereNextPrime(to, false);
-    return SomePrimes.subList(whereFrom, whereTo);
+    return whereFrom >= 0 && whereTo >= 0 ? SomePrimes.subList(whereFrom, whereTo) : Collections.<Integer>emptyList();
   }
 
   public static int whereNextPrime(int from, boolean higher) {
     for (int i = 0; i < SomePrimes.size(); i++) {
       if (SomePrimes.get(i) > from) {
-        return higher ? i - 1 : i;
+        return higher ? Math.max(i - 1, 0) : i;
       }
     }
     // Not sure what to do here.
@@ -138,18 +139,50 @@ public class Primes {
     return m / d;
   }
 
-  public static void main(String[] args) {
-    int[] ints = new int[]{527, 1143, 1581, 2635, 2667, 7905, 8001};
-    for (int i : ints) {
-      System.out.println("Factors of " + i + "=" + primeFactors(i));
+  public static long test(int upTo) {
+    long sum = 0;
+    for (int i = 0; i < upTo; i++) {
+      if (i != 1 && i % 2 != 0 && i % 3 != 0 && i % 5 != 0 && i % 7 != 0) {
+        sum = sum + i;
+      }
+      if (i == 2 || i == 3 || i == 5 || i == 7) {
+        sum = sum + i;
+      }
+
     }
+    return sum;
+  }
 
-    System.out.println("möbius(" + 2 + ") = " + möbius(2) + " should be 1?.");
-    System.out.println("möbius(" + 10 + ") = " + möbius(10) + " should be 99.");
+  public static long test2(int upTo) {
+    List<Integer> primes = Primes.primes(1, upTo - 1);
+    long sum = 0;
+    for (Integer p : primes) {
+      sum += p;
+    }
+    return sum;
+  }
 
-    System.out.println("totient(" + 33 + ") = " + totient(33) + " should be 20.");
-    System.out.println("totient(" + 93 + ") = " + totient(93) + " should be 60.");
-    System.out.println("totient(" + 341 + ") = " + totient(341) + " should be 300.");
-    System.out.println("totient(" + 1023 + ") = " + totient(1023) + " should be 600.");
+  public static void main(String[] args) {
+    for (int i = 0; i < 200; i++) {
+      long s1 = test(i);
+      long s2 = test2(i);
+      if (s1 != s2) {
+        System.out.println("i = " + i + " s1 = " + s1 + " s2 = " + s2);
+      }
+    }
+    /*
+     int[] ints = new int[]{527, 1143, 1581, 2635, 2667, 7905, 8001};
+     for (int i : ints) {
+     System.out.println("Factors of " + i + "=" + primeFactors(i));
+     }
+
+     System.out.println("möbius(" + 2 + ") = " + möbius(2) + " should be 1?.");
+     System.out.println("möbius(" + 10 + ") = " + möbius(10) + " should be 99.");
+
+     System.out.println("totient(" + 33 + ") = " + totient(33) + " should be 20.");
+     System.out.println("totient(" + 93 + ") = " + totient(93) + " should be 60.");
+     System.out.println("totient(" + 341 + ") = " + totient(341) + " should be 300.");
+     System.out.println("totient(" + 1023 + ") = " + totient(1023) + " should be 600.");
+     */
   }
 }

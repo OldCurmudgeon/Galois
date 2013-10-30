@@ -218,14 +218,14 @@ public class LFSR implements Iterable<BigInteger> {
       }
     }
   }
-  private static final String Z = "0000000000";
+  private static final String Z = "000000000000";
 
   private static String nBits(int bits, BigInteger n) {
     String inBinary = n.toString(2);
-    return (Z + inBinary).substring(Z.length() + inBinary.length() - bits);
+    return "'"+(Z + inBinary).substring(Z.length() + inBinary.length() - bits);
   }
   // The allseen set.
-  static final int MaxBits = 10;
+  static final int MaxBits = 12;
   static BitSet allSeen = new BitSet(1 << MaxBits);
 
   private static void testBits(int bits, BigInteger poly, BigInteger start) {

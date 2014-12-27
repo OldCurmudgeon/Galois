@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright 2013 OldCurmudgeon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,66 +28,115 @@ import java.util.Random;
  * See: http://en.wikipedia.org/wiki/Base32
  */
 public class Base32 {
-  // The character sets.
-    // Like Hex but up to V
-    private static final String base32HexCharacterSet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
-    // Common alternative - avoids O/0, i/1 etc.
-    private static final String base32CharacterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-    // Avoids vowels (and therefore real words)
-    private static final String zBase32CharacterSet = "YBNDRFG8EJKMCPQXOT1UWISZA345H769";
-    // Avoids o/0 confusion.
-    private static final String crockfordCharacterSet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
-  // Known/published formats.
-    // Uses the BigInteger formatter.
-    public static final Base32 ordinary = new Base32();
-    // A lot like the BigInteger formatter - but using my mechanism.
-    public static final Base32 base32Hex = new Base32(base32HexCharacterSet);
-    // The RFC 4648 Base32.
-    public static final Base32 base32 = new Base32(base32CharacterSet);
-    // Supposedly more natural than RFC 4648.
-    public static final Base32 zBase32 = new Base32(zBase32CharacterSet);
-    // Much like normal but recodes some similar looking characters to the same character.
-    public static final Base32 crockfords = new Base32(crockfordCharacterSet, "O0", "o0", "L1", "l1", "I1", "i1");
+
+    public interface BigFormatter {
+
+        public String format(BigInteger v);
+    }
+
+    public interface BigParser {
+
+        public BigInteger parse(String s);
+
+        public boolean good(String s);
+    }
+
+    /**
+     * The character sets.
+     */
+    public enum Formatter implements BigFormatter, BigParser {
+
+        /**
+         * Mimics BigInteger
+         */
+        Ordinary(null),
+        /**
+         * Like Hex but up to V
+         */
+        Base32Hex("0123456789ABCDEFGHIJKLMNOPQRSTUV"),
+        /**
+         * Common alternative - avoids O/0, i/1 etc.
+         */
+        Base32("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
+        /**
+         * Avoids vowels (and therefore real words)
+         */
+        ZBase32("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
+        /**
+         * Avoids o/0 confusion.
+         */
+        Crockford("0123456789ABCDEFGHJKMNPQRSTVWXYZ", "O0", "o0", "L1", "l1", "I1", "i1");
+
+        // The formatter/parser.
+        public final Base32 format;
+
+        Formatter(String charSet, String... extras) {
+            this.format = new Base32(charSet, extras);
+        }
+
+        // Utilities.
+        @Override
+        public String format(BigInteger i) {
+            return format.format(i);
+        }
+
+        @Override
+        public BigInteger parse(String s) {
+            return format.parse(s);
+        }
+
+        @Override
+        public boolean good(String s) {
+            return format.good(s);
+        }
+
+    }
     // Invalid character.
     private static final int Invalid = -1;
     // The radix.
-    private final int radix;
+    private static final int Radix = 32;
     // The bits per digit - could use (int) (Math.log(radix) / Math.log(2))
-    private static final int bitsPerDigit = 5;
+    private static final int BitsPerDigit = 5;
     // The bits per byte.
-    private static final int bitsPerByte = 8;
+    private static final int BitsPerByte = 8;
     // Translation table for each code.
     private final char[] formatTable;
     // Translation table for each character.
     private final int[] parseTable;
 
     // Constructor - Probably should be private but why restrict the user.
-    public Base32() {
+    private Base32() {
         // Empty tables makes us match BigInteger format so no formatting/parsing is required.
         formatTable = null;
         parseTable = null;
-        radix = 32;
     }
 
     // Constructor with character set and optional extras :).
-    protected Base32(String characterSet, String... extras) {
+    private Base32(String charSet, String... extras) {
         // Check the character set against the radix.
-        radix = characterSet.length();
+        if (charSet.length() != Radix) {
+            throw new NumberFormatException("Invalid character set - must be 32 long " + charSet);
+        }
         // Build the format table.
-        formatTable = buildFormatTable(characterSet);
+        formatTable = buildFormatTable(charSet);
         // And the parse table.
-        parseTable = buildParseTable(characterSet, extras);
+        parseTable = buildParseTable(charSet, extras);
     }
 
     // Build a format table from the character set.
     private char[] buildFormatTable(String characterSet) {
-        // Start clear.
-        char[] table = new char[radix];
-        // Put each character from the character set in.
-        for (int i = 0; i < radix; i++) {
-            table[i] = characterSet.charAt(i);
+        if (characterSet != null) {
+            // Start clear.
+            char[] table = new char[Radix];
+            // Put each character from the character set in.
+            for (int i = 0; i < Radix; i++) {
+                table[i] = characterSet.charAt(i);
+            }
+            return table;
+        } else {
+            // No formatting for a null charset.
+            return null;
         }
-        return table;
     }
 
     private int[] buildParseTable(String characterSet, String... extras) {
@@ -99,7 +148,7 @@ public class Base32 {
         String lc = characterSet.toLowerCase();
         String uc = characterSet.toUpperCase();
         // Walk through the character set.
-        for (int i = 0; i < radix; i++) {
+        for (int i = 0; i < Radix; i++) {
             char l = lc.charAt(i);
             char u = uc.charAt(i);
             // Something wrong if we've already filled this one in.
@@ -138,16 +187,16 @@ public class Base32 {
     }
 
     // Format a BigInteger.
-    public String format(BigInteger n) {
+    private String format(BigInteger n) {
         // Get its raw Radix32 string - in uppercase.
-        String formatted = n.toString(radix).toUpperCase();
+        String formatted = n.toString(Radix).toUpperCase();
         // Further formatting through the format table?
         if (formatTable != null) {
             // Translate it.
             char[] translated = new char[formatted.length()];
             for (int i = 0; i < formatted.length(); i++) {
                 // Use Character.digit to decode the digit value.
-                int d = Character.digit(formatted.charAt(i), radix);
+                int d = Character.digit(formatted.charAt(i), Radix);
                 // Translate to that.
                 translated[i] = formatTable[d];
             }
@@ -157,22 +206,22 @@ public class Base32 {
     }
 
     // Parse a string.
-    public BigInteger parse(String s) {
+    private BigInteger parse(String s) {
         BigInteger big;
         // Pass it through the parse table if present.
         if (parseTable != null) {
             // Digits in the number.
             int digits = s.length();
             // Total bits (+1 to avoid sign bit).
-            int bits = digits * bitsPerDigit + 1;
+            int bits = digits * BitsPerDigit + 1;
             // Number of bytes.
-            int bytes = (bits + bitsPerByte - 1) / bitsPerByte;
+            int bytes = (bits + BitsPerByte - 1) / BitsPerByte;
             // Bias bits to slide to the right to get the bottom bit rightmost (+1 to avoid sign bit).
-            int bias = (bytes * bitsPerByte) - bits + 1;
+            int bias = (bytes * BitsPerByte) - bits + 1;
             // Make my array.
             byte[] parsed = new byte[bytes];
             // Walk the string.
-            for (int i = 0, bit = bias; i < digits; i++, bit += bitsPerDigit) {
+            for (int i = 0, bit = bias; i < digits; i++, bit += BitsPerDigit) {
                 // The character.
                 char c = s.charAt(i);
                 // Must be in the parse table.
@@ -187,9 +236,9 @@ public class Base32 {
 
                         default:
                             // How far to shift it to line up with "bit"
-                            int shift = (bitsPerByte - bitsPerDigit - (bit % bitsPerByte));
+                            int shift = (BitsPerByte - BitsPerDigit - (bit % BitsPerByte));
                             // Sorry about the name.
-                            int bite = bit / bitsPerByte;
+                            int bite = bit / BitsPerByte;
                             // +ve shift is left into this byte.
                             if (shift >= 0) {
                                 // Slide left only.
@@ -198,7 +247,7 @@ public class Base32 {
                                 // Split across this byte and the next.
                                 parsed[bite] |= n >>> -shift;
                                 // Slide right.
-                                parsed[bite + 1] |= n << (bitsPerByte + shift);
+                                parsed[bite + 1] |= n << (BitsPerByte + shift);
                             }
                             break;
 
@@ -215,13 +264,13 @@ public class Base32 {
             big = new BigInteger(parsed);
         } else {
             // No parsing - it's ordinary.
-            big = new BigInteger(s, radix);
+            big = new BigInteger(s, Radix);
         }
         return big;
     }
 
     // Check a string.
-    public boolean good(String s) {
+    private boolean good(String s) {
         boolean good = true;
         // Check each character.
         for (int i = 0; i < s.length() && good; i++) {
@@ -237,7 +286,7 @@ public class Base32 {
                 }
             } else {
                 // Use Character.digit - returns -1 if not valid.
-                good = Character.digit(c, radix) != -1;
+                good = Character.digit(c, Radix) != Invalid;
             }
         }
         return good;
@@ -256,7 +305,7 @@ class Test {
     /*
      * A 95 bit number fits in a 12 byte binary with a bit to spare (sign bit).
      * A 95 bit number formats in base 32 to 19 digits exactly.
-     * 
+     *
      * Other numbers of this type:
      * 15 bits 2 bytes 3 digits
      * 55 bits 7 bytes 11 digits
@@ -283,21 +332,19 @@ class Test {
     }
 
     private static void test(BigInteger i) {
-        test(i, Base32.ordinary, "Ordinary");
-        test(i, Base32.base32Hex, "Base32Hex");
-        test(i, Base32.base32, "Base32");
-        test(i, Base32.crockfords, "Crockfords");
-        test(i, Base32.zBase32, "ZBase32");
+        for (Base32.Formatter f : Base32.Formatter.values()) {
+            test(i, f);
+        }
     }
 
-    private static void test(BigInteger i, Base32 f, String name) {
-        test(i, f, f.format(i), name);
+    private static void test(BigInteger i, Base32.Formatter f) {
+        test(i, f, f.format(i), f.name());
     }
 
-    private static void test(BigInteger i, Base32 f, String formatted, String name) {
+    private static void test(BigInteger i, Base32.Formatter f, String formatted, String name) {
         BigInteger parsed = f.parse(formatted);
         boolean ok = parsed.equals(i) && f.good(formatted);
-    //if (!ok) {
+        //if (!ok) {
         // For debug - so we can trace the issue.
         BigInteger reParsed = f.parse(formatted);
         boolean good = f.good(formatted);
@@ -312,17 +359,17 @@ class Test {
         /// Crockford uses extras.
         for (int i = 0; i < 100; i++) {
             BigInteger b = BigInteger.valueOf(i);
-            String formatted = Base32.crockfords.format(b)
+            String formatted = Base32.Formatter.Crockford.format(b)
                     .replace('0', 'O')
                     .replace('1', 'l');
-            test(b, Base32.crockfords, formatted, "Crockfords Test");
+            test(b, Base32.Formatter.Crockford, formatted, "Crockfords Test");
         }
         for (int i = 0; i < 1000; i++) {
             BigInteger b = new BigInteger(testBits, r);
-            String formatted = Base32.crockfords.format(b)
+            String formatted = Base32.Formatter.Crockford.format(b)
                     .replace('0', 'O')
                     .replace('1', 'l');
-            test(b, Base32.crockfords, formatted, "Crockfords Test");
+            test(b, Base32.Formatter.Crockford, formatted, "Crockfords Test");
         }
     }
 
